@@ -33,7 +33,7 @@ const BBOX = { latMin: 10.30, latMax: 10.95, lonMin: 122.70, lonMax: 123.20 };
 const VIEWBOX = `${BBOX.lonMin},${BBOX.latMin},${BBOX.lonMax},${BBOX.latMax}`;
 const OUTLIER_KM = 5;
 const BUFFER_DEG = 0.003;
-const RATE_MS = 1200;
+const RATE_MS = 1500;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -127,22 +127,36 @@ async function nominatim(query, city) {
   const q = encodeURIComponent(`${query}, ${city}`);
   const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`
             + `&viewbox=${VIEWBOX}&bounded=1&accept-language=en`;
-  const res = await fetch(url, { headers: { 'User-Agent': 'BacolodOutageMap/1.0 geocode-streets' }});
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  if (data[0]) return { lat: +data[0].lat, lon: +data[0].lon, display: data[0].display_name };
+  // Retry once on 429 with backoff
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt > 0) await sleep(3000);
+    const res = await fetch(url, { headers: { 'User-Agent': 'BacolodOutageMap/1.0 geocode-streets' }});
+    if (res.status === 429) {
+      process.stderr.write('  [rate limited — waiting 5s]\n');
+      await sleep(5000);
+      continue;
+    }
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data[0]) return { lat: +data[0].lat, lon: +data[0].lon, display: data[0].display_name };
+    break;
+  }
 
   // Retry without bounding box if bounded search returned nothing
   await sleep(300);
   const url2 = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&accept-language=en`;
-  const res2 = await fetch(url2, { headers: { 'User-Agent': 'BacolodOutageMap/1.0 geocode-streets' }});
-  if (!res2.ok) return null;
-  const data2 = await res2.json();
-  if (!data2[0]) return null;
-  const lat = +data2[0].lat, lon = +data2[0].lon;
-  // Reject if far outside Negros Occidental
-  if (lat < BBOX.latMin || lat > BBOX.latMax || lon < BBOX.lonMin || lon > BBOX.lonMax) return null;
-  return { lat, lon, display: data2[0].display_name };
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt > 0) await sleep(3000);
+    const res2 = await fetch(url2, { headers: { 'User-Agent': 'BacolodOutageMap/1.0 geocode-streets' }});
+    if (res2.status === 429) { await sleep(5000); continue; }
+    if (!res2.ok) return null;
+    const data2 = await res2.json();
+    if (!data2[0]) return null;
+    const lat = +data2[0].lat, lon = +data2[0].lon;
+    if (lat < BBOX.latMin || lat > BBOX.latMax || lon < BBOX.lonMin || lon > BBOX.lonMax) return null;
+    return { lat, lon, display: data2[0].display_name };
+  }
+  return null;
 }
 
 const pattern = process.argv[2] ? process.argv[2].toLowerCase() : '';
