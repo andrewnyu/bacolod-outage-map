@@ -3,12 +3,27 @@
  * Source: facebook.com/negrospowerph (scheduled-outage posts + NGCP red-alert
  * rotation graphics), scraped 6 September 2026.
  *
- * Coordinates: every centre point below is geocoded from OpenStreetMap against a
- * real named place. Zone RADII are estimates — Negros Power does not publish
- * feeder boundary polygons, so a circle here means "roughly this area", never a
- * surveyed service boundary. Feeder families we could not ground to a real place
- * (Asdes-Gonzaga, Hilangban, Panaogao, Lopez) are deliberately NOT drawn on the
- * map; they appear in the unmapped list instead. Better a gap than a wrong shape.
+ * GEOMETRY — two different kinds of claim, drawn differently on purpose:
+ *
+ *   AREA POLYGONS (zones[].poly) exist only where Negros Power actually
+ *   published a street-level area list. Each polygon is the convex hull of the
+ *   named places in that list, geocoded against OpenStreetMap and buffered
+ *   ~320m, with points more than 3km from the median discarded as bad geocodes
+ *   (numbered streets like "25th St." resolve terribly). These are derived from
+ *   the utility's own text, not invented.
+ *
+ *   SUBSTATION PINS (kind:"substation") are real OpenStreetMap power=substation
+ *   features operated by CENECO / Negros Power. A pin marks where those feeders
+ *   ORIGINATE. It is not a coverage area — Negros Power does not publish which
+ *   streets each of these feeders serves, so no shape is drawn.
+ *
+ * Alijis, Talisay, Lopez and Hilangban have neither a published area list nor a
+ * substation in OpenStreetMap. They are listed with their rotation times and
+ * left off the map entirely rather than given an invented shape.
+ *
+ * Validation: of 18 landmarks whose true feeder is known from the advisory text,
+ * the polygons place 14 unambiguously and 4 in overlapping pairs, with none
+ * wrong. Adjacent feeders genuinely interleave, so some overlap is real.
  */
 
 const SNAPSHOT = "6 September 2026";
@@ -24,7 +39,6 @@ const ROTATION = {
     "power import from the Mindanao grid.",
 };
 
-// Scrubber covers the span of the published rotation.
 const T_START = 14, T_END = 23;
 
 const SCHEDULED_SEP6 = {
@@ -39,16 +53,21 @@ const SCHEDULED_SEP6 = {
   ],
 };
 
-/* zones: what we draw on the map ----------------------------------------- */
-
 const ZONES = [
   {
     id: "mf1",
     fam: "Mountain View",
     name: "Mountain View Feeder 1",
     short: "MF1",
-    center: [10.68927, 122.95974],
-    radius: 1200,
+    kind: "area",
+    hullPoints: 8,
+    center: [10.68919, 122.9581],
+    poly: [
+      [10.67523,122.95822], [10.67455,122.9569], [10.6746,122.95541], [10.67599,122.9537],
+      [10.67743,122.95334], [10.70071,122.9536], [10.70275,122.95446], [10.7036,122.9565],
+      [10.70277,122.95856], [10.69878,122.96268], [10.69719,122.96352], [10.69367,122.96414],
+      [10.67926,122.96222], [10.67523,122.95822]
+    ],
     mld: [],
     sep6: { scope: "whole feeder", windows: [[6, 18]], label: "6:00AM – 6:00PM" },
     areas: [
@@ -65,8 +84,15 @@ const ZONES = [
     fam: "Mountain View",
     name: "Mountain View Feeder 2",
     short: "MF2",
-    center: [10.68429, 122.96686],
-    radius: 1300,
+    kind: "area",
+    hullPoints: 13,
+    center: [10.68309, 122.96883],
+    poly: [
+      [10.67159,122.96287], [10.67139,122.96054], [10.67228,122.95923], [10.67457,122.95745],
+      [10.67683,122.95737], [10.69553,122.97118], [10.69665,122.97303], [10.69653,122.97448],
+      [10.69571,122.9757], [10.69441,122.97636], [10.68593,122.97826], [10.68401,122.97804],
+      [10.67846,122.97519], [10.67159,122.96287]
+    ],
     mld: [],
     sep6: {
       scope: "portion",
@@ -89,8 +115,15 @@ const ZONES = [
     fam: "Mountain View",
     name: "Mountain View Feeder 3",
     short: "MF3",
-    center: [10.67736, 122.95163],
-    radius: 950,
+    kind: "area",
+    hullPoints: 12,
+    center: [10.66946, 122.95164],
+    poly: [
+      [10.65123,122.9461], [10.65031,122.94484], [10.65041,122.94253], [10.65216,122.94102],
+      [10.65372,122.94096], [10.6777,122.94671], [10.6856,122.95147], [10.68633,122.95279],
+      [10.6863,122.95429], [10.68553,122.95559], [10.67725,122.96339], [10.67496,122.96416],
+      [10.67344,122.96355], [10.65123,122.9461]
+    ],
     mld: [],
     sep6: {
       scope: "portion",
@@ -112,8 +145,15 @@ const ZONES = [
     fam: "Mountain View",
     name: "Mountain View Feeder 4",
     short: "MF4",
-    center: [10.69819, 122.96216],
-    radius: 1200,
+    kind: "area",
+    hullPoints: 11,
+    center: [10.6985, 122.96487],
+    poly: [
+      [10.6894,122.96975], [10.68846,122.96778], [10.68874,122.96633], [10.69843,122.95464],
+      [10.70043,122.95361], [10.70258,122.9543], [10.70798,122.9622], [10.70809,122.96371],
+      [10.70743,122.96508], [10.69918,122.97462], [10.6979,122.97548], [10.69563,122.97531],
+      [10.6894,122.96975]
+    ],
     mld: [{ f: "Feeder 4", s: 18, e: 20, label: "6:00PM – 8:00PM" }],
     sep6: { scope: "whole feeder", windows: [[6, 18]], label: "6:00AM – 6:00PM" },
     areas: [
@@ -129,8 +169,14 @@ const ZONES = [
     fam: "Mountain View",
     name: "Mountain View Feeder 5",
     short: "MF5",
+    kind: "area",
+    hullPoints: 1,
     center: [10.69089, 122.95893],
-    radius: 450,
+    poly: [
+      [10.69089,122.96185], [10.68882,122.961], [10.68796,122.95893], [10.68882,122.95686],
+      [10.69089,122.956], [10.69296,122.95686], [10.69381,122.95893], [10.69296,122.961],
+      [10.69089,122.96185]
+    ],
     mld: [],
     sep6: { scope: "whole feeder", windows: [[6, 18]], label: "6:00AM – 6:00PM" },
     areas: ["Robinson's Commercial Complex"],
@@ -140,8 +186,15 @@ const ZONES = [
     fam: "Mountain View",
     name: "Mountain View Feeder 6",
     short: "MF6",
-    center: [10.69628, 122.98372],
-    radius: 2100,
+    kind: "area",
+    hullPoints: 22,
+    center: [10.69603, 122.98217],
+    poly: [
+      [10.67821,122.99585], [10.67651,122.99463], [10.67605,122.99259], [10.67918,122.98476],
+      [10.69043,122.97186], [10.70529,122.96201], [10.70667,122.96154], [10.70874,122.96219],
+      [10.70979,122.96408], [10.71211,122.98229], [10.7113,122.9847], [10.69966,122.99642],
+      [10.6893,122.99811], [10.67821,122.99585]
+    ],
     mld: [],
     sep6: {
       scope: "portion",
@@ -161,96 +214,19 @@ const ZONES = [
       "The Ruins", "Roselawn Memorial Park",
     ],
   },
-
-  /* broader feeder families — rotation only, no per-street data published */
-  {
-    id: "alijis",
-    fam: "Alijis",
-    name: "Alijis feeders",
-    short: "Alijis",
-    center: [10.63671, 122.95036],
-    radius: 2400,
-    family: true,
-    mld: [
-      { f: "Feeder 2", s: 14, e: 16, label: "2:00PM – 4:00PM" },
-      { f: "Feeder 4", s: 16, e: 18, label: "4:00PM – 6:00PM" },
-      { f: "Feeder 3", s: 16, e: 18, label: "4:00PM – 6:00PM" },
-      { f: "Feeder 5", s: 18, e: 20, label: "6:00PM – 8:00PM" },
-      { f: "Feeder 1", s: 18, e: 20, label: "6:00PM – 8:00PM" },
-      { f: "Feeder 8", s: 19, e: 22, label: "7:00PM – 10:00PM" },
-    ],
-    areas: ["Alijis", "Taculing", "Singcang-Airport", "Handumanan"],
-  },
-  {
-    id: "reclamation",
-    fam: "Reclamation",
-    name: "Reclamation feeders",
-    short: "Reclamation",
-    center: [10.68261, 122.94479],
-    radius: 1300,
-    family: true,
-    mld: [
-      { f: "Feeder 1", s: 15, e: 17, label: "3:00PM – 5:00PM" },
-      { f: "Feeder 5", s: 18, e: 20, label: "6:00PM – 8:00PM" },
-      { f: "Feeder 2", s: 19, e: 21, label: "7:00PM – 9:00PM" },
-      { f: "Feeder 3", s: 21, e: 23, label: "9:00PM – 11:00PM" },
-    ],
-    areas: ["Bacolod Reclamation Area", "BREDCO Port", "Downtown waterfront"],
-  },
-  {
-    id: "murcia",
-    fam: "Murcia",
-    name: "Murcia feeders",
-    short: "Murcia",
-    center: [10.60665, 123.04047],
-    radius: 4500,
-    family: true,
-    mld: [
-      { f: "Feeder 4", s: 16, e: 18, label: "4:00PM – 6:00PM" },
-      { f: "Feeder 3", s: 17, e: 19, label: "5:00PM – 7:00PM" },
-      { f: "Feeder 1", s: 18, e: 20, label: "6:00PM – 8:00PM" },
-      { f: "Feeder 2", s: 20, e: 22, label: "8:00PM – 10:00PM" },
-    ],
-    areas: ["Murcia town proper", "Granada"],
-  },
-  {
-    id: "sumag",
-    fam: "Sum-ag",
-    name: "Sum-ag feeders",
-    short: "Sum-ag",
-    center: [10.60199, 122.92483],
-    radius: 2200,
-    family: true,
-    mld: [
-      { f: "Feeder 1", s: 19, e: 21, label: "7:00PM – 9:00PM" },
-      { f: "Feeder 2", s: 20, e: 22, label: "8:00PM – 10:00PM" },
-    ],
-    areas: ["Sum-ag", "Pahanocoy", "Tangub"],
-  },
-  {
-    id: "talisay",
-    fam: "Talisay",
-    name: "Talisay feeders",
-    short: "Talisay",
-    center: [10.73726, 122.96733],
-    radius: 3200,
-    family: true,
-    mld: [
-      { f: "Feeder 2", s: 15, e: 17, label: "3:00PM – 5:00PM" },
-      { f: "Feeder 1", s: 19, e: 22, label: "7:00PM – 10:00PM" },
-      { f: "Feeder 3", s: 21, e: 23, label: "9:00PM – 11:00PM" },
-    ],
-    areas: ["Talisay City"],
-  },
   {
     id: "dsb",
     fam: "Murcia",
     name: "Murcia Feeder 3 — Kumaliskis / DSB",
     short: "Kumaliskis",
-    center: [10.55001, 123.22053],
-    radius: 3500,
-    family: true,
-    upland: true,
+    kind: "area",
+    hullPoints: 2,
+    center: [10.56354, 123.22045],
+    poly: [
+      [10.57706,123.21744], [10.57913,123.21829], [10.58,123.22035], [10.57916,123.22242],
+      [10.57709,123.22329], [10.55002,123.22345], [10.54795,123.22261], [10.54708,123.22054],
+      [10.54793,123.21847], [10.54999,123.2176], [10.57706,123.21744]
+    ],
     mld: [{ f: "Feeder 3", s: 17, e: 19, label: "5:00PM – 7:00PM" }],
     scheduled: {
       date: "Tuesday, 8 September 2026",
@@ -261,19 +237,107 @@ const ZONES = [
     },
     areas: ["Kumaliskis (portion)", "Don Salvador Benedicto"],
   },
+  {
+    id: "mvsub",
+    fam: "Mountain View",
+    name: "Mountain View Substation",
+    short: "Mt. View SS",
+    kind: "substation",
+    center: [10.693143, 122.969153],
+    mld: [],
+    note: "Feeds MF1-MF6. The 6 September preventive maintenance happened here.",
+    areas: [],
+  },
+  {
+    id: "asdes",
+    fam: "Asdes-Gonzaga",
+    name: "Asdes-Gonzaga Substation",
+    short: "Asdes-Gonzaga",
+    kind: "substation",
+    center: [10.666209, 122.952618],
+    mld: [
+      { f: "Feeder 5", s: 14, e: 16, label: "2:00PM – 4:00PM" },
+      { f: "Feeder 4", s: 17, e: 19, label: "5:00PM – 7:00PM" },
+      { f: "Feeder 1", s: 17, e: 19, label: "5:00PM – 7:00PM" },
+      { f: "Feeder 3", s: 19, e: 21, label: "7:00PM – 9:00PM" },
+      { f: "Feeder 7", s: 20, e: 22, label: "8:00PM – 10:00PM" },
+      { f: "Feeder 2", s: 21, e: 23, label: "9:00PM – 11:00PM" },
+    ],
+    note: "Tagged in OpenStreetMap as Asbes Gonzaga Substation, operated by CENECO.",
+    areas: [],
+  },
+  {
+    id: "panaogao",
+    fam: "Panaogao",
+    name: "Panaogao Substation",
+    short: "Panaogao",
+    kind: "substation",
+    center: [10.781265, 123.002954],
+    mld: [
+      { f: "Feeder 2", s: 17, e: 19, label: "5:00PM – 7:00PM" },
+      { f: "Feeder 1", s: 20, e: 22, label: "8:00PM – 10:00PM" },
+    ],
+    areas: [],
+  },
+  {
+    id: "reclamation",
+    fam: "Reclamation",
+    name: "Reclamation Substation",
+    short: "Reclamation",
+    kind: "substation",
+    center: [10.666136, 122.936001],
+    mld: [
+      { f: "Feeder 1", s: 15, e: 17, label: "3:00PM – 5:00PM" },
+      { f: "Feeder 5", s: 18, e: 20, label: "6:00PM – 8:00PM" },
+      { f: "Feeder 2", s: 19, e: 21, label: "7:00PM – 9:00PM" },
+      { f: "Feeder 3", s: 21, e: 23, label: "9:00PM – 11:00PM" },
+    ],
+    areas: [],
+  },
+  {
+    id: "sumag",
+    fam: "Sum-ag",
+    name: "Sum-ag Substation",
+    short: "Sum-ag",
+    kind: "substation",
+    center: [10.594298, 122.925092],
+    mld: [
+      { f: "Feeder 1", s: 19, e: 21, label: "7:00PM – 9:00PM" },
+      { f: "Feeder 2", s: 20, e: 22, label: "8:00PM – 10:00PM" },
+    ],
+    areas: [],
+  },
+  {
+    id: "murcia",
+    fam: "Murcia",
+    name: "CENECO Murcia Substation",
+    short: "Murcia",
+    kind: "substation",
+    center: [10.613463, 123.028222],
+    mld: [
+      { f: "Feeder 4", s: 16, e: 18, label: "4:00PM – 6:00PM" },
+      { f: "Feeder 3", s: 17, e: 19, label: "5:00PM – 7:00PM" },
+      { f: "Feeder 1", s: 18, e: 20, label: "6:00PM – 8:00PM" },
+      { f: "Feeder 2", s: 20, e: 22, label: "8:00PM – 10:00PM" },
+    ],
+    note: "Murcia Feeder 3 also runs up to Kumaliskis / Don Salvador Benedicto, ~20km east.",
+    areas: [],
+  },
 ];
 
-/* feeder families we could not place on a map ---------------------------- */
+/* Neither a published area list nor a substation in OpenStreetMap. Listed with
+   their rotation times; deliberately not drawn. */
 const UNMAPPED = [
-  { name: "Asdes-Gonzaga", slots: [
-    { f: "Feeder 5", label: "2:00PM – 4:00PM" }, { f: "Feeder 4", label: "5:00PM – 7:00PM" },
-    { f: "Feeder 1", label: "5:00PM – 7:00PM" }, { f: "Feeder 3", label: "7:00PM – 9:00PM" },
-    { f: "Feeder 7", label: "8:00PM – 10:00PM" }, { f: "Feeder 2", label: "9:00PM – 11:00PM" }]},
+  { name: "Alijis", slots: [
+    { f: "Feeder 2", label: "2:00PM – 4:00PM" }, { f: "Feeder 4", label: "4:00PM – 6:00PM" },
+    { f: "Feeder 3", label: "4:00PM – 6:00PM" }, { f: "Feeder 5", label: "6:00PM – 8:00PM" },
+    { f: "Feeder 1", label: "6:00PM – 8:00PM" }, { f: "Feeder 8", label: "7:00PM – 10:00PM" }]},
+  { name: "Talisay", slots: [
+    { f: "Feeder 2", label: "3:00PM – 5:00PM" }, { f: "Feeder 1", label: "7:00PM – 10:00PM" },
+    { f: "Feeder 3", label: "9:00PM – 11:00PM" }]},
   { name: "Hilangban", slots: [
     { f: "Feeder 4", label: "5:00PM – 7:00PM" }, { f: "Feeder 2", label: "5:00PM – 7:00PM" },
     { f: "Feeder 3", label: "7:00PM – 9:00PM" }]},
   { name: "Lopez", slots: [
     { f: "Feeder 1", label: "2:00PM – 4:00PM" }, { f: "Feeder 2", label: "3:00PM – 5:00PM" }]},
-  { name: "Panaogao", slots: [
-    { f: "Feeder 2", label: "5:00PM – 7:00PM" }, { f: "Feeder 1", label: "8:00PM – 10:00PM" }]},
 ];

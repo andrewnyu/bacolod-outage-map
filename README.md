@@ -25,21 +25,40 @@ with limited or zero import from the Mindanao grid — 2,255MW available against
 
 ## Honest limits
 
-**It is a frozen snapshot.** It does not update itself. `negrospower.ph/power-advisories`
-is stale (last entries 2024) and defers to Facebook, and Facebook serves only the
-2 newest posts and 8 newest photos to logged-out visitors — so a refresh is real
-work, not a cron one-liner.
+**It is a frozen snapshot.** There is no cron job and no automatic refresh — the
+data is fixed at the 6 September scrape. `negrospower.ph/power-advisories` is
+stale (last entries 2024) and defers to Facebook, and Facebook serves only the
+2 newest posts and 8 newest photos to logged-out visitors, so a refresh is real
+work rather than a scheduled one-liner.
 
-**The circles are approximations, not service boundaries.** Negros Power does not
-publish feeder boundary polygons. Every zone *centre* is geocoded against a real
-OpenStreetMap place, but the radii are estimates. A circle means "roughly this
-area." Zones overlap, and the app says so when your location falls in more than one.
+**The map draws two different kinds of claim, deliberately styled apart.**
 
-**Four feeder families are deliberately not drawn.** Asdes-Gonzaga, Hilangban,
-Lopez and Panaogao appear in the published rotation but could not be tied to any
-real place — they are substation names OSM does not know. Rather than place a
-shape in a plausible-looking but wrong spot, they are listed with their times
-under "feeders we could not put on the map." An honest gap beats a confident error.
+*Shaded areas* exist only where Negros Power published a street-level list. Each
+polygon is the convex hull of the named places in that list, geocoded against
+OpenStreetMap and buffered ~320m, with points more than 3km from the median
+dropped as bad geocodes. They come from the utility's own text.
+
+*Circular pins* are real OpenStreetMap `power=substation` features operated by
+CENECO / Negros Power. A pin marks where those feeders **originate**. It is not a
+coverage area — Negros Power has not published which streets they serve, so no
+shape is drawn for them.
+
+**How accurate is it?** Of 18 landmarks whose true feeder is known from the
+advisory text, the polygons place **14 unambiguously, 4 in overlapping pairs, and
+none wrong**. Adjacent feeders genuinely interleave, so some overlap is real
+rather than error. An earlier circle-based version scored 7 / 11 / 0 on the same
+test, and returned an outright wrong feeder for Lopue's Mandalagan and the
+Redemptorist Church.
+
+**Locate never guesses.** If your position falls inside more than one feeder
+area, the app lists every candidate and says it cannot tell which is yours,
+rather than picking the nearest and presenting it as fact. The area lists are the
+authority; the outlines are an aid.
+
+**Alijis, Talisay, Lopez and Hilangban are not on the map at all.** They appear
+in the published rotation but have no area list and no substation in
+OpenStreetMap. Nothing grounds them, so they are listed with their times and left
+off — 14 of the 33 published feeder slots. An honest gap beats a confident error.
 
 **Always confirm before planning around it.** Rotation schedules change at short
 notice with grid conditions and NGCP directives.
@@ -52,7 +71,7 @@ No build step, no dependencies to install.
 | file | what |
 |---|---|
 | `index.html` | the whole app — markup, styles, logic |
-| `data.js` | the scraped snapshot: zones, coordinates, rotation slots |
+| `data.js` | the scraped snapshot: polygons, substations, rotation slots |
 
 Leaflet is loaded from a CDN; tiles are standard OpenStreetMap, inverted in CSS
 for dark mode.

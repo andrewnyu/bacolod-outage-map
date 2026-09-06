@@ -77,14 +77,11 @@
 
   /* ---------- legend ---------- */
   .legend{
-    position:fixed; left:12px; z-index:900; pointer-events:none;
-    bottom:calc(var(--sheet-h, 210px) + 12px);
-    display:flex; flex-direction:column; gap:5px;
-    background:var(--card); padding:9px 11px; border-radius:12px;
-    box-shadow:var(--shadow); font-size:.72rem; line-height:1.3;
+    display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:8px;
+    font-size:.7rem; color:var(--muted);
   }
-  .legend div{display:flex; align-items:center; gap:7px; color:var(--muted)}
-  .legend i{width:11px; height:11px; border-radius:50%; flex:none; display:block}
+  .legend span{display:flex; align-items:center; gap:5px}
+  .legend i{width:9px; height:9px; border-radius:50%; flex:none; display:block}
 
   /* ---------- bottom sheet ---------- */
   .sheet{
@@ -191,12 +188,6 @@
   <div id="results"></div>
 </div>
 
-<div class="legend" id="legend">
-  <div><i style="background:var(--out)"></i> Power out now</div>
-  <div><i style="background:var(--soon)"></i> Out within the hour</div>
-  <div><i style="background:var(--on)"></i> Power on</div>
-</div>
-
 <div class="sheet" id="sheet">
   <div class="grab" id="grab"></div>
   <div class="scrub">
@@ -206,6 +197,13 @@
     </div>
     <input type="range" id="time" min="14" max="23" step="0.5" value="18">
     <div class="ticks"><span>2PM</span><span>5PM</span><span>8PM</span><span>11PM</span></div>
+    <div class="legend">
+      <span><i style="background:var(--out)"></i>out now</span>
+      <span><i style="background:var(--soon)"></i>within the hour</span>
+      <span><i style="background:var(--on)"></i>on</span>
+      <span><i style="border-radius:2px;background:var(--muted);opacity:.5"></i>published area</span>
+      <span><i style="background:var(--muted)"></i>substation only</span>
+    </div>
   </div>
   <div class="sheet-body" id="body"></div>
 </div>
@@ -228,6 +226,16 @@
   }).addTo(map);
 
   function sheetH(){ return sheet.getBoundingClientRect().height; }
+
+  // ray casting; poly is [[lat,lng],...]
+  function pointInPoly(pt, poly){
+    var x = pt[1], y = pt[0], inside = false;
+    for(var i = 0, j = poly.length - 1; i < poly.length; j = i++){
+      var xi = poly[i][1], yi = poly[i][0], xj = poly[j][1], yj = poly[j][0];
+      if(((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    return inside;
+  }
 
   var css = getComputedStyle(document.documentElement);
   var C_OUT  = css.getPropertyValue('--out').trim();
@@ -260,9 +268,12 @@
   /* ---------- draw zones ---------- */
   var layers = {};
   ZONES.forEach(function(z){
-    var c = L.circle(z.center, {
-      radius: z.radius, weight: 2, opacity: .9, fillOpacity: .22, color: C_ON
-    }).addTo(map);
+    // Area polygons come from Negros Power's own published street lists.
+    // Substations are real OSM features — a pin, never a coverage shape.
+    var c = z.kind === 'area'
+      ? L.polygon(z.poly, { weight:2, opacity:.9, fillOpacity:.22, color:C_ON })
+      : L.circleMarker(z.center, { radius:9, weight:3, opacity:1, fillOpacity:.85, color:C_ON });
+    c.addTo(map);
     c.on('click', function(){ select(z.id); });
     var glow = css.getPropertyValue('--card').trim();
     var lbl = L.marker(z.center, {
@@ -275,22 +286,30 @@
            + z.short + '</div>'
       }), interactive:false
     }).addTo(map);
-    layers[z.id] = { circle:c, label:lbl };
+    layers[z.id] = { shape:c, label:lbl };
   });
 
   // A label is only legible if its circle is actually big on screen. The six
   // Mountain View feeders sit within ~2km of each other, so at city zoom their
   // labels collide into mush — hide them until the user zooms in.
   function updateLabels(){
-    var z0 = map.getZoom(), lat = map.getCenter().lat;
-    var mPerPx = 40075016.686 * Math.cos(lat * Math.PI / 180) / Math.pow(2, z0 + 8);
+    var b = map.getBounds();
     ZONES.forEach(function(z){
-      var px = z.radius / mPerPx;
       var el = layers[z.id].label.getElement();
-      if(el){
-        var d = el.querySelector('.zlabel');
-        if(d) d.style.opacity = (px > 46 || selected === z.id) ? 1 : 0;
+      if(!el) return;
+      var d = el.querySelector('.zlabel');
+      if(!d) return;
+      var show;
+      if(z.kind === 'substation'){
+        show = map.getZoom() >= 11;           // pins are small; label whenever readable
+      } else {
+        // label an area only when its polygon is a decent share of the viewport
+        var pb = layers[z.id].shape.getBounds();
+        var w = map.latLngToLayerPoint(pb.getNorthEast()).x
+              - map.latLngToLayerPoint(pb.getSouthWest()).x;
+        show = Math.abs(w) > 70;
       }
+      d.style.opacity = (show || selected === z.id) ? 1 : 0;
     });
   }
   map.on('zoomend moveend', updateLabels);
@@ -309,12 +328,13 @@
     ZONES.forEach(function(z){
       var st = zoneState(z, t), n = outAt(z, t);
       var col = st === 'out' ? C_OUT : st === 'soon' ? C_SOON : C_ON;
-      // intensity rises with how many feeders in the family are dropped
+      // intensity rises with how many feeders at that substation are dropped
       var fill = st === 'out' ? Math.min(.2 + n * .13, .55) : st === 'soon' ? .2 : .12;
-      layers[z.id].circle.setStyle({
-        color: col, fillColor: col, fillOpacity: fill,
-        weight: selected === z.id ? 4 : 2
-      });
+      layers[z.id].shape.setStyle(z.kind === 'substation'
+        ? { color:col, fillColor:col, fillOpacity:.85,
+            weight: selected === z.id ? 5 : 3, radius: 9 + Math.min(n * 2, 8) }
+        : { color:col, fillColor:col, fillOpacity:fill,
+            weight: selected === z.id ? 4 : 2 });
     });
     updateLabels();
     $('tlabel').textContent = fmt(t);
@@ -335,7 +355,8 @@
     h += '<h2 style="margin-top:2px">Drag the time to see who loses power</h2>';
     h += '<p class="dim">Colours follow the rotation actually implemented on '
        + esc(ROTATION.date) + ' — the working pattern for the next red-alert evening. '
-       + 'Tap any zone for its exact schedule.</p>';
+       + 'Shaded areas are drawn from Negros Power’s published street lists; circles are '
+       + 'real substations whose coverage they have not published. Tap either for times.</p>';
 
     // zones currently out, most affected first
     var live = ZONES.filter(function(z){ return outAt(z, t) > 0; })
@@ -359,8 +380,8 @@
 
     h += '<details><summary>Feeders we could not put on the map</summary>'
        + '<p class="dim" style="margin:8px 0">Negros Power names these feeders in the rotation '
-       + 'but we could not tie them to a real place, so we left them off rather than draw a '
-       + 'shape in the wrong spot.</p>';
+       + 'but publishes no area list for them, and OpenStreetMap has no substation for them '
+       + 'either. Nothing to place them with, so they are left off the map.</p>';
     UNMAPPED.forEach(function(u){
       h += '<div style="margin:9px 0 0"><b style="font-size:.86rem">' + esc(u.name) + '</b>';
       u.slots.forEach(function(s){
@@ -422,15 +443,23 @@
       h += '</ul></details>';
     }
 
-    h += '<details' + (z.family ? '' : ' open') + '><summary>Areas on this feeder ('
-       + z.areas.length + ')</summary><ul>';
-    z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
-    h += '</ul></details>';
+    if(z.areas.length){
+      h += '<details open><summary>Areas on this feeder (' + z.areas.length + ')</summary><ul>';
+      z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
+      h += '</ul></details>';
+    }
 
-    if(z.family){
-      h += '<div class="note">Negros Power publishes street-level areas only for the '
-         + 'Mountain View feeders. For ' + esc(z.short) + ' we can show the rotation times '
-         + 'but only an approximate area.</div>';
+    if(z.kind === 'substation'){
+      h += '<div class="note"><b>This is a substation, not a coverage area.</b> The pin is a '
+         + 'real OpenStreetMap power substation operated by CENECO / Negros Power — it marks '
+         + 'where these feeders start, not which streets they reach. Negros Power has not '
+         + 'published area lists for them, so no shape is drawn.'
+         + (z.note ? ' ' + esc(z.note) : '') + '</div>';
+    } else {
+      h += '<div class="note"><b>How this shape was made.</b> It is the hull of '
+         + z.hullPoints + ' places from Negros Power’s own published area list for this '
+         + 'feeder, geocoded against OpenStreetMap. It approximates coverage and overlaps '
+         + 'neighbouring feeders — the area list above is the authority, not the outline.</div>';
     }
 
     h += footer();
@@ -528,24 +557,29 @@
         radius:8, color:'#fff', weight:3, fillColor:'#1a73e8', fillOpacity:1
       }).addTo(map).bindPopup('You are here').openPopup();
 
-      // which zones contain this point
+      // Which published area polygons contain this point? Adjacent feeders
+      // genuinely interleave, so more than one answer is the honest outcome —
+      // never silently pick the nearest and present it as fact.
       var inside = ZONES.filter(function(z){
-        return map.distance(here, z.center) <= z.radius;
-      }).sort(function(a,b){
-        return map.distance(here, a.center) - map.distance(here, b.center);
+        return z.kind === 'area' && z.poly && pointInPoly(here, z.poly);
       });
 
-      if(inside.length){
+      if(inside.length === 1){
         select(inside[0].id);
-        if(inside.length > 1){
-          var extra = inside.slice(1).map(function(z){ return z.short; }).join(', ');
-          var n = document.createElement('div');
-          n.className = 'note';
-          n.innerHTML = '<b>Heads up.</b> Your location also falls inside ' + esc(extra)
-            + '. Zone circles are approximate and overlap — check the area list to confirm '
-            + 'which feeder is really yours.';
-          $('body').appendChild(n);
-        }
+      } else if(inside.length > 1){
+        map.flyTo(here, 14, { duration:.6 });
+        selected = null; paint();
+        var h = '<h2>You are in ' + inside.length + ' overlapping feeder areas</h2>';
+        h += '<p class="dim">Negros Power publishes street lists, not boundaries, so these '
+           + 'areas are drawn from the streets they name and they overlap. We will not guess '
+           + 'which one is yours — check the area lists below for your actual street.</p>';
+        inside.forEach(function(z){
+          h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b>'
+             + '<span>' + z.areas.length + ' named areas · tap to check</span></button>';
+        });
+        h += footer();
+        $('body').innerHTML = h;
+        wireZoneButtons();
       } else {
         map.flyTo(here, 13, { duration:.6 });
         var near = ZONES.slice().sort(function(a,b){
@@ -613,9 +647,13 @@
   window.addEventListener('resize', function(){ setDetent(detent); });
 
   // fit the Bacolod metro zones on screen, leaving room for the sheet
-  var metro = ZONES.filter(function(z){ return !z.upland; });
-  map.fitBounds(L.latLngBounds(metro.map(function(z){ return z.center; })).pad(.25),
-                { paddingBottomRight: L.point(0, sheetH()) });
+  // Open on the Bacolod core — the published area polygons. Panaogao and Murcia
+  // sit far outside it and would shrink the city to nothing if included.
+  var b = L.latLngBounds([]);
+  ZONES.forEach(function(z){
+    if(z.kind === 'area' && z.id !== 'dsb') b.extend(layers[z.id].shape.getBounds());
+  });
+  map.fitBounds(b.pad(.06), { paddingBottomRight: L.point(0, sheetH()) });
 })();
 </script>
 </body>
