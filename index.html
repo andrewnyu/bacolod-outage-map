@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<title>Bacolod Outage Map</title>
+<meta name="description" content="See which Bacolod feeders lose power and when. Tap a zone or find your area.">
+<meta name="theme-color" content="#0b7a3f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --ink:#131a17; --muted:#5f6d66; --line:#e2e8e4; --card:#fff; --bg:#eef1ef;
+    --on:#1a8a4d; --out:#d93b30; --soon:#e08600;
+    --shadow:0 2px 12px rgba(0,0,0,.13); --shadow-lg:0 -4px 28px rgba(0,0,0,.16);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ink:#e9efeb; --muted:#98a6a0; --line:#2b3630; --card:#171e1a; --bg:#0d1310;
+      --on:#40c97a; --out:#ff6b5e; --soon:#f5a623;
+      --shadow:0 2px 12px rgba(0,0,0,.5); --shadow-lg:0 -4px 28px rgba(0,0,0,.6);
+    }
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); overflow:hidden;
+    font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  #map{position:fixed; inset:0; background:var(--bg)}
+  .leaflet-container{background:var(--bg); font:inherit}
+  /* OSM only ships a light basemap; invert it for dark mode and spin the hues back */
+  @media (prefers-color-scheme:dark){
+    .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9)}
+  }
+  /* keep the zoom control clear of the floating search bar */
+  .leaflet-top.leaflet-right{margin-top:calc(env(safe-area-inset-top) + 66px)}
+  .leaflet-control-zoom a{border-radius:8px !important}
+  .zlabel{transition:opacity .18s}
+
+  /* ---------- top search bar ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;
+    pointer-events:none;
+  }
+  .bar{
+    display:flex; align-items:center; gap:8px; max-width:520px; margin:0 auto;
+    background:var(--card); border-radius:999px; box-shadow:var(--shadow);
+    padding:4px 4px 4px 16px; pointer-events:auto;
+  }
+  .bar input{
+    flex:1; border:0; outline:0; background:none; color:var(--ink);
+    font-size:16px; padding:11px 0; min-width:0;
+  }
+  .bar input::placeholder{color:var(--muted)}
+  .iconbtn{
+    flex:none; width:40px; height:40px; border-radius:50%; border:0; cursor:pointer;
+    background:var(--bg); color:var(--ink); font-size:17px; display:grid; place-items:center;
+  }
+  .iconbtn:active{transform:scale(.94)}
+  .iconbtn.busy{opacity:.5}
+
+  #results{
+    max-width:520px; margin:8px auto 0; background:var(--card); border-radius:16px;
+    box-shadow:var(--shadow); overflow:hidden; pointer-events:auto; display:none;
+    max-height:52vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  #results.show{display:block}
+  .res{padding:12px 16px; border-bottom:1px solid var(--line); cursor:pointer}
+  .res:last-child{border-bottom:0}
+  .res:active{background:var(--bg)}
+  .res b{display:block; font-weight:600; font-size:.95rem}
+  .res span{font-size:.8rem; color:var(--muted)}
+  .res-empty{padding:18px 16px; color:var(--muted); font-size:.9rem; text-align:center}
+
+  /* ---------- legend ---------- */
+  .legend{
+    position:fixed; left:12px; z-index:900; pointer-events:none;
+    bottom:calc(var(--sheet-h, 210px) + 12px);
+    display:flex; flex-direction:column; gap:5px;
+    background:var(--card); padding:9px 11px; border-radius:12px;
+    box-shadow:var(--shadow); font-size:.72rem; line-height:1.3;
+  }
+  .legend div{display:flex; align-items:center; gap:7px; color:var(--muted)}
+  .legend i{width:11px; height:11px; border-radius:50%; flex:none; display:block}
+
+  /* ---------- bottom sheet ---------- */
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:1000;
+    background:var(--card); border-radius:20px 20px 0 0; box-shadow:var(--shadow-lg);
+    height:var(--sh, 46vh); display:flex; flex-direction:column;
+    transition:height .3s cubic-bezier(.32,.72,0,1);
+  }
+  .grab{padding:9px 0 3px; flex:none; cursor:grab; touch-action:none}
+  .grab::after{
+    content:""; display:block; width:38px; height:4px; border-radius:99px;
+    background:var(--line); margin:0 auto;
+  }
+  .sheet-body{
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:6px 18px calc(env(safe-area-inset-bottom) + 20px);
+  }
+
+  /* ---------- time scrubber ---------- */
+  .scrub{flex:none; padding:4px 18px 12px; border-bottom:1px solid var(--line)}
+  .scrub-top{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2px}
+  .scrub-time{font-size:1.5rem; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .scrub-count{font-size:.82rem; color:var(--muted); text-align:right}
+  .scrub-count b{color:var(--out)}
+  input[type=range]{
+    width:100%; margin:6px 0 0; -webkit-appearance:none; background:none; height:26px;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:5px; border-radius:99px;
+    background:linear-gradient(90deg,var(--on),var(--soon),var(--out));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
+    background:var(--card); border:3px solid var(--ink); margin-top:-10px; cursor:grab;
+    box-shadow:var(--shadow);
+  }
+  input[type=range]::-moz-range-track{height:5px; border-radius:99px; background:var(--line)}
+  input[type=range]::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background:var(--card);
+    border:3px solid var(--ink); cursor:grab;
+  }
+  .ticks{display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); margin-top:-2px}
+
+  /* ---------- sheet content ---------- */
+  h2{margin:14px 0 8px; font-size:1.02rem; letter-spacing:-.01em}
+  h2:first-child{margin-top:8px}
+  p{margin:0 0 8px}
+  .dim{color:var(--muted); font-size:.85rem}
+  .pill{
+    display:inline-block; padding:3px 10px; border-radius:999px;
+    font-size:.72rem; font-weight:700; letter-spacing:.02em;
+  }
+  .p-out{background:rgba(217,59,48,.13); color:var(--out)}
+  .p-on{background:rgba(26,138,77,.13); color:var(--on)}
+  .p-soon{background:rgba(224,134,0,.14); color:var(--soon)}
+  .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px}
+
+  .slot{
+    display:flex; justify-content:space-between; gap:12px; align-items:center;
+    padding:10px 0; border-bottom:1px solid var(--line); font-size:.9rem;
+  }
+  .slot:last-child{border-bottom:0}
+  .slot .t{font-variant-numeric:tabular-nums; color:var(--muted); white-space:nowrap}
+  .slot.live{font-weight:700}
+  .slot.live .t{color:var(--out)}
+
+  details{border-top:1px solid var(--line); padding:11px 0 2px; margin-top:10px}
+  summary{cursor:pointer; font-weight:600; font-size:.88rem; list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸ "; color:var(--muted)}
+  details[open] summary::before{content:"▾ "}
+  details ul{margin:9px 0 4px; padding-left:19px; font-size:.85rem; color:var(--muted)}
+  details li{margin:3px 0}
+
+  .note{
+    background:var(--bg); border-radius:12px; padding:11px 13px;
+    font-size:.8rem; color:var(--muted); margin:10px 0 0; line-height:1.55;
+  }
+  .note a{color:var(--on)}
+  .back{
+    background:none; border:0; color:var(--on); font-size:.87rem; font-weight:600;
+    cursor:pointer; padding:0; margin:2px 0 6px;
+  }
+  .zbtn{
+    display:block; width:100%; text-align:left; background:var(--bg); border:0;
+    border-radius:12px; padding:11px 13px; margin-bottom:7px; cursor:pointer;
+    color:var(--ink); font:inherit;
+  }
+  .zbtn:active{transform:scale(.99)}
+  .zbtn b{display:block; font-size:.92rem}
+  .zbtn span{font-size:.78rem; color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="topbar">
+  <div class="bar">
+    <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false"
+           placeholder="Search your subdivision or street">
+    <button class="iconbtn" id="locate" title="Find my location" aria-label="Find my location">◎</button>
+  </div>
+  <div id="results"></div>
+</div>
+
+<div class="legend" id="legend">
+  <div><i style="background:var(--out)"></i> Power out now</div>
+  <div><i style="background:var(--soon)"></i> Out within the hour</div>
+  <div><i style="background:var(--on)"></i> Power on</div>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="grab" id="grab"></div>
+  <div class="scrub">
+    <div class="scrub-top">
+      <div class="scrub-time" id="tlabel">6:00 PM</div>
+      <div class="scrub-count" id="tcount"></div>
+    </div>
+    <input type="range" id="time" min="14" max="23" step="0.5" value="18">
+    <div class="ticks"><span>2PM</span><span>5PM</span><span>8PM</span><span>11PM</span></div>
+  </div>
+  <div class="sheet-body" id="body"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var body = $('body'), sheet = $('sheet'), qEl = $('q'), resEl = $('results');
+  var selected = null, t = 18;
+
+  /* ---------- map ---------- */
+  var dark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+  var map = L.map('map', { zoomControl:false, attributionControl:true })
+             .setView([10.678, 122.962], 12);
+  L.control.zoom({ position:'topright' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  function sheetH(){ return sheet.getBoundingClientRect().height; }
+
+  var css = getComputedStyle(document.documentElement);
+  var C_OUT  = css.getPropertyValue('--out').trim();
+  var C_SOON = css.getPropertyValue('--soon').trim();
+  var C_ON   = css.getPropertyValue('--on').trim();
+
+  /* ---------- state helpers ---------- */
+  // how many of this zone's feeders are dropped at hour h
+  function outAt(z, h){
+    var n = 0;
+    z.mld.forEach(function(m){ if(h >= m.s && h < m.e) n++; });
+    return n;
+  }
+  function soonAt(z, h){
+    var n = 0;
+    z.mld.forEach(function(m){ if(m.s > h && m.s <= h + 1) n++; });
+    return n;
+  }
+  function zoneState(z, h){
+    if(outAt(z, h) > 0) return 'out';
+    if(soonAt(z, h) > 0) return 'soon';
+    return 'on';
+  }
+  function fmt(h){
+    var hr = Math.floor(h), mn = (h % 1) ? 30 : 0;
+    var ap = hr >= 12 ? 'PM' : 'AM', h12 = hr % 12 || 12;
+    return h12 + ':' + (mn ? '30' : '00') + ' ' + ap;
+  }
+
+  /* ---------- draw zones ---------- */
+  var layers = {};
+  ZONES.forEach(function(z){
+    var c = L.circle(z.center, {
+      radius: z.radius, weight: 2, opacity: .9, fillOpacity: .22, color: C_ON
+    }).addTo(map);
+    c.on('click', function(){ select(z.id); });
+    var glow = css.getPropertyValue('--card').trim();
+    var lbl = L.marker(z.center, {
+      icon: L.divIcon({
+        className:'', iconSize:[0,0],
+        html:'<div class="zlabel" style="transform:translate(-50%,-50%);white-space:nowrap;'
+           + 'font:600 11px/1 -apple-system,sans-serif;color:'
+           + css.getPropertyValue('--ink').trim()
+           + ';text-shadow:0 0 4px '+glow+',0 0 4px '+glow+',0 0 4px '+glow+'">'
+           + z.short + '</div>'
+      }), interactive:false
+    }).addTo(map);
+    layers[z.id] = { circle:c, label:lbl };
+  });
+
+  // A label is only legible if its circle is actually big on screen. The six
+  // Mountain View feeders sit within ~2km of each other, so at city zoom their
+  // labels collide into mush — hide them until the user zooms in.
+  function updateLabels(){
+    var z0 = map.getZoom(), lat = map.getCenter().lat;
+    var mPerPx = 40075016.686 * Math.cos(lat * Math.PI / 180) / Math.pow(2, z0 + 8);
+    ZONES.forEach(function(z){
+      var px = z.radius / mPerPx;
+      var el = layers[z.id].label.getElement();
+      if(el){
+        var d = el.querySelector('.zlabel');
+        if(d) d.style.opacity = (px > 46 || selected === z.id) ? 1 : 0;
+      }
+    });
+  }
+  map.on('zoomend moveend', updateLabels);
+
+  function paint(){
+    // Murcia Feeder 3 shows up in two zones (the Murcia family and the upland
+    // Kumaliskis/DSB stretch it also serves), so tally unique feeders, not rows.
+    var live = {};
+    ZONES.forEach(function(z){
+      z.mld.forEach(function(m){
+        if(t >= m.s && t < m.e) live[z.fam + ' ' + m.f] = 1;
+      });
+    });
+    var totalOut = Object.keys(live).length;
+
+    ZONES.forEach(function(z){
+      var st = zoneState(z, t), n = outAt(z, t);
+      var col = st === 'out' ? C_OUT : st === 'soon' ? C_SOON : C_ON;
+      // intensity rises with how many feeders in the family are dropped
+      var fill = st === 'out' ? Math.min(.2 + n * .13, .55) : st === 'soon' ? .2 : .12;
+      layers[z.id].circle.setStyle({
+        color: col, fillColor: col, fillOpacity: fill,
+        weight: selected === z.id ? 4 : 2
+      });
+    });
+    updateLabels();
+    $('tlabel').textContent = fmt(t);
+    $('tcount').innerHTML = totalOut
+      ? '<b>' + totalOut + ' feeder' + (totalOut>1?'s':'') + '</b> dropped'
+      : 'all mapped feeders on';
+  }
+
+  /* ---------- sheet ---------- */
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function renderHome(){
+    selected = null;
+    var h = '';
+    h += '<div class="row"><span class="pill p-out">NGCP red alert</span>'
+       + '<span class="pill p-soon">Rotational brownouts</span></div>';
+    h += '<h2 style="margin-top:2px">Drag the time to see who loses power</h2>';
+    h += '<p class="dim">Colours follow the rotation actually implemented on '
+       + esc(ROTATION.date) + ' — the working pattern for the next red-alert evening. '
+       + 'Tap any zone for its exact schedule.</p>';
+
+    // zones currently out, most affected first
+    var live = ZONES.filter(function(z){ return outAt(z, t) > 0; })
+                    .sort(function(a,b){ return outAt(b,t) - outAt(a,t); });
+    if(live.length){
+      h += '<h2>Out at ' + fmt(t) + '</h2>';
+      live.forEach(function(z){
+        var n = outAt(z, t);
+        h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b>'
+           + '<span>' + n + ' feeder' + (n>1?'s':'') + ' dropped · tap for times</span></button>';
+      });
+    } else {
+      h += '<h2>Nothing dropped at ' + fmt(t) + '</h2>';
+      h += '<p class="dim">No mapped feeder is scheduled off at this time.</p>';
+    }
+
+    h += '<div class="note"><b>Why this is happening.</b> ' + esc(ROTATION.reason)
+       + ' Available ' + esc(ROTATION.available) + ' against peak demand '
+       + esc(ROTATION.demand) + '. Red alert ' + esc(ROTATION.redAlert)
+       + ', yellow alert ' + esc(ROTATION.yellowAlert) + '.</div>';
+
+    h += '<details><summary>Feeders we could not put on the map</summary>'
+       + '<p class="dim" style="margin:8px 0">Negros Power names these feeders in the rotation '
+       + 'but we could not tie them to a real place, so we left them off rather than draw a '
+       + 'shape in the wrong spot.</p>';
+    UNMAPPED.forEach(function(u){
+      h += '<div style="margin:9px 0 0"><b style="font-size:.86rem">' + esc(u.name) + '</b>';
+      u.slots.forEach(function(s){
+        h += '<div class="slot"><span>' + esc(s.f) + '</span><span class="t">'
+           + esc(s.label) + '</span></div>';
+      });
+      h += '</div>';
+    });
+    h += '</details>';
+
+    h += footer();
+    $('body').innerHTML = h;
+    wireZoneButtons();
+  }
+
+  function renderZone(z){
+    var h = '<button class="back" id="back">‹ All zones</button>';
+    var st = zoneState(z, t), n = outAt(z, t);
+
+    h += '<div class="row"><b style="font-size:1.12rem;letter-spacing:-.02em">'
+       + esc(z.name) + '</b></div>';
+    h += '<div class="row">';
+    h += st === 'out'
+      ? '<span class="pill p-out">' + n + ' feeder' + (n>1?'s':'') + ' out at ' + fmt(t) + '</span>'
+      : st === 'soon'
+        ? '<span class="pill p-soon">Drops within the hour</span>'
+        : '<span class="pill p-on">On at ' + fmt(t) + '</span>';
+    h += '</div>';
+
+    if(z.scheduled){
+      h += '<h2>Scheduled outage</h2>';
+      h += '<div class="slot live"><span>' + esc(z.scheduled.date) + '</span>'
+         + '<span class="t">' + esc(z.scheduled.window) + '</span></div>';
+      h += '<p class="dim" style="margin-top:8px">' + esc(z.scheduled.cause) + '</p>';
+    }
+
+    if(z.mld.length){
+      h += '<h2>Rotational brownout slots</h2>';
+      h += '<p class="dim" style="margin-bottom:6px">From ' + esc(ROTATION.date) + '.</p>';
+      z.mld.slice().sort(function(a,b){ return a.s - b.s; }).forEach(function(m){
+        var liveNow = t >= m.s && t < m.e;
+        h += '<div class="slot' + (liveNow ? ' live' : '') + '"><span>' + esc(m.f)
+           + '</span><span class="t">' + esc(m.label) + '</span></div>';
+      });
+    } else {
+      h += '<h2>Rotational brownout slots</h2>';
+      h += '<p class="dim">This feeder did not appear in the ' + esc(ROTATION.date)
+         + ' rotation. That is not a guarantee it will be spared on the next one.</p>';
+    }
+
+    if(z.sep6){
+      h += '<h2>Planned works, ' + esc(SCHEDULED_SEP6.date) + '</h2>';
+      h += '<div class="row"><span class="pill p-on">Restored '
+         + esc(SCHEDULED_SEP6.restoredAt) + '</span></div>';
+      h += '<div class="slot"><span>' + esc(z.sep6.scope) + '</span><span class="t">'
+         + z.sep6.label + '</span></div>';
+      h += '<details><summary>Why the power was out</summary><ul>';
+      SCHEDULED_SEP6.cause.forEach(function(c){ h += '<li>' + esc(c) + '</li>'; });
+      h += '</ul></details>';
+    }
+
+    h += '<details' + (z.family ? '' : ' open') + '><summary>Areas on this feeder ('
+       + z.areas.length + ')</summary><ul>';
+    z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
+    h += '</ul></details>';
+
+    if(z.family){
+      h += '<div class="note">Negros Power publishes street-level areas only for the '
+         + 'Mountain View feeders. For ' + esc(z.short) + ' we can show the rotation times '
+         + 'but only an approximate area.</div>';
+    }
+
+    h += footer();
+    $('body').innerHTML = h;
+    $('back').addEventListener('click', function(){ renderHome(); });
+  }
+
+  function footer(){
+    return '<div class="note"><b>Unofficial.</b> Scraped from the '
+      + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
+      + 'Negros Power Facebook page</a> on ' + esc(SNAPSHOT) + '. This is a static snapshot '
+      + 'and does not update itself. Zone circles are approximations, not service boundaries '
+      + '— Negros Power does not publish feeder maps. Rotation schedules change at short '
+      + 'notice with grid conditions. Confirm on '
+      + '<a href="tel:+63347056372">(034) 705-6372</a> or '
+      + '<a href="tel:+639176837250">0917 683 7250</a>.</div>';
+  }
+
+  function wireZoneButtons(){
+    Array.prototype.forEach.call(document.querySelectorAll('.zbtn'), function(b){
+      b.addEventListener('click', function(){ select(b.getAttribute('data-z')); });
+    });
+  }
+
+  function select(id){
+    var z = ZONES.filter(function(x){ return x.id === id; })[0];
+    if(!z) return;
+    selected = id;
+    paint();
+    // nudge the target up so it lands in the visible strip above the sheet
+    var zoom = z.radius > 3000 ? 12 : 14;
+    var pt = map.project(z.center, zoom).add([0, sheetH() / 2]);
+    map.flyTo(map.unproject(pt, zoom), zoom, { duration:.6 });
+    renderZone(z);
+    $('body').scrollTop = 0;
+    hideResults();
+  }
+
+  /* ---------- search ---------- */
+  var index = [];
+  ZONES.forEach(function(z){
+    z.areas.forEach(function(a){ index.push({ area:a, z:z }); });
+    index.push({ area:z.name, z:z });
+  });
+  function norm(s){ return s.toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
+
+  function hideResults(){ resEl.classList.remove('show'); }
+
+  function runSearch(){
+    var term = qEl.value.trim();
+    if(!term){ hideResults(); return; }
+    var n = norm(term), hits = [], seen = {};
+    index.forEach(function(e){
+      var p = norm(e.area).indexOf(n);
+      if(p > -1 && !seen[e.area + e.z.id]){ seen[e.area + e.z.id] = 1; hits.push({ e:e, p:p }); }
+    });
+    hits.sort(function(a,b){ return a.p - b.p; });
+    hits = hits.slice(0, 8);
+    if(!hits.length){
+      resEl.innerHTML = '<div class="res-empty">Nothing matching “' + esc(term)
+        + '”.<br>Try a shorter word or a nearby landmark.</div>';
+      resEl.classList.add('show'); return;
+    }
+    resEl.innerHTML = hits.map(function(h, i){
+      return '<div class="res" data-i="' + i + '"><b>' + esc(h.e.area) + '</b><span>'
+           + esc(h.e.z.name) + '</span></div>';
+    }).join('');
+    resEl.classList.add('show');
+    Array.prototype.forEach.call(resEl.querySelectorAll('.res'), function(el){
+      el.addEventListener('click', function(){
+        var h = hits[+el.getAttribute('data-i')];
+        qEl.value = h.e.area;
+        qEl.blur();
+        select(h.e.z.id);
+      });
+    });
+  }
+  qEl.addEventListener('input', runSearch);
+  qEl.addEventListener('focus', runSearch);
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.topbar')) hideResults();
+  });
+
+  /* ---------- locate ---------- */
+  var youMarker = null;
+  $('locate').addEventListener('click', function(){
+    var btn = this;
+    if(!navigator.geolocation){ alert('Location is not available in this browser.'); return; }
+    btn.classList.add('busy'); btn.textContent = '…';
+    navigator.geolocation.getCurrentPosition(function(pos){
+      btn.classList.remove('busy'); btn.textContent = '◎';
+      var here = [pos.coords.latitude, pos.coords.longitude];
+      if(youMarker) map.removeLayer(youMarker);
+      youMarker = L.circleMarker(here, {
+        radius:8, color:'#fff', weight:3, fillColor:'#1a73e8', fillOpacity:1
+      }).addTo(map).bindPopup('You are here').openPopup();
+
+      // which zones contain this point
+      var inside = ZONES.filter(function(z){
+        return map.distance(here, z.center) <= z.radius;
+      }).sort(function(a,b){
+        return map.distance(here, a.center) - map.distance(here, b.center);
+      });
+
+      if(inside.length){
+        select(inside[0].id);
+        if(inside.length > 1){
+          var extra = inside.slice(1).map(function(z){ return z.short; }).join(', ');
+          var n = document.createElement('div');
+          n.className = 'note';
+          n.innerHTML = '<b>Heads up.</b> Your location also falls inside ' + esc(extra)
+            + '. Zone circles are approximate and overlap — check the area list to confirm '
+            + 'which feeder is really yours.';
+          $('body').appendChild(n);
+        }
+      } else {
+        map.flyTo(here, 13, { duration:.6 });
+        var near = ZONES.slice().sort(function(a,b){
+          return map.distance(here, a.center) - map.distance(here, b.center);
+        })[0];
+        var km = (map.distance(here, near.center) / 1000).toFixed(1);
+        $('body').innerHTML = '<button class="back" id="back">‹ All zones</button>'
+          + '<h2>You are outside the mapped zones</h2>'
+          + '<p class="dim">Nearest mapped feeder is <b>' + esc(near.name) + '</b>, about '
+          + km + ' km away. That does not mean you have power — it means Negros Power has '
+          + 'not published enough detail for us to place you.</p>' + footer();
+        $('back').addEventListener('click', function(){ renderHome(); });
+      }
+    }, function(err){
+      btn.classList.remove('busy'); btn.textContent = '◎';
+      alert(err.code === 1
+        ? 'Location permission was denied. Search your subdivision instead.'
+        : 'Could not get your location. Search your subdivision instead.');
+    }, { enableHighAccuracy:true, timeout:10000, maximumAge:60000 });
+  });
+
+  /* ---------- time scrubber ---------- */
+  $('time').addEventListener('input', function(){
+    t = parseFloat(this.value);
+    paint();
+    if(selected){ renderZone(ZONES.filter(function(x){ return x.id === selected; })[0]); }
+    else renderHome();
+  });
+
+  /* ---------- sheet detents: peek / mid / full ---------- */
+  var detent = 1, startY = 0, dragging = false;
+  function peekPx(){
+    return sheet.querySelector('.grab').offsetHeight
+         + sheet.querySelector('.scrub').offsetHeight;
+  }
+  function setDetent(i){
+    detent = Math.max(0, Math.min(2, i));
+    var h = detent === 0 ? peekPx() + 'px' : detent === 1 ? '46vh' : '84vh';
+    sheet.style.setProperty('--sh', h);
+    // keep the legend sitting just above the sheet
+    requestAnimationFrame(function(){
+      document.documentElement.style.setProperty(
+        '--sheet-h', sheet.getBoundingClientRect().height + 'px');
+    });
+  }
+  $('grab').addEventListener('pointerdown', function(e){
+    dragging = true; startY = e.clientY; this.setPointerCapture(e.pointerId);
+  });
+  $('grab').addEventListener('pointerup', function(e){
+    if(!dragging) return;
+    dragging = false;
+    var dy = e.clientY - startY;
+    if(dy < -24) setDetent(detent + 1);        // dragged up
+    else if(dy > 24) setDetent(detent - 1);    // dragged down
+    else setDetent(detent === 2 ? 0 : detent + 1); // tap cycles
+  });
+
+  /* ---------- go ---------- */
+  var now = new Date();
+  var nowH = now.getHours() + (now.getMinutes() >= 30 ? .5 : 0);
+  if(nowH >= T_START && nowH <= T_END){ t = nowH; $('time').value = t; }
+  paint();
+  renderHome();
+  setDetent(1);
+  window.addEventListener('resize', function(){ setDetent(detent); });
+
+  // fit the Bacolod metro zones on screen, leaving room for the sheet
+  var metro = ZONES.filter(function(z){ return !z.upland; });
+  map.fitBounds(L.latLngBounds(metro.map(function(z){ return z.center; })).pad(.25),
+                { paddingBottomRight: L.point(0, sheetH()) });
+})();
+</script>
+</body>
+</html>
