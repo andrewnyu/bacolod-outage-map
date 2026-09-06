@@ -1,0 +1,103 @@
+name: Refresh outage data
+
+# Bacolod is UTC+8. Negros Power posts the rotational-brownout advisory during
+# the afternoon, and red alerts run 2PM-11PM local, so check at 1PM and 5PM PHT.
+on:
+  schedule:
+    - cron: '0 5 * * *'    # 13:00 PHT
+    - cron: '0 9 * * *'    # 17:00 PHT
+  workflow_dispatch:        # run it by hand from the Actions tab
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y tesseract-ocr
+
+      - name: Scrape the Facebook page
+        id: scrape
+        run: node scripts/scrape.mjs data/raw-latest.json data/img
+
+      # Exit 2 means "nothing usable parsed" — normal on a day with no rotation
+      # published. Only a crash (1) should fail the job.
+      - name: Parse into schedule.js
+        id: parse
+        run: |
+          set +e
+          node scripts/parse.mjs data/raw-latest.json schedule.js
+          code=$?
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" = "2" ]; then
+            echo "::notice::No usable rotation parsed. Existing data kept unchanged."
+            exit 0
+          fi
+          exit $code
+
+      - name: Sanity-check the result
+        run: |
+          node -e "
+            const fs=require('fs');
+            eval(fs.readFileSync('geo.js','utf8')+fs.readFileSync('schedule.js','utf8')+\`
+              const n=Object.keys(SCHEDULE.slots).length;
+              if(n<8) { console.error('too few slots: '+n); process.exit(1); }
+              const declared=new Set(); ZONES.forEach(z=>z.feeders.forEach(f=>declared.add(f)));
+              const orphans=Object.keys(SCHEDULE.slots).filter(f=>!declared.has(f));
+              if(orphans.length) console.log('::warning::feeders with no zone: '+orphans.join(', '));
+              console.log('ok — '+n+' slots');
+            \`);
+          "
+
+      - name: Commit if changed
+        id: commit
+        run: |
+          git config user.name  "outage-refresh[bot]"
+          git config user.email "actions@github.com"
+          git add schedule.js data/raw-latest.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "no change"
+          else
+            git commit -m "Refresh outage data $(date -u +%Y-%m-%d)"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Deployed from here rather than via the Vercel GitHub App, so the repo
+      # needs no third-party app installed.
+      - name: Deploy to Vercel
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm i -g vercel@latest
+          vercel deploy --prod --yes --token "${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Upload raw capture for debugging
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-capture
+          path: |
+            data/raw-latest.json
+            data/img/
+          retention-days: 7
+          if-no-files-found: ignore

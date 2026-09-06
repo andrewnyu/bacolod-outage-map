@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <title>Bacolod Outage Map</title>
-<meta name="description" content="See which Bacolod feeders lose power and when. Tap a zone or find your area.">
+<meta name="description" content="Which Negros Power feeders lose power in Bacolod, and when. Pick your feeder or find it on the map.">
 <meta name="theme-color" content="#0b7a3f">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -13,6 +13,7 @@
     --ink:#131a17; --muted:#5f6d66; --line:#e2e8e4; --card:#fff; --bg:#eef1ef;
     --on:#1a8a4d; --out:#d93b30; --soon:#e08600;
     --shadow:0 2px 12px rgba(0,0,0,.13); --shadow-lg:0 -4px 28px rgba(0,0,0,.16);
+    --rail:300px;
   }
   @media (prefers-color-scheme:dark){
     :root{
@@ -30,62 +31,94 @@
   }
   #map{position:fixed; inset:0; background:var(--bg)}
   .leaflet-container{background:var(--bg); font:inherit}
-  /* OSM only ships a light basemap; invert it for dark mode and spin the hues back */
   @media (prefers-color-scheme:dark){
     .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9)}
   }
-  /* keep the zoom control clear of the floating search bar */
   .leaflet-top.leaflet-right{margin-top:calc(env(safe-area-inset-top) + 66px)}
   .leaflet-control-zoom a{border-radius:8px !important}
   .zlabel{transition:opacity .18s}
 
-  /* ---------- top search bar ---------- */
+  /* ---------- top bar ---------- */
   .topbar{
-    position:fixed; top:0; left:0; right:0; z-index:1000;
-    padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;
-    pointer-events:none;
+    position:fixed; top:0; left:0; right:0; z-index:1200;
+    padding:calc(env(safe-area-inset-top) + 10px) 12px 10px; pointer-events:none;
   }
   .bar{
-    display:flex; align-items:center; gap:8px; max-width:520px; margin:0 auto;
+    display:flex; align-items:center; gap:6px; max-width:560px; margin:0 auto;
     background:var(--card); border-radius:999px; box-shadow:var(--shadow);
-    padding:4px 4px 4px 16px; pointer-events:auto;
+    padding:4px 4px 4px 6px; pointer-events:auto;
   }
   .bar input{
     flex:1; border:0; outline:0; background:none; color:var(--ink);
-    font-size:16px; padding:11px 0; min-width:0;
+    font-size:16px; padding:11px 4px; min-width:0;
   }
   .bar input::placeholder{color:var(--muted)}
   .iconbtn{
     flex:none; width:40px; height:40px; border-radius:50%; border:0; cursor:pointer;
-    background:var(--bg); color:var(--ink); font-size:17px; display:grid; place-items:center;
+    background:var(--bg); color:var(--ink); font-size:16px; display:grid; place-items:center;
   }
   .iconbtn:active{transform:scale(.94)}
-  .iconbtn.busy{opacity:.5}
 
   #results{
-    max-width:520px; margin:8px auto 0; background:var(--card); border-radius:16px;
+    max-width:560px; margin:8px auto 0; background:var(--card); border-radius:16px;
     box-shadow:var(--shadow); overflow:hidden; pointer-events:auto; display:none;
-    max-height:52vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    max-height:52vh; overflow-y:auto;
   }
   #results.show{display:block}
   .res{padding:12px 16px; border-bottom:1px solid var(--line); cursor:pointer}
   .res:last-child{border-bottom:0}
-  .res:active{background:var(--bg)}
   .res b{display:block; font-weight:600; font-size:.95rem}
   .res span{font-size:.8rem; color:var(--muted)}
   .res-empty{padding:18px 16px; color:var(--muted); font-size:.9rem; text-align:center}
 
-  /* ---------- legend ---------- */
-  .legend{
-    display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:8px;
-    font-size:.7rem; color:var(--muted);
+  /* ---------- left feeder rail ---------- */
+  .rail{
+    position:fixed; top:0; left:0; bottom:0; width:var(--rail); z-index:1300;
+    background:var(--card); box-shadow:var(--shadow-lg); display:flex; flex-direction:column;
+    transform:translateX(-100%); transition:transform .26s cubic-bezier(.32,.72,0,1);
   }
-  .legend span{display:flex; align-items:center; gap:5px}
-  .legend i{width:9px; height:9px; border-radius:50%; flex:none; display:block}
+  .rail.open{transform:none}
+  .rail-head{
+    flex:none; padding:calc(env(safe-area-inset-top) + 14px) 16px 10px;
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:flex-start; justify-content:space-between; gap:8px;
+  }
+  .rail-head b{font-size:1rem; letter-spacing:-.01em}
+  .rail-head span{font-size:.74rem; color:var(--muted); display:block; margin-top:2px}
+  .rail-list{overflow-y:auto; padding:6px 0 24px; flex:1}
+  .fam{
+    padding:12px 16px 4px; font-size:.7rem; font-weight:700; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.06em;
+  }
+  .fam small{
+    display:block; text-transform:none; letter-spacing:0; font-weight:500;
+    font-size:.72rem; margin-top:3px; opacity:.85;
+  }
+  .fd{
+    display:flex; align-items:center; gap:9px; width:100%; text-align:left;
+    padding:9px 16px; background:none; border:0; cursor:pointer; color:var(--ink);
+    font:inherit; font-size:.88rem;
+  }
+  .fd:hover{background:var(--bg)}
+  .fd.sel{background:var(--bg); font-weight:700}
+  .fd i{width:9px; height:9px; border-radius:50%; flex:none}
+  .fd .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .fd .tm{font-size:.75rem; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .scrim{
+    position:fixed; inset:0; z-index:1250; background:rgba(0,0,0,.42);
+    opacity:0; pointer-events:none; transition:opacity .26s;
+  }
+  .scrim.on{opacity:1; pointer-events:auto}
+  @media (min-width:980px){
+    .rail{transform:none; box-shadow:none; border-right:1px solid var(--line)}
+    .scrim{display:none}
+    #map, .topbar, .sheet{left:var(--rail)}
+    #railbtn, #railclose{display:none}
+  }
 
   /* ---------- bottom sheet ---------- */
   .sheet{
-    position:fixed; left:0; right:0; bottom:0; z-index:1000;
+    position:fixed; left:0; right:0; bottom:0; z-index:1100;
     background:var(--card); border-radius:20px 20px 0 0; box-shadow:var(--shadow-lg);
     height:var(--sh, 46vh); display:flex; flex-direction:column;
     transition:height .3s cubic-bezier(.32,.72,0,1);
@@ -95,50 +128,40 @@
     content:""; display:block; width:38px; height:4px; border-radius:99px;
     background:var(--line); margin:0 auto;
   }
-  .sheet-body{
-    overflow-y:auto; -webkit-overflow-scrolling:touch;
-    padding:6px 18px calc(env(safe-area-inset-bottom) + 20px);
-  }
+  .sheet-body{overflow-y:auto; padding:6px 18px calc(env(safe-area-inset-bottom) + 20px)}
 
-  /* ---------- time scrubber ---------- */
   .scrub{flex:none; padding:4px 18px 12px; border-bottom:1px solid var(--line)}
   .scrub-top{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2px}
   .scrub-time{font-size:1.5rem; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
   .scrub-count{font-size:.82rem; color:var(--muted); text-align:right}
   .scrub-count b{color:var(--out)}
-  input[type=range]{
-    width:100%; margin:6px 0 0; -webkit-appearance:none; background:none; height:26px;
-  }
+  input[type=range]{width:100%; margin:6px 0 0; -webkit-appearance:none; background:none; height:26px}
   input[type=range]::-webkit-slider-runnable-track{
     height:5px; border-radius:99px;
     background:linear-gradient(90deg,var(--on),var(--soon),var(--out));
   }
   input[type=range]::-webkit-slider-thumb{
     -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
-    background:var(--card); border:3px solid var(--ink); margin-top:-10px; cursor:grab;
-    box-shadow:var(--shadow);
+    background:var(--card); border:3px solid var(--ink); margin-top:-10px; box-shadow:var(--shadow);
   }
   input[type=range]::-moz-range-track{height:5px; border-radius:99px; background:var(--line)}
   input[type=range]::-moz-range-thumb{
-    width:20px; height:20px; border-radius:50%; background:var(--card);
-    border:3px solid var(--ink); cursor:grab;
+    width:20px; height:20px; border-radius:50%; background:var(--card); border:3px solid var(--ink);
   }
   .ticks{display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); margin-top:-2px}
+  .legend{display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:8px; font-size:.7rem; color:var(--muted)}
+  .legend span{display:flex; align-items:center; gap:5px}
+  .legend i{width:9px; height:9px; border-radius:50%; flex:none; display:block}
 
-  /* ---------- sheet content ---------- */
   h2{margin:14px 0 8px; font-size:1.02rem; letter-spacing:-.01em}
   h2:first-child{margin-top:8px}
   p{margin:0 0 8px}
   .dim{color:var(--muted); font-size:.85rem}
-  .pill{
-    display:inline-block; padding:3px 10px; border-radius:999px;
-    font-size:.72rem; font-weight:700; letter-spacing:.02em;
-  }
+  .pill{display:inline-block; padding:3px 10px; border-radius:999px; font-size:.72rem; font-weight:700}
   .p-out{background:rgba(217,59,48,.13); color:var(--out)}
   .p-on{background:rgba(26,138,77,.13); color:var(--on)}
   .p-soon{background:rgba(224,134,0,.14); color:var(--soon)}
   .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px}
-
   .slot{
     display:flex; justify-content:space-between; gap:12px; align-items:center;
     padding:10px 0; border-bottom:1px solid var(--line); font-size:.9rem;
@@ -147,7 +170,6 @@
   .slot .t{font-variant-numeric:tabular-nums; color:var(--muted); white-space:nowrap}
   .slot.live{font-weight:700}
   .slot.live .t{color:var(--out)}
-
   details{border-top:1px solid var(--line); padding:11px 0 2px; margin-top:10px}
   summary{cursor:pointer; font-weight:600; font-size:.88rem; list-style:none}
   summary::-webkit-details-marker{display:none}
@@ -155,12 +177,12 @@
   details[open] summary::before{content:"▾ "}
   details ul{margin:9px 0 4px; padding-left:19px; font-size:.85rem; color:var(--muted)}
   details li{margin:3px 0}
-
   .note{
     background:var(--bg); border-radius:12px; padding:11px 13px;
     font-size:.8rem; color:var(--muted); margin:10px 0 0; line-height:1.55;
   }
   .note a{color:var(--on)}
+  .note.warn{background:rgba(217,59,48,.1); color:var(--out)}
   .back{
     background:none; border:0; color:var(--on); font-size:.87rem; font-weight:600;
     cursor:pointer; padding:0; margin:2px 0 6px;
@@ -170,20 +192,37 @@
     border-radius:12px; padding:11px 13px; margin-bottom:7px; cursor:pointer;
     color:var(--ink); font:inherit;
   }
-  .zbtn:active{transform:scale(.99)}
   .zbtn b{display:block; font-size:.92rem}
   .zbtn span{font-size:.78rem; color:var(--muted)}
+  .conf{
+    display:inline-block; font-size:.66rem; font-weight:700; padding:2px 7px;
+    border-radius:99px; background:var(--bg); color:var(--muted);
+    text-transform:uppercase; letter-spacing:.05em; border:1px solid var(--line);
+  }
 </style>
 </head>
 <body>
 
 <div id="map"></div>
+<div class="scrim" id="scrim"></div>
+
+<aside class="rail" id="rail">
+  <div class="rail-head">
+    <div>
+      <b>All feeders</b>
+      <span id="railsub"></span>
+    </div>
+    <button class="iconbtn" id="railclose" aria-label="Close feeder list">✕</button>
+  </div>
+  <div class="rail-list" id="raillist"></div>
+</aside>
 
 <div class="topbar">
   <div class="bar">
+    <button class="iconbtn" id="railbtn" aria-label="Show all feeders">☰</button>
     <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false"
-           placeholder="Search your subdivision or street">
-    <button class="iconbtn" id="locate" title="Find my location" aria-label="Find my location">◎</button>
+           placeholder="Search area or feeder">
+    <button class="iconbtn" id="locate" aria-label="Find my location">◎</button>
   </div>
   <div id="results"></div>
 </div>
@@ -202,32 +241,37 @@
       <span><i style="background:var(--soon)"></i>within the hour</span>
       <span><i style="background:var(--on)"></i>on</span>
       <span><i style="border-radius:2px;background:var(--muted);opacity:.5"></i>published area</span>
-      <span><i style="background:var(--muted)"></i>substation only</span>
+      <span><i style="background:var(--muted)"></i>point only</span>
     </div>
   </div>
   <div class="sheet-body" id="body"></div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="data.js"></script>
+<script src="geo.js"></script>
+<script src="schedule.js"></script>
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var body = $('body'), sheet = $('sheet'), qEl = $('q'), resEl = $('results');
-  var selected = null, t = 18;
+  var sheet = $('sheet'), qEl = $('q'), resEl = $('results');
+  var selected = null, selFeeder = null;
+  var T0 = SCHEDULE.window.start, T1 = SCHEDULE.window.end, t = 18;
 
-  /* ---------- map ---------- */
-  var dark = window.matchMedia('(prefers-color-scheme:dark)').matches;
-  var map = L.map('map', { zoomControl:false, attributionControl:true })
-             .setView([10.678, 122.962], 12);
-  L.control.zoom({ position:'topright' }).addTo(map);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-
-  function sheetH(){ return sheet.getBoundingClientRect().height; }
-
-  // ray casting; poly is [[lat,lng],...]
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function slotOf(f){ return SCHEDULE.slots[f] || null; }
+  function isOut(f, h){ var s = slotOf(f); return !!s && h >= s.s && h < s.e; }
+  function isSoon(f, h){ var s = slotOf(f); return !!s && s.s > h && s.s <= h + 1; }
+  function outAt(z, h){ return z.feeders.filter(function(f){ return isOut(f, h); }).length; }
+  function soonAt(z, h){ return z.feeders.filter(function(f){ return isSoon(f, h); }).length; }
+  function zoneState(z, h){ return outAt(z,h) ? 'out' : soonAt(z,h) ? 'soon' : 'on'; }
+  function zoneOf(f){
+    return ZONES.filter(function(z){ return z.feeders.indexOf(f) > -1; })[0] || null;
+  }
+  function fmt(h){
+    var hr = Math.floor(h), mn = (h % 1) ? 30 : 0;
+    return (hr % 12 || 12) + ':' + (mn ? '30' : '00') + ' ' + (hr >= 12 ? 'PM' : 'AM');
+  }
   function pointInPoly(pt, poly){
     var x = pt[1], y = pt[0], inside = false;
     for(var i = 0, j = poly.length - 1; i < poly.length; j = i++){
@@ -236,276 +280,343 @@
     }
     return inside;
   }
+  function sheetH(){ return sheet.getBoundingClientRect().height; }
+
+  /* ---------- staleness: the refresh job stamps fetchedAt ---------- */
+  function staleNote(){
+    var d = (Date.now() - new Date(SCHEDULE.fetchedAt).getTime()) / 86400000;
+    var n = Math.floor(d);
+    var txt = d < 1 ? 'Data refreshed today.'
+            : 'Data last refreshed ' + n + ' day' + (n === 1 ? '' : 's') + ' ago.';
+    var warn = d > 2;
+    return '<div class="note' + (warn ? ' warn' : '') + '">'
+      + (warn ? '<b>This data is stale.</b> ' : '') + esc(txt)
+      + ' Rotation schedules change daily with grid conditions — confirm on the '
+      + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
+      + 'Negros Power page</a> or (034) 705-6372 before planning around it.</div>';
+  }
+
+  /* ---------- map ---------- */
+  var map = L.map('map', { zoomControl:false }).setView([10.68, 122.96], 12);
+  L.control.zoom({ position:'topright' }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
 
   var css = getComputedStyle(document.documentElement);
-  var C_OUT  = css.getPropertyValue('--out').trim();
+  var C_OUT = css.getPropertyValue('--out').trim();
   var C_SOON = css.getPropertyValue('--soon').trim();
-  var C_ON   = css.getPropertyValue('--on').trim();
+  var C_ON = css.getPropertyValue('--on').trim();
+  var C_INK = css.getPropertyValue('--ink').trim();
+  var C_CARD = css.getPropertyValue('--card').trim();
 
-  /* ---------- state helpers ---------- */
-  // how many of this zone's feeders are dropped at hour h
-  function outAt(z, h){
-    var n = 0;
-    z.mld.forEach(function(m){ if(h >= m.s && h < m.e) n++; });
-    return n;
-  }
-  function soonAt(z, h){
-    var n = 0;
-    z.mld.forEach(function(m){ if(m.s > h && m.s <= h + 1) n++; });
-    return n;
-  }
-  function zoneState(z, h){
-    if(outAt(z, h) > 0) return 'out';
-    if(soonAt(z, h) > 0) return 'soon';
-    return 'on';
-  }
-  function fmt(h){
-    var hr = Math.floor(h), mn = (h % 1) ? 30 : 0;
-    var ap = hr >= 12 ? 'PM' : 'AM', h12 = hr % 12 || 12;
-    return h12 + ':' + (mn ? '30' : '00') + ' ' + ap;
-  }
+  function weakPin(z){ return z.confidence === 'guess' || z.confidence === 'unknown'; }
 
-  /* ---------- draw zones ---------- */
   var layers = {};
   ZONES.forEach(function(z){
-    // Area polygons come from Negros Power's own published street lists.
-    // Substations are real OSM features — a pin, never a coverage shape.
-    var c = z.kind === 'area'
-      ? L.polygon(z.poly, { weight:2, opacity:.9, fillOpacity:.22, color:C_ON })
-      : L.circleMarker(z.center, { radius:9, weight:3, opacity:1, fillOpacity:.85, color:C_ON });
-    c.addTo(map);
-    c.on('click', function(){ select(z.id); });
-    var glow = css.getPropertyValue('--card').trim();
-    var lbl = L.marker(z.center, {
-      icon: L.divIcon({
-        className:'', iconSize:[0,0],
-        html:'<div class="zlabel" style="transform:translate(-50%,-50%);white-space:nowrap;'
-           + 'font:600 11px/1 -apple-system,sans-serif;color:'
-           + css.getPropertyValue('--ink').trim()
-           + ';text-shadow:0 0 4px '+glow+',0 0 4px '+glow+',0 0 4px '+glow+'">'
-           + z.short + '</div>'
-      }), interactive:false
-    }).addTo(map);
-    layers[z.id] = { shape:c, label:lbl };
+    var shape;
+    if(z.kind === 'area'){
+      shape = L.polygon(z.poly, { weight:2, opacity:.9, fillOpacity:.22, color:C_ON });
+    } else {
+      // A point, never a coverage claim. Low-confidence pins are hollow and dashed
+      // so a guess cannot read as a surveyed location.
+      shape = L.circleMarker(z.center, {
+        radius:9, weight:3, opacity:1, color:C_ON,
+        fillOpacity: weakPin(z) ? 0 : .85, dashArray: weakPin(z) ? '3,3' : null
+      });
+    }
+    shape.addTo(map);
+    shape.on('click', function(){ select(z.id); });
+    var lbl = L.marker(z.center, { interactive:false, icon: L.divIcon({
+      className:'', iconSize:[0,0],
+      html:'<div class="zlabel" style="transform:translate(-50%,-50%);white-space:nowrap;'
+         + 'font:600 11px/1 -apple-system,sans-serif;color:' + C_INK
+         + ';text-shadow:0 0 4px ' + C_CARD + ',0 0 4px ' + C_CARD + ',0 0 4px ' + C_CARD + '">'
+         + z.short + (z.confidence === 'unknown' ? ' ?' : '') + '</div>'
+    })}).addTo(map);
+    layers[z.id] = { shape:shape, label:lbl };
   });
 
-  // A label is only legible if its circle is actually big on screen. The six
-  // Mountain View feeders sit within ~2km of each other, so at city zoom their
-  // labels collide into mush — hide them until the user zooms in.
   function updateLabels(){
-    var b = map.getBounds();
     ZONES.forEach(function(z){
-      var el = layers[z.id].label.getElement();
-      if(!el) return;
-      var d = el.querySelector('.zlabel');
-      if(!d) return;
+      var el = layers[z.id].label.getElement(); if(!el) return;
+      var d = el.querySelector('.zlabel'); if(!d) return;
       var show;
-      if(z.kind === 'substation'){
-        show = map.getZoom() >= 11;           // pins are small; label whenever readable
-      } else {
-        // label an area only when its polygon is a decent share of the viewport
+      if(z.kind === 'area'){
         var pb = layers[z.id].shape.getBounds();
-        var w = map.latLngToLayerPoint(pb.getNorthEast()).x
-              - map.latLngToLayerPoint(pb.getSouthWest()).x;
-        show = Math.abs(w) > 70;
-      }
+        show = Math.abs(map.latLngToLayerPoint(pb.getNorthEast()).x
+                      - map.latLngToLayerPoint(pb.getSouthWest()).x) > 70;
+      } else { show = map.getZoom() >= 11; }
       d.style.opacity = (show || selected === z.id) ? 1 : 0;
     });
   }
   map.on('zoomend moveend', updateLabels);
 
   function paint(){
-    // Murcia Feeder 3 shows up in two zones (the Murcia family and the upland
-    // Kumaliskis/DSB stretch it also serves), so tally unique feeders, not rows.
     var live = {};
     ZONES.forEach(function(z){
-      z.mld.forEach(function(m){
-        if(t >= m.s && t < m.e) live[z.fam + ' ' + m.f] = 1;
-      });
+      z.feeders.forEach(function(f){ if(isOut(f, t)) live[f] = 1; });
     });
-    var totalOut = Object.keys(live).length;
+    var total = Object.keys(live).length;
 
     ZONES.forEach(function(z){
       var st = zoneState(z, t), n = outAt(z, t);
       var col = st === 'out' ? C_OUT : st === 'soon' ? C_SOON : C_ON;
-      // intensity rises with how many feeders at that substation are dropped
-      var fill = st === 'out' ? Math.min(.2 + n * .13, .55) : st === 'soon' ? .2 : .12;
-      layers[z.id].shape.setStyle(z.kind === 'substation'
-        ? { color:col, fillColor:col, fillOpacity:.85,
-            weight: selected === z.id ? 5 : 3, radius: 9 + Math.min(n * 2, 8) }
-        : { color:col, fillColor:col, fillOpacity:fill,
-            weight: selected === z.id ? 4 : 2 });
+      layers[z.id].shape.setStyle(z.kind === 'area'
+        ? { color:col, fillColor:col, weight: selected === z.id ? 4 : 2,
+            fillOpacity: st === 'out' ? Math.min(.2 + n * .13, .55) : st === 'soon' ? .2 : .12 }
+        : { color:col, fillColor:col, weight: selected === z.id ? 5 : 3,
+            fillOpacity: weakPin(z) ? 0 : .85, radius: 9 + Math.min(n * 2, 8) });
     });
     updateLabels();
     $('tlabel').textContent = fmt(t);
-    $('tcount').innerHTML = totalOut
-      ? '<b>' + totalOut + ' feeder' + (totalOut>1?'s':'') + '</b> dropped'
-      : 'all mapped feeders on';
+    $('tcount').innerHTML = total
+      ? '<b>' + total + ' feeder' + (total > 1 ? 's' : '') + '</b> dropped'
+      : 'no feeder dropped';
+    renderRail();
   }
 
-  /* ---------- sheet ---------- */
-  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  /* ---------- left rail: every feeder, always reachable ---------- */
+  var FAMS = (function(){
+    var byFam = {}, out = [];
+    ZONES.forEach(function(z){
+      z.feeders.forEach(function(f){
+        var fam = f.replace(/ Feeder \d+$/, '');
+        (byFam[fam] = byFam[fam] || []).push(f);
+      });
+    });
+    Object.keys(byFam).sort().forEach(function(fam){
+      out.push({ fam: fam, feeders: byFam[fam].sort(function(a, b){
+        return (+a.match(/\d+$/)) - (+b.match(/\d+$/)); }) });
+    });
+    return out;
+  })();
+
+  var CONF_TEXT = {
+    published:   'area mapped from published street list',
+    confirmed:   'substation located in OpenStreetMap',
+    approximate: 'pinned on a matching place name',
+    guess:       'location is a weak guess',
+    unknown:     'location unknown — pin is a placeholder'
+  };
+
+  function renderRail(){
+    var h = '';
+    FAMS.forEach(function(g){
+      var z = zoneOf(g.feeders[0]);
+      h += '<div class="fam">' + esc(g.fam)
+         + (z ? '<small>' + esc(CONF_TEXT[z.confidence] || '') + '</small>' : '') + '</div>';
+      g.feeders.forEach(function(f){
+        var s = slotOf(f);
+        var st = isOut(f, t) ? 'out' : isSoon(f, t) ? 'soon' : 'on';
+        var col = st === 'out' ? 'var(--out)' : st === 'soon' ? 'var(--soon)' : 'var(--on)';
+        h += '<button class="fd' + (selFeeder === f ? ' sel' : '') + '" data-f="' + esc(f) + '">'
+           + '<i style="background:' + col + '"></i>'
+           + '<span class="nm">' + esc(f.replace(g.fam + ' ', '')) + '</span>'
+           + '<span class="tm">' + (s ? esc(s.label) : 'no slot') + '</span></button>';
+      });
+    });
+    $('raillist').innerHTML = h;
+    Array.prototype.forEach.call($('raillist').querySelectorAll('.fd'), function(b){
+      b.addEventListener('click', function(){
+        showFeeder(b.getAttribute('data-f'));
+        if(window.innerWidth < 980) rail(false);
+      });
+    });
+    $('railsub').textContent =
+      FAMS.reduce(function(n, g){ return n + g.feeders.length; }, 0) + ' feeders · '
+      + Object.keys(SCHEDULE.slots).length + ' in the rotation';
+  }
+
+  function rail(open){
+    $('rail').classList.toggle('open', open);
+    $('scrim').classList.toggle('on', open);
+  }
+  $('railbtn').addEventListener('click', function(){ rail(true); });
+  $('railclose').addEventListener('click', function(){ rail(false); });
+  $('scrim').addEventListener('click', function(){ rail(false); });
+
+  /* ---------- sheet views ---------- */
+  function footer(){
+    return staleNote() + '<div class="note"><b>Unofficial.</b> Scraped from the '
+      + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
+      + 'Negros Power Facebook page</a>. Not operated by or affiliated with Negros Power. '
+      + 'Shaded areas come from their published street lists; points are substations or '
+      + 'approximations with no published coverage. '
+      + '<a href="tel:+63347056372">(034) 705-6372</a> · '
+      + '<a href="tel:+639176837250">0917 683 7250</a>.</div>';
+  }
+
+  function confNote(z){
+    if(z.confidence === 'published'){
+      return '<div class="note"><b>How this shape was made.</b> Convex hull of '
+        + z.hullPoints + ' places from Negros Power’s own published area list, geocoded '
+        + 'against OpenStreetMap. It approximates coverage and overlaps neighbouring feeders '
+        + '— the area list is the authority, not the outline.</div>';
+    }
+    if(z.confidence === 'confirmed'){
+      return '<div class="note"><b>This is a substation, not a coverage area.</b> A real '
+        + 'OpenStreetMap power substation operated by CENECO / Negros Power. It marks where '
+        + 'these feeders start, not which streets they reach.'
+        + (z.note ? ' ' + esc(z.note) : '') + '</div>';
+    }
+    return '<div class="note' + (z.confidence === 'unknown' ? ' warn' : '') + '"><b>'
+      + (z.confidence === 'unknown' ? 'Position unknown.' : 'Approximate position.') + '</b> '
+      + esc(z.note || '') + ' The schedule above comes from the published rotation and is '
+      + 'unaffected by this.</div>';
+  }
 
   function renderHome(){
-    selected = null;
-    var h = '';
-    h += '<div class="row"><span class="pill p-out">NGCP red alert</span>'
-       + '<span class="pill p-soon">Rotational brownouts</span></div>';
-    h += '<h2 style="margin-top:2px">Drag the time to see who loses power</h2>';
-    h += '<p class="dim">Colours follow the rotation actually implemented on '
-       + esc(ROTATION.date) + ' — the working pattern for the next red-alert evening. '
-       + 'Shaded areas are drawn from Negros Power’s published street lists; circles are '
-       + 'real substations whose coverage they have not published. Tap either for times.</p>';
+    selected = null; selFeeder = null;
+    var h = '<div class="row"><span class="pill p-out">NGCP red alert</span>'
+          + '<span class="pill p-soon">Rotational brownouts</span></div>';
+    h += '<h2 style="margin-top:2px">Drag the time, or pick your feeder</h2>';
+    h += '<p class="dim">Colours follow the rotation implemented on '
+       + esc(SCHEDULE.rotation.date) + '. If you already know your feeder, open '
+       + '<b>All feeders</b> (☰) for the full list — including the ones we cannot '
+       + 'place on the map.</p>';
 
-    // zones currently out, most affected first
     var live = ZONES.filter(function(z){ return outAt(z, t) > 0; })
-                    .sort(function(a,b){ return outAt(b,t) - outAt(a,t); });
+                    .sort(function(a, b){ return outAt(b, t) - outAt(a, t); });
     if(live.length){
       h += '<h2>Out at ' + fmt(t) + '</h2>';
       live.forEach(function(z){
         var n = outAt(z, t);
-        h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b>'
-           + '<span>' + n + ' feeder' + (n>1?'s':'') + ' dropped · tap for times</span></button>';
+        h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b><span>'
+           + n + ' feeder' + (n > 1 ? 's' : '') + ' dropped · '
+           + esc(CONF_TEXT[z.confidence]) + '</span></button>';
       });
     } else {
       h += '<h2>Nothing dropped at ' + fmt(t) + '</h2>';
-      h += '<p class="dim">No mapped feeder is scheduled off at this time.</p>';
     }
 
-    h += '<div class="note"><b>Why this is happening.</b> ' + esc(ROTATION.reason)
-       + ' Available ' + esc(ROTATION.available) + ' against peak demand '
-       + esc(ROTATION.demand) + '. Red alert ' + esc(ROTATION.redAlert)
-       + ', yellow alert ' + esc(ROTATION.yellowAlert) + '.</div>';
-
-    h += '<details><summary>Feeders we could not put on the map</summary>'
-       + '<p class="dim" style="margin:8px 0">Negros Power names these feeders in the rotation '
-       + 'but publishes no area list for them, and OpenStreetMap has no substation for them '
-       + 'either. Nothing to place them with, so they are left off the map.</p>';
-    UNMAPPED.forEach(function(u){
-      h += '<div style="margin:9px 0 0"><b style="font-size:.86rem">' + esc(u.name) + '</b>';
-      u.slots.forEach(function(s){
-        h += '<div class="slot"><span>' + esc(s.f) + '</span><span class="t">'
-           + esc(s.label) + '</span></div>';
+    if(SCHEDULE.scheduled.length){
+      h += '<h2>Scheduled outages</h2>';
+      SCHEDULE.scheduled.forEach(function(s){
+        h += '<div class="slot live"><span>' + esc(s.feeders.join(', ')) + '</span>'
+           + '<span class="t">' + esc(s.window) + '</span></div>'
+           + '<p class="dim" style="margin-top:6px">' + esc(s.date) + ' — '
+           + esc(s.cause) + '</p>';
       });
-      h += '</div>';
-    });
-    h += '</details>';
+    }
 
-    h += footer();
+    h += '<div class="note"><b>Why this is happening.</b> ' + esc(SCHEDULE.rotation.reason)
+       + ' Available ' + esc(SCHEDULE.rotation.available) + ' against peak demand '
+       + esc(SCHEDULE.rotation.demand) + '.</div>' + footer();
     $('body').innerHTML = h;
     wireZoneButtons();
   }
 
-  function renderZone(z){
-    var h = '<button class="back" id="back">‹ All zones</button>';
-    var st = zoneState(z, t), n = outAt(z, t);
+  function showFeeder(f){
+    selFeeder = f;
+    var z = zoneOf(f), s = slotOf(f);
+    if(z){
+      selected = z.id; paint();
+      if(z.kind === 'area'){
+        map.flyToBounds(layers[z.id].shape.getBounds(),
+          { paddingBottomRight: L.point(0, sheetH()), duration:.6, maxZoom:15 });
+      } else { map.flyTo(z.center, 14, { duration:.6 }); }
+    } else { renderRail(); }
 
-    h += '<div class="row"><b style="font-size:1.12rem;letter-spacing:-.02em">'
-       + esc(z.name) + '</b></div>';
-    h += '<div class="row">';
-    h += st === 'out'
-      ? '<span class="pill p-out">' + n + ' feeder' + (n>1?'s':'') + ' out at ' + fmt(t) + '</span>'
-      : st === 'soon'
-        ? '<span class="pill p-soon">Drops within the hour</span>'
-        : '<span class="pill p-on">On at ' + fmt(t) + '</span>';
-    h += '</div>';
+    var out = isOut(f, t);
+    var h = '<button class="back" id="back">‹ Back</button>';
+    h += '<div class="row"><b style="font-size:1.12rem;letter-spacing:-.02em">' + esc(f)
+       + '</b></div><div class="row">'
+       + (out ? '<span class="pill p-out">Out at ' + fmt(t) + '</span>'
+              : '<span class="pill p-on">On at ' + fmt(t) + '</span>')
+       + (z ? '<span class="conf">' + esc(z.confidence) + '</span>' : '') + '</div>';
 
-    if(z.scheduled){
-      h += '<h2>Scheduled outage</h2>';
-      h += '<div class="slot live"><span>' + esc(z.scheduled.date) + '</span>'
-         + '<span class="t">' + esc(z.scheduled.window) + '</span></div>';
-      h += '<p class="dim" style="margin-top:8px">' + esc(z.scheduled.cause) + '</p>';
-    }
-
-    if(z.mld.length){
-      h += '<h2>Rotational brownout slots</h2>';
-      h += '<p class="dim" style="margin-bottom:6px">From ' + esc(ROTATION.date) + '.</p>';
-      z.mld.slice().sort(function(a,b){ return a.s - b.s; }).forEach(function(m){
-        var liveNow = t >= m.s && t < m.e;
-        h += '<div class="slot' + (liveNow ? ' live' : '') + '"><span>' + esc(m.f)
-           + '</span><span class="t">' + esc(m.label) + '</span></div>';
-      });
+    h += '<h2>Rotational brownout</h2>';
+    if(s){
+      h += '<div class="slot' + (out ? ' live' : '') + '"><span>Manual load dropping</span>'
+         + '<span class="t">' + esc(s.label) + '</span></div>'
+         + '<p class="dim" style="margin-top:8px">Pattern from ' + esc(SCHEDULE.rotation.date)
+         + '. Red alert ' + esc(SCHEDULE.rotation.redAlert) + ', yellow alert '
+         + esc(SCHEDULE.rotation.yellowAlert) + '.</p>';
     } else {
-      h += '<h2>Rotational brownout slots</h2>';
-      h += '<p class="dim">This feeder did not appear in the ' + esc(ROTATION.date)
+      h += '<p class="dim">This feeder did not appear in the ' + esc(SCHEDULE.rotation.date)
          + ' rotation. That is not a guarantee it will be spared on the next one.</p>';
     }
 
-    if(z.sep6){
-      h += '<h2>Planned works, ' + esc(SCHEDULED_SEP6.date) + '</h2>';
-      h += '<div class="row"><span class="pill p-on">Restored '
-         + esc(SCHEDULED_SEP6.restoredAt) + '</span></div>';
-      h += '<div class="slot"><span>' + esc(z.sep6.scope) + '</span><span class="t">'
-         + z.sep6.label + '</span></div>';
-      h += '<details><summary>Why the power was out</summary><ul>';
-      SCHEDULED_SEP6.cause.forEach(function(c){ h += '<li>' + esc(c) + '</li>'; });
+    SCHEDULE.scheduled.forEach(function(sc){
+      if(sc.feeders.indexOf(f) > -1){
+        h += '<h2>Scheduled outage</h2><div class="slot live"><span>' + esc(sc.date)
+           + '</span><span class="t">' + esc(sc.window) + '</span></div>'
+           + '<p class="dim" style="margin-top:8px">' + esc(sc.cause) + '</p>';
+        if(sc.areas.length) h += '<p class="dim">' + esc(sc.areas.join(' · ')) + '</p>';
+      }
+    });
+    if(SCHEDULE.completed.feeders.indexOf(f) > -1){
+      h += '<h2>Planned works, ' + esc(SCHEDULE.completed.date) + '</h2>'
+         + '<div class="row"><span class="pill p-on">Restored '
+         + esc(SCHEDULE.completed.restoredAt) + '</span></div>'
+         + '<details><summary>Why the power was out</summary><ul>';
+      SCHEDULE.completed.cause.forEach(function(c){ h += '<li>' + esc(c) + '</li>'; });
       h += '</ul></details>';
     }
-
-    if(z.areas.length){
+    if(z && z.areas.length){
       h += '<details open><summary>Areas on this feeder (' + z.areas.length + ')</summary><ul>';
       z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
       h += '</ul></details>';
     }
-
-    if(z.kind === 'substation'){
-      h += '<div class="note"><b>This is a substation, not a coverage area.</b> The pin is a '
-         + 'real OpenStreetMap power substation operated by CENECO / Negros Power — it marks '
-         + 'where these feeders start, not which streets they reach. Negros Power has not '
-         + 'published area lists for them, so no shape is drawn.'
-         + (z.note ? ' ' + esc(z.note) : '') + '</div>';
-    } else {
-      h += '<div class="note"><b>How this shape was made.</b> It is the hull of '
-         + z.hullPoints + ' places from Negros Power’s own published area list for this '
-         + 'feeder, geocoded against OpenStreetMap. It approximates coverage and overlaps '
-         + 'neighbouring feeders — the area list above is the authority, not the outline.</div>';
-    }
-
+    if(z) h += confNote(z);
     h += footer();
     $('body').innerHTML = h;
-    $('back').addEventListener('click', function(){ renderHome(); });
+    $('back').addEventListener('click', renderHome);
+    $('body').scrollTop = 0;
+    renderRail();
   }
 
-  function footer(){
-    return '<div class="note"><b>Unofficial.</b> Scraped from the '
-      + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
-      + 'Negros Power Facebook page</a> on ' + esc(SNAPSHOT) + '. This is a static snapshot '
-      + 'and does not update itself. Zone circles are approximations, not service boundaries '
-      + '— Negros Power does not publish feeder maps. Rotation schedules change at short '
-      + 'notice with grid conditions. Confirm on '
-      + '<a href="tel:+63347056372">(034) 705-6372</a> or '
-      + '<a href="tel:+639176837250">0917 683 7250</a>.</div>';
-  }
-
-  function wireZoneButtons(){
-    Array.prototype.forEach.call(document.querySelectorAll('.zbtn'), function(b){
-      b.addEventListener('click', function(){ select(b.getAttribute('data-z')); });
+  function renderZone(z){
+    if(z.feeders.length === 1){ showFeeder(z.feeders[0]); return; }
+    selected = z.id; selFeeder = null; paint();
+    var h = '<button class="back" id="back">‹ Back</button>'
+      + '<div class="row"><b style="font-size:1.12rem;letter-spacing:-.02em">' + esc(z.name)
+      + '</b><span class="conf">' + esc(z.confidence) + '</span></div><h2>Feeders here</h2>';
+    z.feeders.forEach(function(f){
+      var s = slotOf(f);
+      h += '<button class="zbtn" data-f="' + esc(f) + '"><b>' + esc(f) + '</b><span>'
+         + (s ? esc(s.label) : 'not in the rotation')
+         + (isOut(f, t) ? ' · out now' : '') + '</span></button>';
+    });
+    if(z.areas.length){
+      h += '<details><summary>Areas on this feeder (' + z.areas.length + ')</summary><ul>';
+      z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
+      h += '</ul></details>';
+    }
+    h += confNote(z) + footer();
+    $('body').innerHTML = h;
+    $('back').addEventListener('click', renderHome);
+    Array.prototype.forEach.call($('body').querySelectorAll('[data-f]'), function(b){
+      b.addEventListener('click', function(){ showFeeder(b.getAttribute('data-f')); });
     });
   }
 
+  function wireZoneButtons(){
+    Array.prototype.forEach.call(document.querySelectorAll('.zbtn[data-z]'), function(b){
+      b.addEventListener('click', function(){ select(b.getAttribute('data-z')); });
+    });
+  }
   function select(id){
     var z = ZONES.filter(function(x){ return x.id === id; })[0];
     if(!z) return;
-    selected = id;
-    paint();
-    // nudge the target up so it lands in the visible strip above the sheet
-    var zoom = z.radius > 3000 ? 12 : 14;
-    var pt = map.project(z.center, zoom).add([0, sheetH() / 2]);
-    map.flyTo(map.unproject(pt, zoom), zoom, { duration:.6 });
+    selected = id; paint();
+    if(z.kind === 'area'){
+      map.flyToBounds(layers[id].shape.getBounds(),
+        { paddingBottomRight: L.point(0, sheetH()), duration:.6, maxZoom:15 });
+    } else { map.flyTo(z.center, 14, { duration:.6 }); }
     renderZone(z);
     $('body').scrollTop = 0;
     hideResults();
   }
 
-  /* ---------- search ---------- */
+  /* ---------- search: named areas and feeder names ---------- */
   var index = [];
   ZONES.forEach(function(z){
-    z.areas.forEach(function(a){ index.push({ area:a, z:z }); });
-    index.push({ area:z.name, z:z });
+    z.areas.forEach(function(a){ index.push({ label:a, sub:z.name, z:z }); });
+    z.feeders.forEach(function(f){ index.push({ label:f, sub:'feeder', z:z, f:f }); });
   });
   function norm(s){ return s.toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
-
   function hideResults(){ resEl.classList.remove('show'); }
 
   function runSearch(){
@@ -513,27 +624,26 @@
     if(!term){ hideResults(); return; }
     var n = norm(term), hits = [], seen = {};
     index.forEach(function(e){
-      var p = norm(e.area).indexOf(n);
-      if(p > -1 && !seen[e.area + e.z.id]){ seen[e.area + e.z.id] = 1; hits.push({ e:e, p:p }); }
+      var p = norm(e.label).indexOf(n);
+      if(p > -1 && !seen[e.label + e.z.id]){ seen[e.label + e.z.id] = 1; hits.push({ e:e, p:p }); }
     });
-    hits.sort(function(a,b){ return a.p - b.p; });
+    hits.sort(function(a, b){ return a.p - b.p; });
     hits = hits.slice(0, 8);
     if(!hits.length){
       resEl.innerHTML = '<div class="res-empty">Nothing matching “' + esc(term)
-        + '”.<br>Try a shorter word or a nearby landmark.</div>';
+        + '”.</div>';
       resEl.classList.add('show'); return;
     }
     resEl.innerHTML = hits.map(function(h, i){
-      return '<div class="res" data-i="' + i + '"><b>' + esc(h.e.area) + '</b><span>'
-           + esc(h.e.z.name) + '</span></div>';
+      return '<div class="res" data-i="' + i + '"><b>' + esc(h.e.label) + '</b><span>'
+           + esc(h.e.sub) + '</span></div>';
     }).join('');
     resEl.classList.add('show');
     Array.prototype.forEach.call(resEl.querySelectorAll('.res'), function(el){
       el.addEventListener('click', function(){
-        var h = hits[+el.getAttribute('data-i')];
-        qEl.value = h.e.area;
-        qEl.blur();
-        select(h.e.z.id);
+        var e = hits[+el.getAttribute('data-i')].e;
+        qEl.value = e.label; qEl.blur(); hideResults();
+        if(e.f) showFeeder(e.f); else select(e.z.id);
       });
     });
   }
@@ -543,87 +653,74 @@
     if(!e.target.closest('.topbar')) hideResults();
   });
 
-  /* ---------- locate ---------- */
+  /* ---------- locate: never guesses between overlapping areas ---------- */
   var youMarker = null;
   $('locate').addEventListener('click', function(){
     var btn = this;
     if(!navigator.geolocation){ alert('Location is not available in this browser.'); return; }
-    btn.classList.add('busy'); btn.textContent = '…';
+    btn.textContent = '…';
     navigator.geolocation.getCurrentPosition(function(pos){
-      btn.classList.remove('busy'); btn.textContent = '◎';
+      btn.textContent = '◎';
       var here = [pos.coords.latitude, pos.coords.longitude];
       if(youMarker) map.removeLayer(youMarker);
-      youMarker = L.circleMarker(here, {
-        radius:8, color:'#fff', weight:3, fillColor:'#1a73e8', fillOpacity:1
-      }).addTo(map).bindPopup('You are here').openPopup();
+      youMarker = L.circleMarker(here, { radius:8, color:'#fff', weight:3,
+        fillColor:'#1a73e8', fillOpacity:1 }).addTo(map).bindPopup('You are here').openPopup();
 
-      // Which published area polygons contain this point? Adjacent feeders
-      // genuinely interleave, so more than one answer is the honest outcome —
-      // never silently pick the nearest and present it as fact.
       var inside = ZONES.filter(function(z){
         return z.kind === 'area' && z.poly && pointInPoly(here, z.poly);
       });
-
-      if(inside.length === 1){
-        select(inside[0].id);
-      } else if(inside.length > 1){
+      if(inside.length === 1){ select(inside[0].id); return; }
+      if(inside.length > 1){
         map.flyTo(here, 14, { duration:.6 });
-        selected = null; paint();
-        var h = '<h2>You are in ' + inside.length + ' overlapping feeder areas</h2>';
-        h += '<p class="dim">Negros Power publishes street lists, not boundaries, so these '
-           + 'areas are drawn from the streets they name and they overlap. We will not guess '
-           + 'which one is yours — check the area lists below for your actual street.</p>';
+        selected = null; selFeeder = null; paint();
+        var h = '<h2>You are in ' + inside.length + ' overlapping feeder areas</h2>'
+          + '<p class="dim">Negros Power publishes street lists, not boundaries, so these '
+          + 'areas overlap. We will not guess which is yours — check the area lists for '
+          + 'your street, or pick your feeder from ☰ if you already know it.</p>';
         inside.forEach(function(z){
-          h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b>'
-             + '<span>' + z.areas.length + ' named areas · tap to check</span></button>';
+          h += '<button class="zbtn" data-z="' + z.id + '"><b>' + esc(z.name) + '</b><span>'
+             + z.areas.length + ' named areas · tap to check</span></button>';
         });
-        h += footer();
-        $('body').innerHTML = h;
+        $('body').innerHTML = h + footer();
         wireZoneButtons();
-      } else {
-        map.flyTo(here, 13, { duration:.6 });
-        var near = ZONES.slice().sort(function(a,b){
-          return map.distance(here, a.center) - map.distance(here, b.center);
-        })[0];
-        var km = (map.distance(here, near.center) / 1000).toFixed(1);
-        $('body').innerHTML = '<button class="back" id="back">‹ All zones</button>'
-          + '<h2>You are outside the mapped zones</h2>'
-          + '<p class="dim">Nearest mapped feeder is <b>' + esc(near.name) + '</b>, about '
-          + km + ' km away. That does not mean you have power — it means Negros Power has '
-          + 'not published enough detail for us to place you.</p>' + footer();
-        $('back').addEventListener('click', function(){ renderHome(); });
+        return;
       }
+      map.flyTo(here, 13, { duration:.6 });
+      var near = ZONES.slice().sort(function(a, b){
+        return map.distance(here, a.center) - map.distance(here, b.center); })[0];
+      $('body').innerHTML = '<button class="back" id="back">‹ Back</button>'
+        + '<h2>You are outside the mapped areas</h2>'
+        + '<p class="dim">Nearest mapped point is <b>' + esc(near.name) + '</b>, about '
+        + (map.distance(here, near.center) / 1000).toFixed(1) + ' km away. That does not mean '
+        + 'you have power — only that Negros Power has not published enough detail to '
+        + 'place you. If you know your feeder, pick it from ☰.</p>' + footer();
+      $('back').addEventListener('click', renderHome);
     }, function(err){
-      btn.classList.remove('busy'); btn.textContent = '◎';
+      btn.textContent = '◎';
       alert(err.code === 1
-        ? 'Location permission was denied. Search your subdivision instead.'
-        : 'Could not get your location. Search your subdivision instead.');
+        ? 'Location permission denied. Search your area, or pick your feeder from the list.'
+        : 'Could not get your location.');
     }, { enableHighAccuracy:true, timeout:10000, maximumAge:60000 });
   });
 
-  /* ---------- time scrubber ---------- */
+  /* ---------- scrubber + sheet detents ---------- */
+  $('time').min = T0; $('time').max = T1;
   $('time').addEventListener('input', function(){
     t = parseFloat(this.value);
     paint();
-    if(selected){ renderZone(ZONES.filter(function(x){ return x.id === selected; })[0]); }
+    if(selFeeder) showFeeder(selFeeder);
+    else if(selected) renderZone(ZONES.filter(function(x){ return x.id === selected; })[0]);
     else renderHome();
   });
 
-  /* ---------- sheet detents: peek / mid / full ---------- */
   var detent = 1, startY = 0, dragging = false;
   function peekPx(){
-    return sheet.querySelector('.grab').offsetHeight
-         + sheet.querySelector('.scrub').offsetHeight;
+    return sheet.querySelector('.grab').offsetHeight + sheet.querySelector('.scrub').offsetHeight;
   }
   function setDetent(i){
     detent = Math.max(0, Math.min(2, i));
-    var h = detent === 0 ? peekPx() + 'px' : detent === 1 ? '46vh' : '84vh';
-    sheet.style.setProperty('--sh', h);
-    // keep the legend sitting just above the sheet
-    requestAnimationFrame(function(){
-      document.documentElement.style.setProperty(
-        '--sheet-h', sheet.getBoundingClientRect().height + 'px');
-    });
+    sheet.style.setProperty('--sh',
+      detent === 0 ? peekPx() + 'px' : detent === 1 ? '46vh' : '84vh');
   }
   $('grab').addEventListener('pointerdown', function(e){
     dragging = true; startY = e.clientY; this.setPointerCapture(e.pointerId);
@@ -632,28 +729,24 @@
     if(!dragging) return;
     dragging = false;
     var dy = e.clientY - startY;
-    if(dy < -24) setDetent(detent + 1);        // dragged up
-    else if(dy > 24) setDetent(detent - 1);    // dragged down
-    else setDetent(detent === 2 ? 0 : detent + 1); // tap cycles
+    if(dy < -24) setDetent(detent + 1);
+    else if(dy > 24) setDetent(detent - 1);
+    else setDetent(detent === 2 ? 0 : detent + 1);
   });
 
-  /* ---------- go ---------- */
   var now = new Date();
   var nowH = now.getHours() + (now.getMinutes() >= 30 ? .5 : 0);
-  if(nowH >= T_START && nowH <= T_END){ t = nowH; $('time').value = t; }
+  if(nowH >= T0 && nowH <= T1){ t = nowH; $('time').value = t; }
   paint();
   renderHome();
   setDetent(1);
   window.addEventListener('resize', function(){ setDetent(detent); });
 
-  // fit the Bacolod metro zones on screen, leaving room for the sheet
-  // Open on the Bacolod core — the published area polygons. Panaogao and Murcia
-  // sit far outside it and would shrink the city to nothing if included.
-  var b = L.latLngBounds([]);
+  var fit = L.latLngBounds([]);
   ZONES.forEach(function(z){
-    if(z.kind === 'area' && z.id !== 'dsb') b.extend(layers[z.id].shape.getBounds());
+    if(z.kind === 'area' && z.id !== 'dsb') fit.extend(layers[z.id].shape.getBounds());
   });
-  map.fitBounds(b.pad(.06), { paddingBottomRight: L.point(0, sheetH()) });
+  map.fitBounds(fit.pad(.06), { paddingBottomRight: L.point(0, sheetH()) });
 })();
 </script>
 </body>
