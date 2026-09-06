@@ -10,6 +10,10 @@ tap a zone, search your subdivision, or hit locate to find which feeder is yours
 
 ## What the data is
 
+Two sources:
+
+### Rotation schedule (Sep 2026 red-alert snapshot)
+
 Scraped on **6 September 2026** from the official
 [Negros Power Facebook page](https://www.facebook.com/negrospowerph) — the
 scheduled-outage posts plus the NGCP red-alert rotation graphics. It covers:
@@ -23,42 +27,48 @@ The rotation exists because Visayas coal plants TVI 1 and PEDC 3 were unavailabl
 with limited or zero import from the Mindanao grid — 2,255MW available against
 2,432MW peak demand.
 
+### Feeder coverage album (March 2025)
+
+Transcribed from the Negros Power
+[Feeder Coverage Update as of March 5, 2025](https://www.facebook.com/share/p/1GxSiuTSTE/)
+Facebook post. Contains published area lists for **30 feeders** across 10 substation
+families: Alijis (AF1–AF8), Asdes-Gonzaga (AGF1–7), Reclamation (RF1–5), Burgos
+(BF1–4), Mountain View (MF1–5), Talisay (TF1–3), Murcia (MUF1–4), Hilangban
+(HF1–4), Lopez (LF1–3), and a handful of individual cards. The app shows this text
+when you tap any feeder — tap "Published coverage" to expand it.
+
+Coverage lists are historical (early 2025) and feeder assignments may have changed.
+Use the most recent Negros Power advisory when they conflict.
+
 ## Honest limits
 
 **It is a frozen snapshot.** There is no cron job and no automatic refresh — the
-data is fixed at the 6 September scrape. `negrospower.ph/power-advisories` is
-stale (last entries 2024) and defers to Facebook, and Facebook serves only the
-2 newest posts and 8 newest photos to logged-out visitors, so a refresh is real
-work rather than a scheduled one-liner.
+rotation data is fixed at the 6 September scrape.
 
-**The map draws two different kinds of claim, deliberately styled apart.**
+**The map draws three kinds of claim, deliberately styled apart.**
 
 *Shaded areas* exist only where Negros Power published a street-level list. Each
 polygon is the convex hull of the named places in that list, geocoded against
 OpenStreetMap and buffered ~320m, with points more than 3km from the median
 dropped as bad geocodes. They come from the utility's own text.
 
-*Circular pins* are real OpenStreetMap `power=substation` features operated by
-CENECO / Negros Power. A pin marks where those feeders **originate**. It is not a
-coverage area — Negros Power has not published which streets they serve, so no
-shape is drawn for them.
+*Filled circular pins* are real OpenStreetMap `power=substation` features operated
+by CENECO / Negros Power. A pin marks where those feeders **originate**. It is not
+a coverage area — the streets they serve extend far from the substation point.
 
-**How accurate is it?** Of 18 landmarks whose true feeder is known from the
-advisory text, the polygons place **14 unambiguously, 4 in overlapping pairs, and
-none wrong**. Adjacent feeders genuinely interleave, so some overlap is real
-rather than error. An earlier circle-based version scored 7 / 11 / 0 on the same
-test, and returned an outright wrong feeder for Lopue's Mandalagan and the
-Redemptorist Church.
+*Hollow/dashed pins* mark feeder families that have published coverage lists but
+whose substation is not in OpenStreetMap. The position is approximate (Alijis,
+Talisay) or uncertain (Burgos, Lopez, Hilangban).
+
+**How accurate are the polygons?** Of 18 landmarks whose true feeder is known from
+the advisory text, the MF1–MF6 polygons place **14 unambiguously, 4 in overlapping
+pairs, and none wrong**. Adjacent feeders genuinely interleave, so some overlap is
+real rather than error.
 
 **Locate never guesses.** If your position falls inside more than one feeder
 area, the app lists every candidate and says it cannot tell which is yours,
 rather than picking the nearest and presenting it as fact. The area lists are the
 authority; the outlines are an aid.
-
-**Alijis, Talisay, Lopez and Hilangban are not on the map at all.** They appear
-in the published rotation but have no area list and no substation in
-OpenStreetMap. Nothing grounds them, so they are listed with their times and left
-off — 14 of the 33 published feeder slots. An honest gap beats a confident error.
 
 **Always confirm before planning around it.** Rotation schedules change at short
 notice with grid conditions and NGCP directives.
@@ -71,7 +81,10 @@ No build step, no dependencies to install.
 | file | what |
 |---|---|
 | `index.html` | the whole app — markup, styles, logic |
-| `data.js` | the scraped snapshot: polygons, substations, rotation slots |
+| `geo.js` | geometry: polygons (published areas), substation pins, approximate pins |
+| `coverage.js` | feeder area lists from the March 2025 album |
+| `schedule.js` | rotation slots, scheduled outages, completed works |
+| `data/coverage-2025/` | saved card images from the coverage album |
 
 Leaflet is loaded from a CDN; tiles are standard OpenStreetMap, inverted in CSS
 for dark mode.
@@ -81,6 +94,15 @@ Run it locally with any static server:
 ```bash
 python3 -m http.server 8931
 ```
+
+### Scripts
+
+| script | what |
+|---|---|
+| `scripts/scrape.mjs` | fetch latest posts & photos from the Negros Power FB page (needs Playwright) |
+| `scripts/parse.mjs` | parse rotation slots from the raw scrape into `schedule.js` |
+| `scripts/geocode-coverage.mjs` | geocode coverage text via Nominatim → hull polygon candidates |
+| `scripts/geocode-streets.mjs` | improved geocoder with street-name extraction (for downtown feeders) |
 
 ## Deploying
 

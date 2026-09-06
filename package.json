@@ -5,7 +5,9 @@
   "scripts": {
     "scrape": "node scripts/scrape.mjs",
     "parse": "node scripts/parse.mjs",
-    "refresh": "node scripts/scrape.mjs && node scripts/parse.mjs"
+    "refresh": "node scripts/scrape.mjs && node scripts/parse.mjs",
+    "geocode": "node scripts/geocode-coverage.mjs",
+    "geocode-streets": "node scripts/geocode-streets.mjs"
   },
   "devDependencies": {
     "playwright": "^1.47.0"
