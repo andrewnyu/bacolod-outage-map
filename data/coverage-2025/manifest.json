@@ -1,0 +1,232 @@
+{
+  "cards": [
+    {
+      "card": 1,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205422048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/01.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AF1",
+        "AF2"
+      ]
+    },
+    {
+      "card": 2,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205494048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/02.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AF3"
+      ]
+    },
+    {
+      "card": 3,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205434048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/03.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AF4",
+        "AF5",
+        "AF6",
+        "AF7"
+      ]
+    },
+    {
+      "card": 4,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205404048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/04.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AF8"
+      ]
+    },
+    {
+      "card": 9,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205518048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/09.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AGF3",
+        "AGF5"
+      ]
+    },
+    {
+      "card": 10,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205416048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/10.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AGF1",
+        "AGF2"
+      ]
+    },
+    {
+      "card": 11,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205548048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/11.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "AGF6",
+        "AGF7"
+      ]
+    },
+    {
+      "card": 12,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205440048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/12.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "RF3",
+        "RF4",
+        "RF5"
+      ]
+    },
+    {
+      "card": 13,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205506048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/13.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "RF1",
+        "RF2"
+      ]
+    },
+    {
+      "card": 14,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205452048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/14.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "BF1"
+      ]
+    },
+    {
+      "card": 15,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205482048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/15.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "BF4"
+      ]
+    },
+    {
+      "card": 16,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205554048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/16.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "BF3"
+      ]
+    },
+    {
+      "card": 17,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205464048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/17.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "BF2"
+      ]
+    },
+    {
+      "card": 18,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205470048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/18.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "MF3",
+        "MF4",
+        "MF5"
+      ]
+    },
+    {
+      "card": 19,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205476048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/19.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "MF1",
+        "MF2"
+      ]
+    },
+    {
+      "card": 20,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205428048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/20.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "TF3"
+      ]
+    },
+    {
+      "card": 21,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205524048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/21.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "TF1",
+        "TF2"
+      ]
+    },
+    {
+      "card": 22,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205458048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/22.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "MUF3",
+        "MUF4"
+      ]
+    },
+    {
+      "card": 23,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205530048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/23.jpg",
+      "asOf": "2025-01-18",
+      "feeders": [
+        "HF1",
+        "HF2",
+        "HF3",
+        "HF4"
+      ]
+    },
+    {
+      "card": 24,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205488048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/24.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "MUF1",
+        "MUF2"
+      ]
+    },
+    {
+      "card": 25,
+      "photoUrl": "https://www.facebook.com/photo/?fbid=122174205500048473&set=pcb.122174205872048473",
+      "image": "data/coverage-2025/25.jpg",
+      "asOf": "2025-02-03",
+      "feeders": [
+        "LF1",
+        "LF2",
+        "LF3"
+      ]
+    }
+  ],
+  "duplicateCards": [
+    {
+      "photoId": "122174205536048473",
+      "sameAsCard": 1
+    },
+    {
+      "photoId": "122174205410048473",
+      "sameAsCard": 2
+    },
+    {
+      "photoId": "122174205542048473",
+      "sameAsCard": 3
+    },
+    {
+      "photoId": "122174205446048473",
+      "sameAsCard": 4
+    }
+  ]
+}
