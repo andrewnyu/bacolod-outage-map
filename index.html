@@ -249,6 +249,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="geo.js"></script>
+<script src="coverage.js"></script>
 <script src="schedule.js"></script>
 <script>
 (function(){
@@ -314,6 +315,7 @@
 
   var layers = {};
   ZONES.forEach(function(z){
+    if(z.kind === 'unmapped') return;
     var shape;
     if(z.kind === 'area'){
       shape = L.polygon(z.poly, { weight:2, opacity:.9, fillOpacity:.22, color:C_ON });
@@ -339,6 +341,7 @@
 
   function updateLabels(){
     ZONES.forEach(function(z){
+      if(!layers[z.id]) return;
       var el = layers[z.id].label.getElement(); if(!el) return;
       var d = el.querySelector('.zlabel'); if(!d) return;
       var show;
@@ -360,6 +363,7 @@
     var total = Object.keys(live).length;
 
     ZONES.forEach(function(z){
+      if(!layers[z.id]) return;
       var st = zoneState(z, t), n = outAt(z, t);
       var col = st === 'out' ? C_OUT : st === 'soon' ? C_SOON : C_ON;
       layers[z.id].shape.setStyle(z.kind === 'area'
@@ -379,11 +383,14 @@
   /* ---------- left rail: every feeder, always reachable ---------- */
   var FAMS = (function(){
     var byFam = {}, out = [];
+    var names = Object.keys(COVERAGE.feeders).concat(Object.keys(SCHEDULE.slots));
     ZONES.forEach(function(z){
-      z.feeders.forEach(function(f){
-        var fam = f.replace(/ Feeder \d+$/, '');
-        (byFam[fam] = byFam[fam] || []).push(f);
-      });
+      names = names.concat(z.feeders);
+    });
+    names.forEach(function(f){
+      var fam = f.replace(/ Feeder \d+$/, '');
+      var group = byFam[fam] = byFam[fam] || [];
+      if(group.indexOf(f) === -1) group.push(f);
     });
     Object.keys(byFam).sort().forEach(function(fam){
       out.push({ fam: fam, feeders: byFam[fam].sort(function(a, b){
@@ -397,7 +404,7 @@
     confirmed:   'substation located in OpenStreetMap',
     approximate: 'pinned on a matching place name',
     guess:       'location is a weak guess',
-    unknown:     'location unknown — pin is a placeholder'
+    unknown:     'coverage listed; precise location not mapped'
   };
 
   function renderRail(){
@@ -409,7 +416,7 @@
       g.feeders.forEach(function(f){
         var s = slotOf(f);
         var st = isOut(f, t) ? 'out' : isSoon(f, t) ? 'soon' : 'on';
-        var col = st === 'out' ? 'var(--out)' : st === 'soon' ? 'var(--soon)' : 'var(--on)';
+        var col = !s ? 'var(--muted)' : st === 'out' ? 'var(--out)' : st === 'soon' ? 'var(--soon)' : 'var(--on)';
         h += '<button class="fd' + (selFeeder === f ? ' sel' : '') + '" data-f="' + esc(f) + '">'
            + '<i style="background:' + col + '"></i>'
            + '<span class="nm">' + esc(f.replace(g.fam + ' ', '')) + '</span>'
@@ -442,12 +449,18 @@
       + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
       + 'Negros Power Facebook page</a>. Not operated by or affiliated with Negros Power. '
       + 'Shaded areas come from their published street lists; points are substations or '
-      + 'approximations with no published coverage. '
+      + 'approximate reference points. Historical area lists are from the '
+      + '<a href="' + esc(COVERAGE.sourceUrl) + '" target="_blank" rel="noopener">'
+      + 'March 2025 feeder coverage album</a>; assignments may have changed. '
       + '<a href="tel:+63347056372">(034) 705-6372</a> · '
       + '<a href="tel:+639176837250">0917 683 7250</a>.</div>';
   }
 
   function confNote(z){
+    if(z.kind === 'unmapped'){
+      return '<div class="note"><b>Coverage listed; not mapped.</b> '
+        + esc(z.note) + '</div>';
+    }
     if(z.confidence === 'published'){
       return '<div class="note"><b>How this shape was made.</b> Convex hull of '
         + z.hullPoints + ' places from Negros Power’s own published area list, geocoded '
@@ -510,19 +523,22 @@
   function showFeeder(f){
     selFeeder = f;
     var z = zoneOf(f), s = slotOf(f);
+    selected = z ? z.id : null;
+    hideResults();
+    paint();
     if(z){
-      selected = z.id; paint();
       if(z.kind === 'area'){
         map.flyToBounds(layers[z.id].shape.getBounds(),
           { paddingBottomRight: L.point(0, sheetH()), duration:.6, maxZoom:15 });
-      } else { map.flyTo(z.center, 14, { duration:.6 }); }
+      } else if(z.center) { map.flyTo(z.center, 14, { duration:.6 }); }
     } else { renderRail(); }
 
     var out = isOut(f, t);
     var h = '<button class="back" id="back">‹ Back</button>';
     h += '<div class="row"><b style="font-size:1.12rem;letter-spacing:-.02em">' + esc(f)
        + '</b></div><div class="row">'
-       + (out ? '<span class="pill p-out">Out at ' + fmt(t) + '</span>'
+       + (!s ? '<span class="conf">No rotation slot published</span>'
+              : out ? '<span class="pill p-out">Out at ' + fmt(t) + '</span>'
               : '<span class="pill p-on">On at ' + fmt(t) + '</span>')
        + (z ? '<span class="conf">' + esc(z.confidence) + '</span>' : '') + '</div>';
 
@@ -558,6 +574,19 @@
       h += '<details open><summary>Areas on this feeder (' + z.areas.length + ')</summary><ul>';
       z.areas.forEach(function(a){ h += '<li>' + esc(a) + '</li>'; });
       h += '</ul></details>';
+    }
+    var coverage = COVERAGE.feeders[f];
+    if(coverage){
+      h += '<details open><summary>Published coverage · ' + esc(coverage.asOf) + '</summary>'
+        + '<p class="dim">Historical list from the March 2025 album. Feeder assignments '
+        + 'may have changed; use newer advisories when they differ. '
+        + '“Portion” means only part of the named area.</p>'
+        + '<p>' + esc(coverage.text) + '</p>'
+        + '<p><a href="' + esc(coverage.photoUrl) + '" target="_blank" rel="noopener">'
+        + 'Original Facebook card</a> · <a href="' + esc(coverage.image)
+        + '" target="_blank" rel="noopener">Saved coverage card</a></p></details>';
+      if(!z) h += '<div class="note">This feeder has a published area list, but no verified '
+        + 'map position or boundary in this app.</div>';
     }
     if(z) h += confNote(z);
     h += footer();
@@ -604,7 +633,7 @@
     if(z.kind === 'area'){
       map.flyToBounds(layers[id].shape.getBounds(),
         { paddingBottomRight: L.point(0, sheetH()), duration:.6, maxZoom:15 });
-    } else { map.flyTo(z.center, 14, { duration:.6 }); }
+    } else if(z.center) { map.flyTo(z.center, 14, { duration:.6 }); }
     renderZone(z);
     $('body').scrollTop = 0;
     hideResults();
@@ -616,7 +645,14 @@
     z.areas.forEach(function(a){ index.push({ label:a, sub:z.name, z:z }); });
     z.feeders.forEach(function(f){ index.push({ label:f, sub:'feeder', z:z, f:f }); });
   });
-  function norm(s){ return s.toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
+  Object.keys(COVERAGE.feeders).forEach(function(f){
+    var c = COVERAGE.feeders[f];
+    if(!zoneOf(f)) index.push({ label:f, sub:'feeder · coverage list available', f:f });
+    index.push({ label:c.code, sub:f, f:f });
+    // Search the full text so qualifiers and comma-separated zone numbers stay intact.
+    index.push({ label:f, search:c.text, sub:'Historical coverage · ' + c.asOf, f:f, historical:true });
+  });
+  function norm(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(); }
   function hideResults(){ resEl.classList.remove('show'); }
 
   function runSearch(){
@@ -624,10 +660,11 @@
     if(!term){ hideResults(); return; }
     var n = norm(term), hits = [], seen = {};
     index.forEach(function(e){
-      var p = norm(e.label).indexOf(n);
-      if(p > -1 && !seen[e.label + e.z.id]){ seen[e.label + e.z.id] = 1; hits.push({ e:e, p:p }); }
+      var p = norm(e.search || e.label).indexOf(n);
+      var key = e.label + (e.f || e.z.id) + (e.historical ? ':historical' : '');
+      if(p > -1 && !seen[key]){ seen[key] = 1; hits.push({ e:e, p:p }); }
     });
-    hits.sort(function(a, b){ return a.p - b.p; });
+    hits.sort(function(a, b){ return Number(!!a.e.historical) - Number(!!b.e.historical) || a.p - b.p; });
     hits = hits.slice(0, 8);
     if(!hits.length){
       resEl.innerHTML = '<div class="res-empty">Nothing matching “' + esc(term)
@@ -686,7 +723,7 @@
         return;
       }
       map.flyTo(here, 13, { duration:.6 });
-      var near = ZONES.slice().sort(function(a, b){
+      var near = ZONES.filter(function(z){ return !!z.center; }).sort(function(a, b){
         return map.distance(here, a.center) - map.distance(here, b.center); })[0];
       $('body').innerHTML = '<button class="back" id="back">‹ Back</button>'
         + '<h2>You are outside the mapped areas</h2>'
