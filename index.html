@@ -411,13 +411,21 @@
   function isWide(){ return window.innerWidth >= WIDE; }
 
   function staleNote(){
-    var d = (Date.now() - new Date(SCHEDULE.fetchedAt).getTime()) / 86400000;
+    var dt = new Date(SCHEDULE.fetchedAt);
+    var abs = dt.toLocaleString('en-PH', {
+      timeZone:'Asia/Manila', month:'short', day:'numeric', year:'numeric',
+      hour:'numeric', minute:'2-digit'
+    }) + ' PHT';
+    var d = (Date.now() - dt.getTime()) / 86400000;
     var n = Math.floor(d);
-    var txt = d < 1 ? 'Data refreshed today.'
-            : 'Data last refreshed ' + n + ' day' + (n === 1 ? '' : 's') + ' ago.';
+    var rel = d < 1 ? 'today' : n + ' day' + (n === 1 ? '' : 's') + ' ago';
     var warn = d > 2;
+    var src = SCHEDULE.source;
     return '<div class="note' + (warn ? ' warn' : '') + '">'
-      + (warn ? '<b>This data is stale.</b> ' : '') + esc(txt)
+      + (warn ? '<b>This data is stale.</b> ' : '')
+      + 'Refreshed ' + esc(abs) + ' (' + esc(rel) + ').'
+      + (src ? ' <a href="' + esc(src.url) + '" target="_blank" rel="noopener">'
+             + esc(src.label) + '</a>.' : '')
       + ' Rotation schedules change daily with grid conditions — confirm on the '
       + '<a href="https://www.facebook.com/negrospowerph" target="_blank" rel="noopener">'
       + 'Negros Power page</a> or (034) 705-6372 before planning around it.</div>';

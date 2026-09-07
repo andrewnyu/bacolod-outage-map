@@ -79,9 +79,9 @@ function advisoryDate(text) {
            pretty: `${m[1]} ${+m[2]}, ${m[3]}` };
 }
 
-function parseSlots(texts) {
+function parseSlots(entries) {
   const byDate = new Map(), unknown = new Set(), undated = [];
-  for (const t of texts) {
+  for (const { text: t, src } of entries) {
     const date = advisoryDate(t);
     const found = [];
     let m;
@@ -96,8 +96,12 @@ function parseSlots(texts) {
     }
     if (!found.length) continue;
     if (!date) { undated.push(found.length); continue; }   // cannot attribute — drop
-    if (!byDate.has(date.key)) byDate.set(date.key, { date, slots: {} });
-    Object.assign(byDate.get(date.key).slots, Object.fromEntries(found));
+    if (!byDate.has(date.key)) byDate.set(date.key, { date, slots: {}, sources: [] });
+    var entry = byDate.get(date.key);
+    Object.assign(entry.slots, Object.fromEntries(found));
+    if (src && !entry.sources.some(function(s2){ return s2.kind === src.kind && s2.fbid === src.fbid; })) {
+      entry.sources.push(src);
+    }
   }
   return { byDate, unknown: [...unknown], undated };
 }
@@ -123,18 +127,24 @@ const ocrTexts = (raw.photos || []).map(p => {
 });
 console.log(`OCR: ${ocrCount}/${(raw.photos || []).length} images read`);
 
-const texts = [...raw.posts, ...raw.photos.map(p => p.alt), ...ocrTexts]
-  .filter(Boolean).map(fixOcr);
-if (!texts.length) {
+// Tag every text with where it came from, so whichever date's rotation wins
+// can link straight back to the Facebook post or photo that stated it.
+const entries = [
+  ...raw.posts.map(t => ({ text: t, src: { kind: 'post' } })),
+  ...raw.photos.map(p => ({ text: p.alt, src: { kind: 'photo', fbid: p.fbid } })),
+  ...raw.photos.map((p, i) => ({ text: ocrTexts[i], src: { kind: 'photo', fbid: p.fbid } })),
+].filter(e => e.text).map(e => ({ ...e, text: fixOcr(e.text) }));
+
+if (!entries.length) {
   console.error('FAILED: raw capture contained no text. schedule.js left untouched.');
   process.exit(1);
 }
 
-const { byDate, unknown, undated } = parseSlots(texts);
+const { byDate, unknown, undated } = parseSlots(entries);
 const scheduled = parseScheduled(raw.posts);
 
 const days = [...byDate.values()].sort((a, b) => b.date.ts - a.date.ts);
-console.log(`read ${texts.length} texts; rotations found for ` +
+console.log(`read ${entries.length} texts; rotations found for ` +
   (days.length ? days.map(d => `${d.date.pretty} (${Object.keys(d.slots).length})`).join(', ')
                : 'no dated advisory'));
 if (undated.length) console.log(`ignored ${undated.length} undated block(s) — cannot attribute to a day`);
@@ -144,6 +154,23 @@ scheduled.forEach(s => console.log('scheduled interruption headline: ' + s.headl
 const newest = days[0] || null;
 const slots = newest ? newest.slots : {};
 if (newest) console.log(`publishing ${newest.date.pretty} only`);
+
+// Prefer a link straight to the specific photo that stated this rotation;
+// fall back to the page itself if it only ever showed up in plain post text.
+function sourceFor(day) {
+  if (!day) return null;
+  var photo = (day.sources || []).find(function(s){ return s.kind === 'photo' && s.fbid; });
+  if (photo) {
+    return { url: `https://www.facebook.com/photo.php?fbid=${photo.fbid}`,
+             label: 'View the source post on Facebook' };
+  }
+  if ((day.sources || []).length) {
+    return { url: raw.url, label: 'View the Negros Power Facebook page' };
+  }
+  return null;
+}
+const source = sourceFor(newest);
+if (source) console.log('source: ' + source.url);
 
 // Refuse to publish a rotation that looks broken. A real red-alert rotation is
 // dozens of slots; a handful means the markup changed and we half-read it.
@@ -163,10 +190,18 @@ if (Object.keys(slots).length < MIN_SLOTS) {
 const cur = JSON.parse(JSON.stringify({
   fetchedAt: raw.fetchedAt,
   slots,
+  source,
 }));
 
 // keep whatever the previous file declared for the things we cannot parse
 const keep = k => (prev.match(new RegExp(`${k}:\\s*("[^"]*")`)) || [])[1] || '""';
+
+// Fall back to whatever the previous file already had if this run found no
+// usable source (e.g. a re-parse of an old capture) -- never regress to nothing.
+const prevSourceMatch = prev.match(/source:\s*(\{[^}]*\}|null)/);
+const sourceLiteral = cur.source
+  ? `{ url: ${JSON.stringify(cur.source.url)}, label: ${JSON.stringify(cur.source.label)} }`
+  : (prevSourceMatch ? prevSourceMatch[1] : 'null');
 
 const lines = [];
 lines.push('/* Bacolod outage map — SCHEDULE (rewritten by .github/workflows/refresh.yml).');
@@ -177,6 +212,7 @@ lines.push('');
 lines.push('const SCHEDULE = {');
 lines.push(`  fetchedAt: "${cur.fetchedAt}",`);
 lines.push(`  sourceDate: ${keep('sourceDate')},`);
+lines.push(`  source: ${sourceLiteral},`);
 lines.push('  rotation: {');
 const rotDate = newest
   ? `"${new Date(newest.date.ts).toLocaleDateString('en-US',
