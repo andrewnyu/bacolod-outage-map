@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-06T14:22:04.301Z",
+  fetchedAt: "2026-09-06T15:11:37.194Z",
   sourceDate: "6 September 2026",
   rotation: {
     date: "Saturday, September 5, 2026",
@@ -62,6 +62,18 @@ const SCHEDULE = {
       areas: ["Kumaliskis (portion)", "Don Salvador Benedicto"],
     },
   ],
+  completed: {
+    date: "Sunday, 6 September 2026",
+    restoredAt: "6:37 PM",
+    feeders: ["Mountain View Feeder 1", "Mountain View Feeder 2", "Mountain View Feeder 3", "Mountain View Feeder 4", "Mountain View Feeder 5", "Mountain View Feeder 6"],
+    cause: [
+      "Mt. View Substation preventive maintenance & old relay isolation",
+      "69kV pole (2) replacement along Buri Rd. near Villa Estanzia & Magdalene Ville",
+      "Primary pole replacement along GM Cordova, Buri & Lacson Sts. (6 double-circuit poles)",
+      "Primary pole (4) relocation from Citadines to North Tourist-Inn",
+      "Massive tree clearing along Aguinaldo St.",
+    ],
+  },
   completed: {
     date: "Sunday, 6 September 2026",
     restoredAt: "6:37 PM",
