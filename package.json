@@ -5,7 +5,8 @@
   "scripts": {
     "scrape": "node scripts/scrape.mjs",
     "parse": "node scripts/parse.mjs",
-    "refresh": "node scripts/scrape.mjs && node scripts/parse.mjs",
+    "export-schedule": "node scripts/export-schedule.mjs",
+    "refresh": "node scripts/scrape.mjs && node scripts/parse.mjs; code=$?; if [ $code -eq 0 ] || [ $code -eq 2 ]; then node scripts/export-schedule.mjs; else exit $code; fi",
     "geocode": "node scripts/geocode-coverage.mjs",
     "geocode-streets": "node scripts/geocode-streets.mjs"
   },

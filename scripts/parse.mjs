@@ -109,10 +109,66 @@ function parseSlots(entries) {
 function parseScheduled(texts) {
   const out = [];
   for (const t of texts) {
-    const m = t.match(/SCHEDULED\s+POWER\s+INTERRUPTION\s*:?\s*([A-Z]+\s+\d{1,2},\s*\d{4})/i);
-    if (m) out.push({ headline: m[1], text: t });
+    const dateMatch = t.match(
+      /SCHEDULED\s+POWER\s+INTERRUPTION\s*:?\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s*(\d{4})/i);
+    if (!dateMatch) continue;
+
+    const month = MONTHS.indexOf(dateMatch[1].toLowerCase());
+    const date = new Date(Date.UTC(+dateMatch[3], month, +dateMatch[2]));
+    const key = date.toISOString().slice(0, 10);
+    const pretty = date.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+    });
+
+    const reasonMatch = t.match(/Reason\s*:\s*([\s\S]*?)\s*Time\s*&\s*Affected\s+Areas\s*:/i);
+    const cause = reasonMatch
+      ? reasonMatch[1].replace(/^[\s●•-]+/gm, '').replace(/\s*;\s*\n/g, '; ')
+          .replace(/\s*\n\s*/g, '; ').replace(/;\s*and\s*;/gi, '; ')
+          .replace(/\s+/g, ' ').trim().replace(/;$/, '')
+      : 'See the Negros Power advisory for the stated reason';
+
+    const bodyMatch = t.match(/Time\s*&\s*Affected\s+Areas\s*:\s*([\s\S]*)/i);
+    if (!bodyMatch) continue;
+
+    let current = null;
+    for (const rawLine of bodyMatch[1].split(/\n+/)) {
+      const line = rawLine.trim();
+      const time = line.match(
+        /^(\d{1,2}:\d{2}\s*(?:AM|PM)\s+to\s+\d{1,2}:\d{2}\s*(?:AM|PM)(?:\s*&\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s+to\s+\d{1,2}:\d{2}\s*(?:AM|PM))?)/i);
+      if (time) {
+        current = { key, date: pretty, window: time[1].replace(/\s+/g, ' '), feeders: [], cause, areas: [] };
+        out.push(current);
+        continue;
+      }
+      if (!current) continue;
+
+      const area = line.match(/^(?:Whole|Portion)\s+of\s+([A-Z-]+\s*\d+)\s*-\s*(.+)$/i);
+      if (!area) continue;
+      const feeder = feederNameFromCode(area[1]);
+      if (feeder && !current.feeders.includes(feeder)) current.feeders.push(feeder);
+      current.areas.push(area[2].trim());
+    }
   }
-  return out;
+  return out.filter(s => s.feeders.length);
+}
+
+function feederNameFromCode(value) {
+  const m = value.toUpperCase().replace(/\s+/g, '').match(/^([A-Z-]+?)(\d+)$/);
+  if (!m) return null;
+  const families = {
+    AF: 'Alijis', AGF: 'Asdes-Gonzaga', BF: 'Burgos', HF: 'Hilangban',
+    LF: 'Lopez', MF: 'Mountain View', MUF: 'Murcia', PF: 'Panaogao',
+    RF: 'Reclamation', SF: 'Sum-ag', TF: 'Talisay',
+  };
+  return families[m[1]] ? `${families[m[1]]} Feeder ${parseInt(m[2], 10)}` : null;
+}
+
+function phtDateKey(value) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date(value));
+  const get = type => parts.find(p => p.type === type)?.value;
+  return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -149,11 +205,19 @@ console.log(`read ${entries.length} texts; rotations found for ` +
                : 'no dated advisory'));
 if (undated.length) console.log(`ignored ${undated.length} undated block(s) — cannot attribute to a day`);
 if (unknown.length) console.log('unrecognised feeder families: ' + unknown.join(', '));
-scheduled.forEach(s => console.log('scheduled interruption headline: ' + s.headline));
+scheduled.forEach(s => console.log(`scheduled interruption: ${s.date}, ${s.window}`));
 
 const newest = days[0] || null;
-const slots = newest ? newest.slots : {};
-if (newest) console.log(`publishing ${newest.date.pretty} only`);
+const checkDate = phtDateKey(raw.fetchedAt);
+const activeRotation = newest && newest.date.key >= checkDate ? newest : null;
+const slots = activeRotation ? activeRotation.slots : {};
+if (activeRotation) {
+  console.log(`publishing ${activeRotation.date.pretty} only`);
+} else if (newest) {
+  console.log(`latest rotation (${newest.date.pretty}) is expired on ${checkDate}; publishing no active slots`);
+} else {
+  console.log(`no rotation published for ${checkDate}; publishing no active slots`);
+}
 
 // Prefer a link straight to the specific photo that stated this rotation;
 // fall back to the page itself if it only ever showed up in plain post text.
@@ -169,7 +233,9 @@ function sourceFor(day) {
   }
   return null;
 }
-const source = sourceFor(newest);
+const source = sourceFor(activeRotation) || (scheduled.length
+  ? { url: raw.url, label: 'View the Negros Power Facebook page' }
+  : null);
 if (source) console.log('source: ' + source.url);
 
 // Refuse to publish a rotation that looks broken. A real red-alert rotation is
@@ -177,8 +243,15 @@ if (source) console.log('source: ' + source.url);
 const MIN_SLOTS = 8;
 const prev = readFileSync(OUT, 'utf8');
 const prevCount = (prev.match(/^\s{4}"/gm) || []).length;
+let prevSchedule = {};
+try {
+  prevSchedule = Function(`"use strict";\n${prev}\nreturn SCHEDULE;`)();
+} catch (error) {
+  console.error(`FAILED: could not read existing schedule.js: ${error.message}`);
+  process.exit(1);
+}
 
-if (Object.keys(slots).length < MIN_SLOTS) {
+if (Object.keys(slots).length > 0 && Object.keys(slots).length < MIN_SLOTS) {
   console.error(
     `FAILED: only ${Object.keys(slots).length} slots parsed (need >= ${MIN_SLOTS}). ` +
     `Keeping the existing ${prevCount}. This usually means no rotation was published ` +
@@ -187,21 +260,32 @@ if (Object.keys(slots).length < MIN_SLOTS) {
   process.exit(2);          // 2 = nothing usable, distinct from a crash
 }
 
+function displayDateKey(value) {
+  return advisoryDate(value)?.key || '';
+}
+
+// Keep future scheduled interruptions that may have scrolled off Facebook's
+// two-post logged-out view, replace dates found in the new scrape, and drop
+// anything already in the past.
+const newScheduledDates = new Set(scheduled.map(s => s.key));
+const scheduledToPublish = [
+  ...(prevSchedule.scheduled || [])
+    .map(s => ({ ...s, key: displayDateKey(s.date) }))
+    .filter(s => s.key >= checkDate && !newScheduledDates.has(s.key)),
+  ...scheduled.filter(s => s.key >= checkDate),
+].map(({ key, ...s }) => s);
+
 const cur = JSON.parse(JSON.stringify({
   fetchedAt: raw.fetchedAt,
   slots,
   source,
 }));
 
-// keep whatever the previous file declared for the things we cannot parse
-const keep = k => (prev.match(new RegExp(`${k}:\\s*("[^"]*")`)) || [])[1] || '""';
-
 // Fall back to whatever the previous file already had if this run found no
 // usable source (e.g. a re-parse of an old capture) -- never regress to nothing.
-const prevSourceMatch = prev.match(/source:\s*(\{[^}]*\}|null)/);
 const sourceLiteral = cur.source
   ? `{ url: ${JSON.stringify(cur.source.url)}, label: ${JSON.stringify(cur.source.label)} }`
-  : (prevSourceMatch ? prevSourceMatch[1] : 'null');
+  : JSON.stringify(prevSchedule.source || null);
 
 const lines = [];
 lines.push('/* Bacolod outage map — SCHEDULE (rewritten by .github/workflows/refresh.yml).');
@@ -211,19 +295,25 @@ lines.push(' */');
 lines.push('');
 lines.push('const SCHEDULE = {');
 lines.push(`  fetchedAt: "${cur.fetchedAt}",`);
-lines.push(`  sourceDate: ${keep('sourceDate')},`);
+const sourceDate = activeRotation
+  ? new Date(activeRotation.date.ts).toLocaleDateString('en-GB',
+      { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' })
+  : scheduled.length
+    ? new Date(`${scheduled[0].key}T00:00:00Z`).toLocaleDateString('en-GB',
+        { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' })
+  : (prevSchedule.sourceDate || '');
+lines.push(`  sourceDate: ${JSON.stringify(sourceDate)},`);
 lines.push(`  source: ${sourceLiteral},`);
 lines.push('  rotation: {');
-const rotDate = newest
-  ? `"${new Date(newest.date.ts).toLocaleDateString('en-US',
+const rotDate = activeRotation
+  ? `"${new Date(activeRotation.date.ts).toLocaleDateString('en-US',
       { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'UTC' })}"`
-  : keep('date');
+  : JSON.stringify(prevSchedule.rotation?.date || 'No current rotation published');
 lines.push(`    date: ${rotDate},`);
 ['redAlert', 'yellowAlert', 'available', 'demand'].forEach(k =>
-  lines.push(`    ${k}: ${keep(k)},`));
+  lines.push(`    ${k}: ${JSON.stringify(prevSchedule.rotation?.[k] || '')},`));
 lines.push('    reason:');
-lines.push('      "Visayas coal plants TVI 1 and PEDC 3 are unavailable, with limited or zero " +');
-lines.push('      "power import from the Mindanao grid.",');
+lines.push(`      ${JSON.stringify(prevSchedule.rotation?.reason || '')},`);
 lines.push('  },');
 lines.push('  window: { start: 14, end: 23 },');
 lines.push('  // canonical feeder name -> rotational brownout slot');
@@ -236,13 +326,14 @@ Object.keys(cur.slots)
   });
 lines.push('  },');
 
-// carry the previous scheduled / completed blocks through verbatim — the parser
-// is not confident enough to rewrite prose and street lists
-const carry = name => {
-  const m = prev.match(new RegExp(`  ${name}: ([\\s\\S]*?\\n  \\},?)\\n`));
-  return m ? `  ${name}: ${m[1]}` : null;
-};
-[carry('scheduled'), carry('completed')].forEach(b => { if (b) lines.push(b); });
+// Serialize structured values instead of slicing JavaScript with a regex. The
+// old regex could swallow the following property and duplicate `completed`.
+const scheduledValue = JSON.stringify(scheduledToPublish, null, 2).replace(/\n/g, '\n  ');
+lines.push(`  scheduled: ${scheduledValue},`);
+if (prevSchedule.completed !== undefined) {
+  const completedValue = JSON.stringify(prevSchedule.completed, null, 2).replace(/\n/g, '\n  ');
+  lines.push(`  completed: ${completedValue},`);
+}
 lines.push('};');
 
 const next = lines.join('\n') + '\n';

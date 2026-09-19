@@ -12,11 +12,15 @@ tap a zone, search your subdivision, or hit locate to find which feeder is yours
 
 Two sources:
 
-### Rotation schedule (Sep 2026 red-alert snapshot)
+### Current advisories
 
-Scraped on **6 September 2026** from the official
-[Negros Power Facebook page](https://www.facebook.com/negrospowerph) — the
-scheduled-outage posts plus the NGCP red-alert rotation graphics. It covers:
+Automatically checked twice daily from the official
+[Negros Power Facebook page](https://www.facebook.com/negrospowerph). The
+pipeline reads scheduled-outage posts and OCRs NGCP red-alert rotation
+graphics. Production loads the latest checked-in JSON snapshot at runtime, so
+new outage data does not require a Vercel redeploy.
+
+The original September 2026 snapshot covered:
 
 - **Sun 6 Sep 2026** planned works across Mountain View feeders MF1–MF6 (restored 6:37PM)
 - **Tue 8 Sep 2026** scheduled outage on Murcia Feeder 3 (Kumaliskis / Don Salvador Benedicto)
@@ -42,8 +46,17 @@ Use the most recent Negros Power advisory when they conflict.
 
 ## Honest limits
 
-**It is a frozen snapshot.** There is no cron job and no automatic refresh — the
-rotation data is fixed at the 6 September scrape.
+**It is an automated, best-effort snapshot.** GitHub Actions checks at 1PM and
+5PM Philippine time. Facebook can change its logged-out markup or block a data
+center runner, so the app displays both the latest page-check time and the
+advisory-data time. Expired rotation slots are cleared rather than presented as
+current. Always verify important plans with Negros Power.
+
+The **Check updates** button loads the newest automatic snapshot immediately.
+If production has a fine-grained `GITHUB_TOKEN` with Actions write access, it
+also starts an on-demand scrape (limited to once per 30 minutes) and waits for
+the new check. Without that optional token, the button remains a read-only
+latest-data check instead of failing.
 
 **The map draws three kinds of claim, deliberately styled apart.**
 
@@ -101,6 +114,7 @@ python3 -m http.server 8931
 |---|---|
 | `scripts/scrape.mjs` | fetch latest posts & photos from the Negros Power FB page (needs Playwright) |
 | `scripts/parse.mjs` | parse rotation slots from the raw scrape into `schedule.js` |
+| `scripts/export-schedule.mjs` | export `data/schedule.json` for production runtime loading |
 | `scripts/geocode-coverage.mjs` | geocode coverage text via Nominatim → hull polygon candidates |
 | `scripts/geocode-streets.mjs` | improved geocoder with street-name extraction (for downtown feeders) |
 

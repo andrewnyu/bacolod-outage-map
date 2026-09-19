@@ -1,7 +1,8 @@
 // Triggers the GitHub Actions "Refresh outage data" workflow via workflow_dispatch.
-// The client-side refresh button calls this endpoint. It checks how long ago
-// the data was last fetched (from schedule.js's fetchedAt) and only fires if
-// more than 30 minutes have passed, to avoid hammering the scraper.
+// The client-side refresh button calls this endpoint. It checks the last page
+// check (data/schedule.json's checkedAt) and only fires if more than 30 minutes
+// have passed, to avoid hammering the scraper. Without a token, it degrades to
+// a read-only "check latest snapshot" response instead of returning a 500.
 //
 // Environment variables (set in Vercel project settings):
 //   GITHUB_TOKEN  — a fine-grained PAT with "Actions: write" on the repo
@@ -29,40 +30,45 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  if (!TOKEN) {
-    return res.status(500).json({
-      ok: false,
-      error: 'Server missing GITHUB_TOKEN. Set it in Vercel env vars.',
-    });
-  }
-
-  // Read the current schedule.js fetchedAt from the repo's default branch
-  // via the GitHub raw-content API (no auth needed for public repos).
-  let fetchedAt = null;
+  // Read the runtime snapshot from the repo's default branch. This is public,
+  // so checking for fresh data does not require a GitHub credential.
+  let snapshot = null;
   try {
     const rawRes = await fetch(
-      `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/schedule.js`
+      `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/data/schedule.json`,
+      { cache: 'no-store', headers: { 'User-Agent': 'bacolod-outage-map' } }
     );
     if (rawRes.ok) {
-      const text = await rawRes.text();
-      const m = text.match(/fetchedAt:\s*"([^"]+)"/);
-      if (m) fetchedAt = m[1];
+      snapshot = await rawRes.json();
     }
   } catch (e) {
     // fall through — we'll attempt the trigger anyway
   }
 
-  if (fetchedAt) {
-    const age = Date.now() - new Date(fetchedAt).getTime();
+  const checkedAt = snapshot && (snapshot.checkedAt || snapshot.fetchedAt);
+  if (checkedAt) {
+    const age = Date.now() - new Date(checkedAt).getTime();
     if (age < THIRTY_MIN) {
       const mins = Math.floor(age / 60000);
       return res.status(200).json({
         ok: true,
         throttled: true,
-        message: `Data was updated ${mins} min ago. Skipping refresh (30-min cooldown).`,
-        fetchedAt,
+        snapshot,
+        message: `Negros Power was checked ${mins} min ago. Skipping another scrape (30-min cooldown).`,
+        checkedAt,
       });
     }
+  }
+
+  if (!TOKEN) {
+    return res.status(200).json({
+      ok: true,
+      triggered: false,
+      snapshot,
+      message: snapshot
+        ? 'Loaded the latest automatic check. On-demand scraping is not configured.'
+        : 'On-demand scraping is not configured and the latest snapshot could not be loaded.',
+    });
   }
 
   // Trigger workflow_dispatch
@@ -89,7 +95,7 @@ export default async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     triggered: true,
-    message: 'Refresh triggered. New data should be live in 2-5 minutes.',
-    fetchedAt,
+    message: 'Refresh started. This page will update when the new check is ready.',
+    checkedAt,
   });
 }

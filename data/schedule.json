@@ -1,26 +1,24 @@
-/* Bacolod outage map — SCHEDULE (rewritten by .github/workflows/refresh.yml).
- * Do not hand-edit; the refresh job overwrites this file.
- * Geometry lives in geo.js and is never touched by the job.
- */
-
-const SCHEDULE = {
-  fetchedAt: "2026-09-19T13:00:31.931Z",
-  sourceDate: "20 September 2026",
-  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
-  rotation: {
-    date: "Wednesday, September 16, 2026",
-    redAlert: "5:00PM – 8:00PM",
-    yellowAlert: "8:00PM – 10:00PM",
-    available: "2,255 MW",
-    demand: "2,432 MW",
-    reason:
-      "Visayas coal plants TVI 1 and PEDC 3 are unavailable, with limited or zero power import from the Mindanao grid.",
+{
+  "fetchedAt": "2026-09-19T13:00:31.931Z",
+  "sourceDate": "20 September 2026",
+  "source": {
+    "url": "https://www.facebook.com/negrospowerph",
+    "label": "View the Negros Power Facebook page"
   },
-  window: { start: 14, end: 23 },
-  // canonical feeder name -> rotational brownout slot
-  slots: {
+  "rotation": {
+    "date": "Wednesday, September 16, 2026",
+    "redAlert": "5:00PM – 8:00PM",
+    "yellowAlert": "8:00PM – 10:00PM",
+    "available": "2,255 MW",
+    "demand": "2,432 MW",
+    "reason": "Visayas coal plants TVI 1 and PEDC 3 are unavailable, with limited or zero power import from the Mindanao grid."
   },
-  scheduled: [
+  "window": {
+    "start": 14,
+    "end": 23
+  },
+  "slots": {},
+  "scheduled": [
     {
       "date": "Sunday, September 20, 2026",
       "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
@@ -46,7 +44,7 @@ const SCHEDULE = {
       ]
     }
   ],
-  completed: {
+  "completed": {
     "date": "Sunday, 6 September 2026",
     "restoredAt": "6:37 PM",
     "feeders": [
@@ -65,4 +63,9 @@ const SCHEDULE = {
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-};
+  "checkedAt": "2026-09-19T13:00:31.931Z",
+  "capture": {
+    "posts": 2,
+    "photos": 9
+  }
+}

@@ -367,7 +367,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/>
         </svg>
-        <span id="refreshtxt">Refresh</span>
+        <span id="refreshtxt">Check updates</span>
       </button>
       <div class="refresh-info" id="refreshinfo"></div>
     </div>
@@ -385,7 +385,22 @@
 <script src="coverage.js"></script>
 <script src="schedule.js"></script>
 <script>
-(function(){
+(async function(){
+  // schedule.js is a deploy-time fallback. The live JSON is updated by the
+  // scraper independently of Vercel deployments.
+  try {
+    var liveResp = await fetch('/api/schedule?ts=' + Date.now(), { cache:'no-store' });
+    if(liveResp.ok){
+      var liveSchedule = await liveResp.json();
+      if(liveSchedule && liveSchedule.fetchedAt && liveSchedule.slots){
+        Object.keys(SCHEDULE).forEach(function(k){ delete SCHEDULE[k]; });
+        Object.assign(SCHEDULE, liveSchedule);
+      }
+    }
+  } catch(e) {
+    // Stay usable with the bundled fallback when GitHub or the API is down.
+  }
+
   var $ = function(id){ return document.getElementById(id); };
   var sheet = $('sheet'), qEl = $('q'), resEl = $('results');
   var selected = null, selFeeder = null;
@@ -394,6 +409,7 @@
 
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function hasRotation(){ return Object.keys(SCHEDULE.slots || {}).length > 0; }
   function slotOf(f){ return SCHEDULE.slots[f] || null; }
   function isOut(f, h){ var s = slotOf(f); return !!s && h >= s.s && h < s.e; }
   function isSoon(f, h){ var s = slotOf(f); return !!s && s.s > h && s.s <= h + 1; }
@@ -412,7 +428,12 @@
 
   function staleNote(){
     var dt = new Date(SCHEDULE.fetchedAt);
+    var checked = new Date(SCHEDULE.checkedAt || SCHEDULE.fetchedAt);
     var abs = dt.toLocaleString('en-PH', {
+      timeZone:'Asia/Manila', month:'short', day:'numeric', year:'numeric',
+      hour:'numeric', minute:'2-digit'
+    }) + ' PHT';
+    var checkedAbs = checked.toLocaleString('en-PH', {
       timeZone:'Asia/Manila', month:'short', day:'numeric', year:'numeric',
       hour:'numeric', minute:'2-digit'
     }) + ' PHT';
@@ -423,7 +444,8 @@
     var src = SCHEDULE.source;
     return '<div class="note' + (warn ? ' warn' : '') + '">'
       + (warn ? '<b>This data is stale.</b> ' : '')
-      + 'Refreshed ' + esc(abs) + ' (' + esc(rel) + ').'
+      + 'Latest page check: ' + esc(checkedAbs) + '. Advisory data: ' + esc(abs)
+      + ' (' + esc(rel) + ').'
       + (src ? ' <a href="' + esc(src.url) + '" target="_blank" rel="noopener">'
              + esc(src.label) + '</a>.' : '')
       + ' Rotation schedules change daily with grid conditions — confirm on the '
@@ -622,12 +644,16 @@
 
   function renderHome(){
     selected = null; selFeeder = null;
-    var h = '<div class="row"><span class="pill p-out">NGCP red alert</span>'
-          + '<span class="pill p-soon">Rotational brownouts</span></div>';
-    h += '<h2 style="margin-top:4px">When will my power drop?</h2>';
-    h += '<p class="dim">Drag the time, tap a pin, or search your street. Each pin is a '
-       + 'feeder reference point — not a service boundary. If you already know your feeder, '
-       + 'open the list from the menu.</p>';
+    var h = hasRotation()
+      ? '<div class="row"><span class="pill p-out">NGCP red alert</span>'
+        + '<span class="pill p-soon">Rotational brownouts</span></div>'
+      : '<div class="row"><span class="pill p-on">No current rotation published</span></div>';
+    h += '<h2 style="margin-top:4px">' + (hasRotation()
+      ? 'When will my power drop?' : 'Latest Negros Power advisories') + '</h2>';
+    h += '<p class="dim">' + (hasRotation()
+      ? 'Drag the time, tap a pin, or search your street. Each pin is a feeder reference point — not a service boundary.'
+      : 'The latest page check found no current rotational-brownout table. Scheduled interruptions are listed below when published.')
+      + ' If you already know your feeder, open the list from the menu.</p>';
 
     var live = ZONES.filter(function(z){ return outAt(z, t) > 0; })
                     .sort(function(a, b){ return outAt(b, t) - outAt(a, t); });
@@ -655,9 +681,12 @@
       });
     }
 
-    h += '<div class="note"><b>Why this is happening.</b> ' + esc(SCHEDULE.rotation.reason)
-       + ' Available ' + esc(SCHEDULE.rotation.available) + ' against peak demand '
-       + esc(SCHEDULE.rotation.demand) + '.</div>' + footer();
+    if(hasRotation()){
+      h += '<div class="note"><b>Why this is happening.</b> ' + esc(SCHEDULE.rotation.reason)
+         + ' Available ' + esc(SCHEDULE.rotation.available) + ' against peak demand '
+         + esc(SCHEDULE.rotation.demand) + '.</div>';
+    }
+    h += footer();
     $('body').innerHTML = h;
     wireZoneButtons();
   }
@@ -687,9 +716,11 @@
          + '<p class="dim" style="margin-top:8px">Pattern from ' + esc(SCHEDULE.rotation.date)
          + '. Red alert ' + esc(SCHEDULE.rotation.redAlert) + ', yellow alert '
          + esc(SCHEDULE.rotation.yellowAlert) + '.</p>';
-    } else {
+    } else if(hasRotation()) {
       h += '<p class="dim">This feeder did not appear in the ' + esc(SCHEDULE.rotation.date)
          + ' rotation. That is not a guarantee it will be spared on the next one.</p>';
+    } else {
+      h += '<p class="dim">No current rotational-brownout table was found in the latest page check.</p>';
     }
 
     SCHEDULE.scheduled.forEach(function(sc){
@@ -923,49 +954,49 @@
   });
 
   // ===== Manual refresh =====
-  var REFRESH_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes
   var refreshBtn = $('refreshbtn');
   var refreshTxt = $('refreshtxt');
   var refreshInfo = $('refreshinfo');
 
-  function dataAgeMs(){
-    return Date.now() - new Date(SCHEDULE.fetchedAt).getTime();
+  function checkedAt(){
+    return SCHEDULE.checkedAt || SCHEDULE.fetchedAt;
   }
-  function dataAgeMins(){
-    return Math.floor(dataAgeMs() / 60000);
+  function checkAgeMins(){
+    return Math.max(0, Math.floor((Date.now() - new Date(checkedAt()).getTime()) / 60000));
   }
 
   function updateRefreshInfo(){
-    var mins = dataAgeMins();
+    if(refreshBtn.dataset.busy === '1') return;
+    var mins = checkAgeMins();
     if(mins < 1){
-      refreshInfo.textContent = 'updated just now';
+      refreshInfo.textContent = 'checked just now';
     } else if(mins < 60){
-      refreshInfo.textContent = 'updated ' + mins + ' min ago';
+      refreshInfo.textContent = 'checked ' + mins + ' min ago';
     } else {
       var hrs = Math.floor(mins / 60);
       var rem = mins % 60;
-      refreshInfo.textContent = 'updated ' + hrs + 'h ' + rem + 'm ago';
+      refreshInfo.textContent = 'checked ' + hrs + 'h ' + rem + 'm ago';
     }
-    var stale = dataAgeMs() >= REFRESH_COOLDOWN_MS;
-    refreshBtn.disabled = !stale && refreshBtn.dataset.busy !== '1';
-    if(refreshBtn.dataset.busy !== '1'){
-      refreshTxt.textContent = stale ? 'Refresh' : 'Refresh';
-      refreshBtn.title = stale
-        ? 'Check for the latest Negros Power advisory'
-        : 'Data was updated ' + mins + ' min ago. The 30-min cooldown prevents hammering the scraper.';
+    refreshBtn.disabled = false;
+    refreshTxt.textContent = 'Check updates';
+    refreshBtn.title = 'Check for the latest Negros Power advisory';
+  }
+
+  function sleep(ms){ return new Promise(function(resolve){ setTimeout(resolve, ms); }); }
+
+  async function waitForNewCheck(baseline){
+    for(var i = 0; i < 18; i++){
+      await sleep(10000);
+      var resp = await fetch('/api/schedule?ts=' + Date.now(), { cache:'no-store' });
+      if(!resp.ok) continue;
+      var next = await resp.json();
+      if(new Date(next.checkedAt || next.fetchedAt).getTime() > baseline) return next;
     }
+    return null;
   }
 
   refreshBtn.addEventListener('click', async function(){
     if(refreshBtn.dataset.busy === '1') return;
-    // Check the 30-min throttle locally first
-    var age = dataAgeMs();
-    if(age < REFRESH_COOLDOWN_MS){
-      var mins = Math.floor(age / 60000);
-      refreshInfo.textContent = 'updated ' + mins + ' min ago — wait ' + (30 - mins) + ' min';
-      return;
-    }
-
     refreshBtn.dataset.busy = '1';
     refreshBtn.disabled = true;
     refreshTxt.textContent = 'Checking\u2026';
@@ -976,29 +1007,41 @@
       var resp = await fetch('/api/refresh', { method:'POST' });
       var data = await resp.json();
 
-      if(data.throttled){
-        // Server says it was updated too recently
-        refreshInfo.textContent = data.message || 'Recently updated — try later.';
-      } else if(data.ok){
-        refreshTxt.textContent = 'Triggered';
-        refreshInfo.textContent = data.message || 'Refresh triggered. Reload in a few minutes.';
-        // Poll for new data — reload once the workflow likely finished
-        setTimeout(function(){
-          refreshInfo.textContent = 'Reloading\u2026';
-          window.location.reload();
-        }, 90000);
-      } else {
-        refreshTxt.textContent = 'Refresh';
+      if(!resp.ok || !data.ok){
+        refreshTxt.textContent = 'Check updates';
         refreshInfo.textContent = data.error || 'Refresh failed.';
+      } else if(data.triggered){
+        refreshTxt.textContent = 'Fetching\u2026';
+        refreshInfo.textContent = data.message || 'Refresh started.';
+        var baseline = new Date(checkedAt()).getTime();
+        var next = await waitForNewCheck(baseline);
+        if(next){
+          refreshInfo.textContent = 'New check ready — reloading\u2026';
+          window.location.reload();
+          return;
+        }
+        refreshInfo.textContent = 'Refresh is still running. Check again shortly.';
+      } else {
+        var snapshot = data.snapshot;
+        var newer = snapshot &&
+          new Date(snapshot.checkedAt || snapshot.fetchedAt).getTime() > new Date(checkedAt()).getTime();
+        if(newer){
+          refreshInfo.textContent = 'New data found — reloading\u2026';
+          window.location.reload();
+          return;
+        }
+        refreshInfo.textContent = data.message || 'Latest automatic check loaded.';
       }
     } catch(e){
-      refreshTxt.textContent = 'Refresh';
+      refreshTxt.textContent = 'Check updates';
       refreshInfo.textContent = 'Network error — try again.';
     } finally {
       refreshBtn.dataset.busy = '';
+      refreshBtn.disabled = false;
       var svg2 = refreshBtn.querySelector('svg');
       if(svg2) svg2.classList.remove('spin');
-      updateRefreshInfo();
+      refreshTxt.textContent = 'Check updates';
+      setTimeout(updateRefreshInfo, 5000);
     }
   });
 
