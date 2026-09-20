@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-20T09:30:48.834Z",
-  sourceDate: "20 September 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-09-20T13:31:37.788Z",
+  sourceDate: "23 September 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Wednesday, September 16, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -43,6 +43,17 @@ const SCHEDULE = {
       "areas": [
         "San Lorenzo Ruiz, Prk. Canaan, Santorini, Purok Yanson, Tierra Minerva, Eroreco subd, Prk Casiana, Prk Sulom 1,St.  Scholastica Academy, La Salle Avenue (La Salle to St. Scho), Capitol  Ville, Portion of USLS.",
         "CL Montelibano-6th St. Going Lasalle."
+      ]
+    },
+    {
+      "date": "Wednesday, September 23, 2026",
+      "window": "7:00AM to 4:00PM",
+      "feeders": [
+        "Murcia Feeder 3"
+      ],
+      "cause": "Replacement of old pin insulators to HDPE pin insulators ; Replacement of one 30ft. Steel pole to one 40ft. Concrete pole.",
+      "areas": [
+        "Whole of Purok Humayan, Brgy. Bagong Silang, Don Salvador Benedicto."
       ]
     }
   ],
