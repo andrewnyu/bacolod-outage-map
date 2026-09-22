@@ -1,12 +1,12 @@
 {
-  "fetchedAt": "2026-09-20T13:31:37.788Z",
-  "sourceDate": "23 September 2026",
+  "fetchedAt": "2026-09-22T09:32:04.556Z",
+  "sourceDate": "22 September 2026",
   "source": {
-    "url": "https://www.facebook.com/negrospowerph",
-    "label": "View the Negros Power Facebook page"
+    "url": "https://www.facebook.com/photo.php?fbid=122233709342048473",
+    "label": "View the source post on Facebook"
   },
   "rotation": {
-    "date": "Wednesday, September 16, 2026",
+    "date": "Tuesday, September 22, 2026",
     "redAlert": "5:00PM – 8:00PM",
     "yellowAlert": "8:00PM – 10:00PM",
     "available": "2,255 MW",
@@ -17,32 +17,79 @@
     "start": 14,
     "end": 23
   },
-  "slots": {},
+  "slots": {
+    "Hilangban Feeder 4": {
+      "s": 13,
+      "e": 15,
+      "label": "1:00PM – 3:00PM"
+    },
+    "Mountain View Feeder 6": {
+      "s": 13,
+      "e": 15,
+      "label": "1:00PM – 3:00PM"
+    },
+    "Murcia Feeder 3": {
+      "s": 13,
+      "e": 15,
+      "label": "1:00PM – 3:00PM"
+    },
+    "Asdes-Gonzaga Feeder 5": {
+      "s": 14,
+      "e": 16,
+      "label": "2:00PM – 4:00PM"
+    },
+    "Lopez Feeder 1": {
+      "s": 14,
+      "e": 16,
+      "label": "2:00PM – 4:00PM"
+    },
+    "Reclamation Feeder 3": {
+      "s": 15,
+      "e": 17,
+      "label": "3:00PM – 5:00PM"
+    },
+    "Talisay Feeder 2": {
+      "s": 15,
+      "e": 17,
+      "label": "3:00PM – 5:00PM"
+    },
+    "Reclamation Feeder 1": {
+      "s": 17,
+      "e": 19,
+      "label": "5:00PM – 7:00PM"
+    },
+    "Talisay Feeder 1": {
+      "s": 17,
+      "e": 19,
+      "label": "5:00PM – 7:00PM"
+    },
+    "Talisay Feeder 3": {
+      "s": 17,
+      "e": 19,
+      "label": "5:00PM – 7:00PM"
+    },
+    "Alijis Feeder 4": {
+      "s": 19,
+      "e": 21,
+      "label": "7:00PM – 9:00PM"
+    },
+    "Asdes-Gonzaga Feeder 2": {
+      "s": 19,
+      "e": 21,
+      "label": "7:00PM – 9:00PM"
+    },
+    "Murcia Feeder 4": {
+      "s": 19,
+      "e": 21,
+      "label": "7:00PM – 9:00PM"
+    },
+    "Mountain View Feeder 3": {
+      "s": 21,
+      "e": 23,
+      "label": "9:00PM – 11:00PM"
+    }
+  },
   "scheduled": [
-    {
-      "date": "Sunday, September 20, 2026",
-      "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
-      "feeders": [
-        "Mountain View Feeder 2"
-      ],
-      "cause": "Reconductoring of 1.0 km 2/0 bare wire 3Ph Primary line MF2 along La Salle; Reconductoring of 0.3km #2 bare wire 3-phase prim. Line BF5 along CL Montelibano.",
-      "areas": [
-        "Portion of USLS, La Salle Avenue (Rollis to BS  Aquino), Lacson St. (12th and 13th St.), Triangle Plaza, NORD Medical Hub, Medical Plaza, The Doctor’s Hospital."
-      ]
-    },
-    {
-      "date": "Sunday, September 20, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Mountain View Feeder 2",
-        "Burgos Feeder 5"
-      ],
-      "cause": "Reconductoring of 1.0 km 2/0 bare wire 3Ph Primary line MF2 along La Salle; Reconductoring of 0.3km #2 bare wire 3-phase prim. Line BF5 along CL Montelibano.",
-      "areas": [
-        "San Lorenzo Ruiz, Prk. Canaan, Santorini, Purok Yanson, Tierra Minerva, Eroreco subd, Prk Casiana, Prk Sulom 1,St.  Scholastica Academy, La Salle Avenue (La Salle to St. Scho), Capitol  Ville, Portion of USLS.",
-        "CL Montelibano-6th St. Going Lasalle."
-      ]
-    },
     {
       "date": "Wednesday, September 23, 2026",
       "window": "7:00AM to 4:00PM",
@@ -74,9 +121,9 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-09-21T15:47:31.607Z",
+  "checkedAt": "2026-09-22T09:32:04.556Z",
   "capture": {
-    "posts": 0,
+    "posts": 1,
     "photos": 9
   }
 }
