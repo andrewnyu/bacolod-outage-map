@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-22T09:32:04.556Z",
+  fetchedAt: "2026-09-22T13:58:31.203Z",
   sourceDate: "22 September 2026",
   source: { url: "https://www.facebook.com/photo.php?fbid=122233709342048473", label: "View the source post on Facebook" },
   rotation: {
@@ -44,6 +44,17 @@ const SCHEDULE = {
       "cause": "Replacement of old pin insulators to HDPE pin insulators ; Replacement of one 30ft. Steel pole to one 40ft. Concrete pole.",
       "areas": [
         "Whole of Purok Humayan, Brgy. Bagong Silang, Don Salvador Benedicto."
+      ]
+    },
+    {
+      "date": "Friday, September 25, 2026",
+      "window": "10:00AM to 3:00PM",
+      "feeders": [
+        "Panaogao Feeder 1"
+      ],
+      "cause": "Relocation of one 10kVa common Distribution Transformer to designated load center.",
+      "areas": [
+        "Hacienda Kinilatan, Brgy. Guimbalaon, Silay City."
       ]
     }
   ],
