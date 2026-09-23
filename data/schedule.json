@@ -1,12 +1,12 @@
 {
-  "fetchedAt": "2026-09-22T13:58:31.203Z",
-  "sourceDate": "22 September 2026",
+  "fetchedAt": "2026-09-23T09:37:11.332Z",
+  "sourceDate": "23 September 2026",
   "source": {
-    "url": "https://www.facebook.com/photo.php?fbid=122233709342048473",
+    "url": "https://www.facebook.com/photo.php?fbid=122233830740048473",
     "label": "View the source post on Facebook"
   },
   "rotation": {
-    "date": "Tuesday, September 22, 2026",
+    "date": "Wednesday, September 23, 2026",
     "redAlert": "5:00PM – 8:00PM",
     "yellowAlert": "8:00PM – 10:00PM",
     "available": "2,255 MW",
@@ -18,75 +18,105 @@
     "end": 23
   },
   "slots": {
-    "Hilangban Feeder 4": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Mountain View Feeder 6": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Murcia Feeder 3": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Asdes-Gonzaga Feeder 5": {
-      "s": 14,
-      "e": 16,
-      "label": "2:00PM – 4:00PM"
-    },
-    "Lopez Feeder 1": {
-      "s": 14,
-      "e": 16,
-      "label": "2:00PM – 4:00PM"
-    },
-    "Reclamation Feeder 3": {
+    "Hilangban Feeder 3": {
       "s": 15,
       "e": 17,
       "label": "3:00PM – 5:00PM"
     },
-    "Talisay Feeder 2": {
+    "Murcia Feeder 2": {
       "s": 15,
       "e": 17,
       "label": "3:00PM – 5:00PM"
     },
-    "Reclamation Feeder 1": {
+    "Reclamation Feeder 2": {
+      "s": 16,
+      "e": 18,
+      "label": "4:00PM – 6:00PM"
+    },
+    "Alijis Feeder 1": {
       "s": 17,
       "e": 19,
       "label": "5:00PM – 7:00PM"
     },
-    "Talisay Feeder 1": {
+    "Alijis Feeder 2": {
       "s": 17,
       "e": 19,
       "label": "5:00PM – 7:00PM"
     },
-    "Talisay Feeder 3": {
+    "Asdes-Gonzaga Feeder 2": {
       "s": 17,
       "e": 19,
       "label": "5:00PM – 7:00PM"
     },
     "Alijis Feeder 4": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Asdes-Gonzaga Feeder 1": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Murcia Feeder 3": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Reclamation Feeder 3": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Reclamation Feeder 4": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Talisay Feeder 2": {
+      "s": 18,
+      "e": 20,
+      "label": "6:00PM – 8:00PM"
+    },
+    "Asdes-Gonzaga Feeder 4": {
       "s": 19,
       "e": 21,
       "label": "7:00PM – 9:00PM"
     },
-    "Asdes-Gonzaga Feeder 2": {
+    "Hilangban Feeder 2": {
       "s": 19,
       "e": 21,
       "label": "7:00PM – 9:00PM"
     },
-    "Murcia Feeder 4": {
+    "Hilangban Feeder 4": {
       "s": 19,
       "e": 21,
       "label": "7:00PM – 9:00PM"
     },
-    "Mountain View Feeder 3": {
-      "s": 21,
-      "e": 23,
-      "label": "9:00PM – 11:00PM"
+    "Sum-ag Feeder 2": {
+      "s": 19,
+      "e": 21,
+      "label": "7:00PM – 9:00PM"
+    },
+    "Talisay Feeder 3": {
+      "s": 19,
+      "e": 21,
+      "label": "7:00PM – 9:00PM"
+    },
+    "Alijis Feeder 3": {
+      "s": 20,
+      "e": 22,
+      "label": "8:00PM – 10:00PM"
+    },
+    "Alijis Feeder 6": {
+      "s": 20,
+      "e": 22,
+      "label": "8:00PM – 10:00PM"
+    },
+    "Asdes-Gonzaga Feeder 5": {
+      "s": 20,
+      "e": 22,
+      "label": "8:00PM – 10:00PM"
     }
   },
   "scheduled": [
@@ -132,7 +162,7 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-09-22T13:58:31.203Z",
+  "checkedAt": "2026-09-23T09:37:11.332Z",
   "capture": {
     "posts": 1,
     "photos": 9
