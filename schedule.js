@@ -4,11 +4,11 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-23T14:09:51.971Z",
-  sourceDate: "23 September 2026",
-  source: { url: "https://www.facebook.com/photo.php?fbid=122233830740048473", label: "View the source post on Facebook" },
+  fetchedAt: "2026-09-24T09:36:43.656Z",
+  sourceDate: "24 September 2026",
+  source: { url: "https://www.facebook.com/photo.php?fbid=122233945202048473", label: "View the source post on Facebook" },
   rotation: {
-    date: "Wednesday, September 23, 2026",
+    date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
     yellowAlert: "8:00PM – 10:00PM",
     available: "2,255 MW",
@@ -19,39 +19,36 @@ const SCHEDULE = {
   window: { start: 14, end: 23 },
   // canonical feeder name -> rotational brownout slot
   slots: {
-    "Hilangban Feeder 3": { s: 15, e: 17, label: "3:00PM – 5:00PM" },
-    "Murcia Feeder 2": { s: 15, e: 17, label: "3:00PM – 5:00PM" },
-    "Reclamation Feeder 2": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
-    "Alijis Feeder 1": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Alijis Feeder 2": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Asdes-Gonzaga Feeder 2": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Alijis Feeder 4": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Asdes-Gonzaga Feeder 1": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Murcia Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Reclamation Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Reclamation Feeder 4": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Talisay Feeder 2": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
-    "Asdes-Gonzaga Feeder 4": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Hilangban Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Hilangban Feeder 4": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Sum-ag Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Talisay Feeder 3": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Alijis Feeder 3": { s: 20, e: 22, label: "8:00PM – 10:00PM" },
-    "Alijis Feeder 6": { s: 20, e: 22, label: "8:00PM – 10:00PM" },
-    "Asdes-Gonzaga Feeder 5": { s: 20, e: 22, label: "8:00PM – 10:00PM" },
+    "Asdes-Gonzaga Feeder 4": { s: 13, e: 15, label: "1:00PM – 3:00PM" },
+    "Hilangban Feeder 2": { s: 13, e: 15, label: "1:00PM – 3:00PM" },
+    "Hilangban Feeder 4": { s: 13, e: 15, label: "1:00PM – 3:00PM" },
+    "Alijis Feeder 8": { s: 14, e: 16, label: "2:00PM – 4:00PM" },
+    "Reclamation Feeder 1": { s: 14, e: 16, label: "2:00PM – 4:00PM" },
+    "Talisay Feeder 2": { s: 14, e: 16, label: "2:00PM – 4:00PM" },
+    "Alijis Feeder 2": { s: 15, e: 17, label: "3:00PM – 5:00PM" },
+    "Reclamation Feeder 3": { s: 15, e: 17, label: "3:00PM – 5:00PM" },
+    "Sum-ag Feeder 2": { s: 15, e: 17, label: "3:00PM – 5:00PM" },
+    "Asdes-Gonzaga Feeder 5": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
+    "Murcia Feeder 3": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
+    "Talisay Feeder 1": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
+    "Talisay Feeder 3": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
+    "Lopez Feeder 1": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
+    "Alijis Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Alijis Feeder 6": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Alijis Feeder 7": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Lopez Feeder 2": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Mountain View Feeder 1": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Mountain View Feeder 6": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Murcia Feeder 1": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Murcia Feeder 2": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Asdes-Gonzaga Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
+    "Asdes-Gonzaga Feeder 3": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
+    "Hilangban Feeder 3": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
+    "Murcia Feeder 4": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
+    "Reclamation Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
+    "Mountain View Feeder 3": { s: 20, e: 22, label: "8:00PM – 10:00PM" },
   },
   scheduled: [
-    {
-      "date": "Wednesday, September 23, 2026",
-      "window": "7:00AM to 4:00PM",
-      "feeders": [
-        "Murcia Feeder 3"
-      ],
-      "cause": "Replacement of old pin insulators to HDPE pin insulators ; Replacement of one 30ft. Steel pole to one 40ft. Concrete pole.",
-      "areas": [
-        "Whole of Purok Humayan, Brgy. Bagong Silang, Don Salvador Benedicto."
-      ]
-    },
     {
       "date": "Friday, September 25, 2026",
       "window": "10:00AM to 3:00PM",
