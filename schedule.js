@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-24T09:36:43.656Z",
+  fetchedAt: "2026-09-24T14:07:42.926Z",
   sourceDate: "24 September 2026",
   source: { url: "https://www.facebook.com/photo.php?fbid=122233945202048473", label: "View the source post on Facebook" },
   rotation: {
@@ -58,6 +58,17 @@ const SCHEDULE = {
       "cause": "Relocation of one 10kVa common Distribution Transformer to designated load center.",
       "areas": [
         "Hacienda Kinilatan, Brgy. Guimbalaon, Silay City."
+      ]
+    },
+    {
+      "date": "Sunday, September 27, 2026",
+      "window": "6:00AM to 6:00PM",
+      "feeders": [
+        "Asdes-Gonzaga Feeder 3"
+      ],
+      "cause": "Removal of overhead Primary Line along Lacson St. From Capitol Lagoon to 18th Lacson St.",
+      "areas": [
+        "Portion Lagoon to 18th St."
       ]
     }
   ],
