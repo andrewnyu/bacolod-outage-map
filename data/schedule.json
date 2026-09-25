@@ -1,9 +1,9 @@
 {
-  "fetchedAt": "2026-09-24T14:07:42.926Z",
-  "sourceDate": "24 September 2026",
+  "fetchedAt": "2026-09-25T09:53:46.615Z",
+  "sourceDate": "25 September 2026",
   "source": {
-    "url": "https://www.facebook.com/photo.php?fbid=122233945202048473",
-    "label": "View the source post on Facebook"
+    "url": "https://www.facebook.com/negrospowerph",
+    "label": "View the Negros Power Facebook page"
   },
   "rotation": {
     "date": "Thursday, September 24, 2026",
@@ -17,160 +17,8 @@
     "start": 14,
     "end": 23
   },
-  "slots": {
-    "Asdes-Gonzaga Feeder 4": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Hilangban Feeder 2": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Hilangban Feeder 4": {
-      "s": 13,
-      "e": 15,
-      "label": "1:00PM – 3:00PM"
-    },
-    "Alijis Feeder 8": {
-      "s": 14,
-      "e": 16,
-      "label": "2:00PM – 4:00PM"
-    },
-    "Reclamation Feeder 1": {
-      "s": 14,
-      "e": 16,
-      "label": "2:00PM – 4:00PM"
-    },
-    "Talisay Feeder 2": {
-      "s": 14,
-      "e": 16,
-      "label": "2:00PM – 4:00PM"
-    },
-    "Alijis Feeder 2": {
-      "s": 15,
-      "e": 17,
-      "label": "3:00PM – 5:00PM"
-    },
-    "Reclamation Feeder 3": {
-      "s": 15,
-      "e": 17,
-      "label": "3:00PM – 5:00PM"
-    },
-    "Sum-ag Feeder 2": {
-      "s": 15,
-      "e": 17,
-      "label": "3:00PM – 5:00PM"
-    },
-    "Asdes-Gonzaga Feeder 5": {
-      "s": 16,
-      "e": 18,
-      "label": "4:00PM – 6:00PM"
-    },
-    "Murcia Feeder 3": {
-      "s": 16,
-      "e": 18,
-      "label": "4:00PM – 6:00PM"
-    },
-    "Talisay Feeder 1": {
-      "s": 16,
-      "e": 18,
-      "label": "4:00PM – 6:00PM"
-    },
-    "Talisay Feeder 3": {
-      "s": 16,
-      "e": 18,
-      "label": "4:00PM – 6:00PM"
-    },
-    "Lopez Feeder 1": {
-      "s": 17,
-      "e": 19,
-      "label": "5:00PM – 7:00PM"
-    },
-    "Alijis Feeder 3": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Alijis Feeder 6": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Alijis Feeder 7": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Lopez Feeder 2": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Mountain View Feeder 1": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Mountain View Feeder 6": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Murcia Feeder 1": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Murcia Feeder 2": {
-      "s": 18,
-      "e": 20,
-      "label": "6:00PM – 8:00PM"
-    },
-    "Asdes-Gonzaga Feeder 2": {
-      "s": 19,
-      "e": 21,
-      "label": "7:00PM – 9:00PM"
-    },
-    "Asdes-Gonzaga Feeder 3": {
-      "s": 19,
-      "e": 21,
-      "label": "7:00PM – 9:00PM"
-    },
-    "Hilangban Feeder 3": {
-      "s": 19,
-      "e": 21,
-      "label": "7:00PM – 9:00PM"
-    },
-    "Murcia Feeder 4": {
-      "s": 19,
-      "e": 21,
-      "label": "7:00PM – 9:00PM"
-    },
-    "Reclamation Feeder 2": {
-      "s": 19,
-      "e": 21,
-      "label": "7:00PM – 9:00PM"
-    },
-    "Mountain View Feeder 3": {
-      "s": 20,
-      "e": 22,
-      "label": "8:00PM – 10:00PM"
-    }
-  },
+  "slots": {},
   "scheduled": [
-    {
-      "date": "Friday, September 25, 2026",
-      "window": "10:00AM to 3:00PM",
-      "feeders": [
-        "Panaogao Feeder 1"
-      ],
-      "cause": "Relocation of one 10kVa common Distribution Transformer to designated load center.",
-      "areas": [
-        "Hacienda Kinilatan, Brgy. Guimbalaon, Silay City."
-      ]
-    },
     {
       "date": "Sunday, September 27, 2026",
       "window": "6:00AM to 6:00PM",
@@ -180,6 +28,17 @@
       "cause": "Removal of overhead Primary Line along Lacson St. From Capitol Lagoon to 18th Lacson St.",
       "areas": [
         "Portion Lagoon to 18th St."
+      ]
+    },
+    {
+      "date": "Friday, September 25, 2026",
+      "window": "10:00AM to 3:00PM",
+      "feeders": [
+        "Panaogao Feeder 1"
+      ],
+      "cause": "Relocation of one 10kVa common Distribution Transformer to designated load center.",
+      "areas": [
+        "Hacienda Kinilatan, Brgy. Guimbalaon, Silay City."
       ]
     }
   ],
@@ -202,9 +61,9 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-09-24T14:07:42.926Z",
+  "checkedAt": "2026-09-25T09:53:46.615Z",
   "capture": {
-    "posts": 1,
+    "posts": 2,
     "photos": 9
   }
 }
