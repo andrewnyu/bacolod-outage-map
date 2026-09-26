@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-25T14:31:11.735Z",
-  sourceDate: "25 September 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-09-26T09:36:27.924Z",
+  sourceDate: "30 September 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -33,14 +33,14 @@ const SCHEDULE = {
       ]
     },
     {
-      "date": "Friday, September 25, 2026",
-      "window": "10:00AM to 3:00PM",
+      "date": "Wednesday, September 30, 2026",
+      "window": "8:00AM to 5:00PM",
       "feeders": [
-        "Panaogao Feeder 1"
+        "Hilangban Feeder 4"
       ],
-      "cause": "Relocation of one 10kVa common Distribution Transformer to designated load center.",
+      "cause": "Replacement of poles",
       "areas": [
-        "Hacienda Kinilatan, Brgy. Guimbalaon, Silay City."
+        "Prk. Lunao, Kakapihan, Tabidyao, Kalubihan and Haggdan, Brgy. Mailum, Bago City."
       ]
     }
   ],
