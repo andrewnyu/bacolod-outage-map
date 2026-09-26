@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-26T09:36:27.924Z",
-  sourceDate: "30 September 2026",
+  fetchedAt: "2026-09-26T13:41:40.636Z",
+  sourceDate: "26 September 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -41,6 +41,32 @@ const SCHEDULE = {
       "cause": "Replacement of poles",
       "areas": [
         "Prk. Lunao, Kakapihan, Tabidyao, Kalubihan and Haggdan, Brgy. Mailum, Bago City."
+      ]
+    },
+    {
+      "date": "Saturday, September 26, 2026",
+      "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
+      "feeders": [
+        "Alijis Feeder 7",
+        "Alijis Feeder 8"
+      ],
+      "cause": "Reconductoring of 1.9 km 3Ph 2/0 Primary line to 336.4 Tree Wire from South Spring Village-Bangga Totong-7/11 Handumanam and Savemore to Handumanan National Highschool; Massive Insulator Replacement East Homes 5; Replacement/relocation of pole, installation of rubber insert, DT & FCO covers, bail clamps.",
+      "areas": [
+        "Portion of Mansilingan Subd., Ta-ala Farms Inc., Kabugwason.",
+        "One Communities Subdivision."
+      ]
+    },
+    {
+      "date": "Saturday, September 26, 2026",
+      "window": "6:00AM to 6:00PM",
+      "feeders": [
+        "Alijis Feeder 7",
+        "Alijis Feeder 8"
+      ],
+      "cause": "Reconductoring of 1.9 km 3Ph 2/0 Primary line to 336.4 Tree Wire from South Spring Village-Bangga Totong-7/11 Handumanam and Savemore to Handumanan National Highschool; Massive Insulator Replacement East Homes 5; Replacement/relocation of pole, installation of rubber insert, DT & FCO covers, bail clamps.",
+      "areas": [
+        "East Homes Phase 4, 5, 6, South Spring Village, Villa Maria Reyna Subd., Sunny Plains Subd., Prk Totong, Hda. Edmar, Brgy. Felisa.",
+        "NGO Village, Handumanan (Handumanan Elem. School, Handumanan National High School until 7/11 Felisa), Villasor  Village, Purok Ceres Ph III."
       ]
     }
   ],
