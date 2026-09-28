@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-27T14:38:02.118Z",
+  fetchedAt: "2026-09-28T11:18:29.570Z",
   sourceDate: "27 September 2026",
-  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
+  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,17 +30,6 @@ const SCHEDULE = {
       "cause": "Replacement of poles",
       "areas": [
         "Prk. Lunao, Kakapihan, Tabidyao, Kalubihan and Haggdan, Brgy. Mailum, Bago City."
-      ]
-    },
-    {
-      "date": "Sunday, September 27, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Asdes-Gonzaga Feeder 3"
-      ],
-      "cause": "Removal of overhead Primary Line along Lacson St. From Capitol Lagoon to 18th Lacson St.",
-      "areas": [
-        "Portion Lagoon to 18th St."
       ]
     }
   ],
