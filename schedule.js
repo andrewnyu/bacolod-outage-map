@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-09-29T15:34:06.495Z",
+  fetchedAt: "2026-09-30T10:47:54.160Z",
   sourceDate: "29 September 2026",
-  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
+  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,17 +30,6 @@ const SCHEDULE = {
       "cause": "Replacement of poles",
       "areas": [
         "Prk. Lunao, Kakapihan, Tabidyao, Kalubihan and Haggdan, Brgy. Mailum, Bago City."
-      ]
-    },
-    {
-      "date": "Tuesday, September 29, 2026",
-      "window": "7:00AM to 11:00AM",
-      "feeders": [
-        "Reclamation Feeder 1"
-      ],
-      "cause": "Installation of check meters.",
-      "areas": [
-        "Prk. Boulevard, Brgy. 16, Bacolod City."
       ]
     }
   ],

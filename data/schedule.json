@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-29T15:34:06.495Z",
+  "fetchedAt": "2026-09-30T10:47:54.160Z",
   "sourceDate": "29 September 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
@@ -29,17 +29,6 @@
       "areas": [
         "Prk. Lunao, Kakapihan, Tabidyao, Kalubihan and Haggdan, Brgy. Mailum, Bago City."
       ]
-    },
-    {
-      "date": "Tuesday, September 29, 2026",
-      "window": "7:00AM to 11:00AM",
-      "feeders": [
-        "Reclamation Feeder 1"
-      ],
-      "cause": "Installation of check meters.",
-      "areas": [
-        "Prk. Boulevard, Brgy. 16, Bacolod City."
-      ]
     }
   ],
   "completed": {
@@ -61,9 +50,9 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-09-29T15:34:06.495Z",
+  "checkedAt": "2026-09-30T10:47:54.160Z",
   "capture": {
-    "posts": 2,
+    "posts": 0,
     "photos": 9
   }
 }
