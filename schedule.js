@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-01T16:13:54.679Z",
-  sourceDate: "4 October 2026",
+  fetchedAt: "2026-10-02T10:46:54.999Z",
+  sourceDate: "3 October 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -21,17 +21,6 @@ const SCHEDULE = {
   slots: {
   },
   scheduled: [
-    {
-      "date": "Saturday, October 3, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Mountain View Feeder 6"
-      ],
-      "cause": "Reconductoring and 3-phase primary rotten pole replacements.",
-      "areas": [
-        "Gold Crest Subd., and Octagon Village, The Ruins,  Sta Maria (Talisay), Brgy. Bata from Celcor to Bata National High School (Prk. Mahimaya-on, Prk. Marapara, Prk. Kabayasan, Prk. Sawmill, Bacolod Golf & Country Club, Prk. Pag-isa, Prk. Kamonsil, Prk. Sawmill, Prk. Magbinuligay), Marapara Heights, Montebello Subd."
-      ]
-    },
     {
       "date": "Sunday, October 4, 2026",
       "window": "6:00AM to 8:00AM",
@@ -71,6 +60,17 @@ const SCHEDULE = {
       "areas": [
         "Portion of Brgy 16, Puroks (Malipayon, Boulevard, Mapinalanggaon, Kasing-kasing, Magti-ayon), Palanca St. (Rodriguez Ave-Burgos Ave), Bacolod Baywalk, San Juan St. (Burgos Ave-St  Capitol Rd), Puroks (Kabuhi),BFP Bacolod Fire Station.",
         "San Juan St. (Rizal-Burgos Ave)."
+      ]
+    },
+    {
+      "date": "Saturday, October 3, 2026",
+      "window": "6:00AM to 6:00PM",
+      "feeders": [
+        "Mountain View Feeder 6"
+      ],
+      "cause": "Reconductoring and 3-phase primary rotten pole replacements.",
+      "areas": [
+        "Gold Crest Subd., and Octagon Village, The Ruins,  Sta Maria (Talisay), Brgy. Bata from Celcor to Bata National High School (Prk. Mahimaya-on, Prk. Marapara, Prk. Kabayasan, Prk. Sawmill, Bacolod Golf & Country Club, Prk. Pag-isa, Prk. Kamonsil, Prk. Sawmill, Prk. Magbinuligay), Marapara Heights, Montebello Subd."
       ]
     }
   ],
