@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-04T14:43:01.741Z",
-  "sourceDate": "3 October 2026",
+  "fetchedAt": "2026-10-05T11:54:34.147Z",
+  "sourceDate": "8 October 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
     "label": "View the Negros Power Facebook page"
@@ -20,44 +20,14 @@
   "slots": {},
   "scheduled": [
     {
-      "date": "Sunday, October 4, 2026",
-      "window": "6:00AM to 8:00AM",
+      "date": "Thursday, October 8, 2026",
+      "window": "9:00AM to 4:00PM",
       "feeders": [
-        "Burgos Feeder 2",
-        "Asdes-Gonzaga Feeder 1",
-        "Asdes-Gonzaga Feeder 3",
-        "Reclamation Feeder 1"
+        "Lopez Feeder 2"
       ],
-      "cause": "Reconductoring of 1.5km 3-phase primary line to #336.4 ACSR Tree Wire from Palanca Road to Iglesia Filipina Brgy. 9 near Locsin St., from Burgos St. To BFP; Replacement of poles along San Juan St. and removal of 4-span 3-phase primary line.",
+      "cause": "Replacement of porcelain insulators into High-Density Polyethylene insulators; Installation of fuse cut out covers, distribution tansformer bushing covers & bail clamps; Rerouting of secondary line",
       "areas": [
-        "Corazon Locsin Montelibano Memorial Regional Hospital, YLAC (Caltex – C.L. Montelibano), Dr. J Villarosa St., Narra  St. (Lopez Jaena St. –",
-        "Mabini St. (Gonzaga-Malalosan St.)(Malalosan-Hernaez St.), Gonzaga St. (Mabini-Lacson St.)(Lacson-Gatuslao St.), Lacson St. (Gonzaga-Bacolod Business Inn), Rizal St. (Lacson-San  Juan St.), Cuadra St.,  Gatuslao St. (Galo-Luzuriaga St.) to Luzuriaga-Araneta, Centrolplex, Bacolod Central Market, BACIWA, San Sebastian Dawis, Bishop’s Palace, Bay Center, San Sebastian  Cathedral, DYAF – Radyo Veritas, GE Money Bank, Bacolod Business Inn, LCCB , Gaisano Grand Central (new).",
-        "Lacson St. (Galo-4th St.)",
-        "San Juan St. (BS Aquino-San Juan Banago Bridge),Tilapia,Cagaycay,Ceresa,Sigay, Lison, Bolinao, Makawiwili, Shell Depot, Portion of Brgy. Banago, Sta. Clara Phase II, Prk. Langis,  San Mateo Village, Petron Depot, Prk. Paraiso, Prk. Kasagingan, Prk. Lawayan, Prk. Rosas Pandan. 888"
-      ]
-    },
-    {
-      "date": "Sunday, October 4, 2026",
-      "window": "6:00AM to 8:00AM & 5:00PM to 6:00PM",
-      "feeders": [
-        "Reclamation Feeder 1"
-      ],
-      "cause": "Reconductoring of 1.5km 3-phase primary line to #336.4 ACSR Tree Wire from Palanca Road to Iglesia Filipina Brgy. 9 near Locsin St., from Burgos St. To BFP; Replacement of poles along San Juan St. and removal of 4-span 3-phase primary line.",
-      "areas": [
-        "San Juan St. (St Capitol Rd.-BS Aquino Dr.),Narra-Baybay, Lampirong, Jalandon, Tambi, Balinday, Tahong,"
-      ]
-    },
-    {
-      "date": "Sunday, October 4, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Reclamation Feeder 1",
-        "Asdes-Gonzaga Feeder 1"
-      ],
-      "cause": "Reconductoring of 1.5km 3-phase primary line to #336.4 ACSR Tree Wire from Palanca Road to Iglesia Filipina Brgy. 9 near Locsin St., from Burgos St. To BFP; Replacement of poles along San Juan St. and removal of 4-span 3-phase primary line.",
-      "areas": [
-        "Portion of Brgy 16, Puroks (Malipayon, Boulevard, Mapinalanggaon, Kasing-kasing, Magti-ayon), Palanca St. (Rodriguez Ave-Burgos Ave), Bacolod Baywalk, San Juan St. (Burgos Ave-St  Capitol Rd), Puroks (Kabuhi),BFP Bacolod Fire Station.",
-        "San Juan St. (Rizal-Burgos Ave)."
+        "Portion of Villa Hergon, Brgy. Rizal, Silay City."
       ]
     }
   ],
@@ -80,9 +50,9 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-10-04T14:43:01.741Z",
+  "checkedAt": "2026-10-05T11:54:34.147Z",
   "capture": {
-    "posts": 2,
+    "posts": 1,
     "photos": 9
   }
 }
