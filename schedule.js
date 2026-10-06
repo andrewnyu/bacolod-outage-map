@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-05T18:11:07.618Z",
-  sourceDate: "8 October 2026",
+  fetchedAt: "2026-10-06T11:34:36.716Z",
+  sourceDate: "9 October 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -30,6 +30,17 @@ const SCHEDULE = {
       "cause": "Replacement of porcelain insulators into High-Density Polyethylene insulators; Installation of fuse cut out covers, distribution tansformer bushing covers & bail clamps; Rerouting of secondary line",
       "areas": [
         "Portion of Villa Hergon, Brgy. Rizal, Silay City."
+      ]
+    },
+    {
+      "date": "Friday, October 9, 2026",
+      "window": "9:00AM to 2:00PM",
+      "feeders": [
+        "Alijis Feeder 6"
+      ],
+      "cause": "Relocation of one 25kVa common distribution transformer into new pole.",
+      "areas": [
+        "Prk. Nabali-an, Brgy. Taculing, Bacolod City."
       ]
     }
   ],

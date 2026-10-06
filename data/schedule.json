@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-05T18:11:07.618Z",
-  "sourceDate": "8 October 2026",
+  "fetchedAt": "2026-10-06T11:34:36.716Z",
+  "sourceDate": "9 October 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
     "label": "View the Negros Power Facebook page"
@@ -29,6 +29,17 @@
       "areas": [
         "Portion of Villa Hergon, Brgy. Rizal, Silay City."
       ]
+    },
+    {
+      "date": "Friday, October 9, 2026",
+      "window": "9:00AM to 2:00PM",
+      "feeders": [
+        "Alijis Feeder 6"
+      ],
+      "cause": "Relocation of one 25kVa common distribution transformer into new pole.",
+      "areas": [
+        "Prk. Nabali-an, Brgy. Taculing, Bacolod City."
+      ]
     }
   ],
   "completed": {
@@ -50,7 +61,7 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-10-05T18:11:07.618Z",
+  "checkedAt": "2026-10-06T11:34:36.716Z",
   "capture": {
     "posts": 1,
     "photos": 9
