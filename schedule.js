@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-08T16:15:13.789Z",
-  sourceDate: "11 October 2026",
+  fetchedAt: "2026-10-09T11:39:55.634Z",
+  sourceDate: "10 October 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -95,6 +95,19 @@ const SCHEDULE = {
       "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
       "areas": [
         "Gonzaga St. (Lacson - Mabini), Mabini St. (Gonzaga-Malalosan St.)"
+      ]
+    },
+    {
+      "date": "Saturday, October 10, 2026",
+      "window": "5:00AM to 9:00AM",
+      "feeders": [
+        "Reclamation Feeder 1",
+        "Asdes-Gonzaga Feeder 1"
+      ],
+      "cause": "Substation Hotspot Correction",
+      "areas": [
+        "Portion of Brgy 16, Puroks (Malipayon, Boulevard, Mapinalanggaon, Kasing-kasing, Magti-ayon), Palanca St. (Rodriguez Ave-Burgos Ave), Bacolod Baywalk, 888, San Juan St. (Burgos Ave. BS Aquino Dr), Puroks (Kabuhi, Narra-Baybay, Lampirong, Jalandon, Tambi, Balinday).",
+        "Mabini St. (Gonzaga-Malalosan St.)(Malalosan- Hernaez St.), Gonzaga St. (Mabini-Lacson St.)(Lacson-Gatuslao St.), Lacson St. (Gonzaga-Bacolod Business Inn), Rizal St. (Lacson-San  Juan St.), Cuadra St., San Juan St. (Rizal-Burgos Ave), Gatuslao St. (Galo-Luzuriaga St.) to Luzuriaga-Araneta, Centrolplex, Bacolod Central Market, BACIWA, San Sebastian Dawis, Bishop’s Palace, Bay Center, San Sebastian Cathedral, DYAF – Radyo Veritas, GE Money  Bank, Bacolod Business Inn, LCCB , Gaisano Grand Central (new)."
       ]
     }
   ],
