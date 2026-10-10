@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-09T15:59:20.633Z",
+  "fetchedAt": "2026-10-10T10:51:30.154Z",
   "sourceDate": "10 October 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
@@ -19,17 +19,6 @@
   },
   "slots": {},
   "scheduled": [
-    {
-      "date": "Friday, October 9, 2026",
-      "window": "9:00AM to 2:00PM",
-      "feeders": [
-        "Alijis Feeder 6"
-      ],
-      "cause": "Relocation of one 25kVa common distribution transformer into new pole.",
-      "areas": [
-        "Prk. Nabali-an, Brgy. Taculing, Bacolod City."
-      ]
-    },
     {
       "date": "Sunday, October 11, 2026",
       "window": "5:00PM to 6:00PM",
@@ -97,15 +86,24 @@
     },
     {
       "date": "Saturday, October 10, 2026",
-      "window": "5:00AM to 9:00AM",
+      "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
       "feeders": [
-        "Reclamation Feeder 1",
-        "Asdes-Gonzaga Feeder 1"
+        "Burgos Feeder 3"
       ],
-      "cause": "Substation Hotspot Correction",
+      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
       "areas": [
-        "Portion of Brgy 16, Puroks (Malipayon, Boulevard, Mapinalanggaon, Kasing-kasing, Magti-ayon), Palanca St. (Rodriguez Ave-Burgos Ave), Bacolod Baywalk, 888, San Juan St. (Burgos Ave. BS Aquino Dr), Puroks (Kabuhi, Narra-Baybay, Lampirong, Jalandon, Tambi, Balinday).",
-        "Mabini St. (Gonzaga-Malalosan St.)(Malalosan- Hernaez St.), Gonzaga St. (Mabini-Lacson St.)(Lacson-Gatuslao St.), Lacson St. (Gonzaga-Bacolod Business Inn), Rizal St. (Lacson-San  Juan St.), Cuadra St., San Juan St. (Rizal-Burgos Ave), Gatuslao St. (Galo-Luzuriaga St.) to Luzuriaga-Araneta, Centrolplex, Bacolod Central Market, BACIWA, San Sebastian Dawis, Bishop’s Palace, Bay Center, San Sebastian Cathedral, DYAF – Radyo Veritas, GE Money  Bank, Bacolod Business Inn, LCCB , Gaisano Grand Central (new)."
+        "Hda. Rosario, Hda. Conchita, Prk. 8 Pinaya-on, Granada Hts, Emiliano Lizares High sch., Police Station 5, Granada Proper to Asuncion Lizares Elem Sch., Glendale Homes, Sitio Mirasol, Stone Haven, Prk Balabag, Charito Hts."
+      ]
+    },
+    {
+      "date": "Saturday, October 10, 2026",
+      "window": "6:00AM to 6:00PM",
+      "feeders": [
+        "Burgos Feeder 3"
+      ],
+      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
+      "areas": [
+        "Residencia Royale, Golden Gate Hills Subd., Alunan  Relocation Site, Alangilan Proper, Alangilan Nat'l HS, Arceo ES, Buro-Buro Resort, Bocal-bocal Resort, Hda. (Hermilinda, Carmen, Bantug, Garcia, Claudio, Bendito), Sitio (Masangcad-Cabatangan, Balogo-Concepcion, Arceo), Purok 12 Kabutungan."
       ]
     }
   ],
@@ -128,7 +126,7 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-10-09T15:59:20.633Z",
+  "checkedAt": "2026-10-10T10:51:30.154Z",
   "capture": {
     "posts": 2,
     "photos": 9
