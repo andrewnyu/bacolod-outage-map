@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-10T15:08:53.423Z",
-  "sourceDate": "10 October 2026",
+  "fetchedAt": "2026-10-11T11:04:12.799Z",
+  "sourceDate": "11 October 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
     "label": "View the Negros Power Facebook page"
@@ -83,28 +83,6 @@
       "areas": [
         "Gonzaga St. (Lacson - Mabini), Mabini St. (Gonzaga-Malalosan St.)"
       ]
-    },
-    {
-      "date": "Saturday, October 10, 2026",
-      "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
-      "feeders": [
-        "Burgos Feeder 3"
-      ],
-      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
-      "areas": [
-        "Hda. Rosario, Hda. Conchita, Prk. 8 Pinaya-on, Granada Hts, Emiliano Lizares High sch., Police Station 5, Granada Proper to Asuncion Lizares Elem Sch., Glendale Homes, Sitio Mirasol, Stone Haven, Prk Balabag, Charito Hts."
-      ]
-    },
-    {
-      "date": "Saturday, October 10, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Burgos Feeder 3"
-      ],
-      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
-      "areas": [
-        "Residencia Royale, Golden Gate Hills Subd., Alunan  Relocation Site, Alangilan Proper, Alangilan Nat'l HS, Arceo ES, Buro-Buro Resort, Bocal-bocal Resort, Hda. (Hermilinda, Carmen, Bantug, Garcia, Claudio, Bendito), Sitio (Masangcad-Cabatangan, Balogo-Concepcion, Arceo), Purok 12 Kabutungan."
-      ]
     }
   ],
   "completed": {
@@ -126,7 +104,7 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-10-10T15:08:53.423Z",
+  "checkedAt": "2026-10-11T11:04:12.799Z",
   "capture": {
     "posts": 2,
     "photos": 9

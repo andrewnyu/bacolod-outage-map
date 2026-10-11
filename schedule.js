@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-10T15:08:53.423Z",
-  sourceDate: "10 October 2026",
+  fetchedAt: "2026-10-11T11:04:12.799Z",
+  sourceDate: "11 October 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -84,28 +84,6 @@ const SCHEDULE = {
       "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
       "areas": [
         "Gonzaga St. (Lacson - Mabini), Mabini St. (Gonzaga-Malalosan St.)"
-      ]
-    },
-    {
-      "date": "Saturday, October 10, 2026",
-      "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
-      "feeders": [
-        "Burgos Feeder 3"
-      ],
-      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
-      "areas": [
-        "Hda. Rosario, Hda. Conchita, Prk. 8 Pinaya-on, Granada Hts, Emiliano Lizares High sch., Police Station 5, Granada Proper to Asuncion Lizares Elem Sch., Glendale Homes, Sitio Mirasol, Stone Haven, Prk Balabag, Charito Hts."
-      ]
-    },
-    {
-      "date": "Saturday, October 10, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Burgos Feeder 3"
-      ],
-      "cause": "Reconductoring of 0.6km 3-phase primary line to #336.4 Aluminum Conductor Steel-Reinforced tree wire; Reconductoring 1.2km 1-phase primary to 4/0 tree wire; Relocation of 5 primary concrete poles due to DPWH road Row widening.",
-      "areas": [
-        "Residencia Royale, Golden Gate Hills Subd., Alunan  Relocation Site, Alangilan Proper, Alangilan Nat'l HS, Arceo ES, Buro-Buro Resort, Bocal-bocal Resort, Hda. (Hermilinda, Carmen, Bantug, Garcia, Claudio, Bendito), Sitio (Masangcad-Cabatangan, Balogo-Concepcion, Arceo), Purok 12 Kabutungan."
       ]
     }
   ],
