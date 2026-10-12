@@ -4,8 +4,8 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-11T15:29:20.540Z",
-  sourceDate: "11 October 2026",
+  fetchedAt: "2026-10-12T12:31:53.606Z",
+  sourceDate: "15 October 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
@@ -22,68 +22,14 @@ const SCHEDULE = {
   },
   scheduled: [
     {
-      "date": "Sunday, October 11, 2026",
-      "window": "5:00PM to 6:00PM",
-      "feeders": [
-        "Asdes-Gonzaga Feeder 2"
-      ],
-      "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
-      "areas": [
-        "Lacson St. (San Sebastian St. to Abad Bridge), Mabini St (Gonzaga Substation to San Sebastian St.), San Sebastian St. (Locsin St. to Sta. Ana St.), UNOR-IS, Planta Hotel, Civil Service Commission Negros Occidental Field Office, Portion of Brgy. 39, Regency Plaza Tourist Inn, Southville Subd, Montalbo Gym., Abad Santos St., Moran St."
-      ]
-    },
-    {
-      "date": "Sunday, October 11, 2026",
-      "window": "6:00AM to 7:00AM",
-      "feeders": [
-        "Asdes-Gonzaga Feeder 3"
-      ],
-      "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
-      "areas": [
-        "Mabini St. (from CENECO to Galo St.), Galo St. (from Mabini to Gatuslao), Locsin St. (from Galo to Rizal), Nueva St., Alisbo, PLDT, Philam Life, Cordova Road, Rizal St. (Mabini St. to Lacson), Burgos St. (Lacson to Locsin St.), LTO, Landbank, Hall Of Justice, SSS Building, 888, portion of Brgy. 9, portion of Brgy. 11, portion of Brgy. 17. Lacson (1st - 4th St.)"
-      ]
-    },
-    {
-      "date": "Sunday, October 11, 2026",
-      "window": "5:00AM to 6:00AM",
-      "feeders": [
-        "Sum-ag Feeder 1",
-        "Alijis Feeder 2",
-        "Alijis Feeder 4",
-        "Asdes-Gonzaga Feeder 2"
-      ],
-      "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
-      "areas": [
-        "Villa Lourdes Subd., Brgy. Pahanocoy, Cegasco, Matti  Village, NHA, Sitio Acacia, From Sum-ag Substation to Sum-ag Highway, Benito Village, San Luis Village, Fiesta Homes, FE Village,  Puroks (Brotherhood,, Bayahinan, Orchids, Manga, Makiangayon, KBS, Magayon), Sum-ag National High School, Punta Taytay Brgy Hall,  Puroks (Paraiso-Bayani, Orchids, Abi-Abihon,Masinulundon, Mahinangpon, Masipag, Masagana, Mahigugma, Providence, Mabinuligon, Kasanagan, YLAC, Progreso) GK ERH, JMC Village, Santanville, Sumag Elem Sch., Sumag Public Market, Metro Sumag,  DBI to Bago-Bacolod Boundary, Puroks (Paghidaet, 13, Dangal, Baybay, Newton, Proper), Casa Rufina South, Sunshine Rd., Bangga Ma. Morena to Trese y Media, Puroks (Papaya, Eucalyptus, Sunflower, C3, Para 1, Mansanero), Marietta Village, DBI. South Bacolod General Hospital & Medical Center Inc.",
-        "Portion of Alijis Road (Alijis Substation to areas before Maranatha Christian Academy), Greenplains Subd., Araneta Street, Magsaysay Ave. to SRA, Luxur Place (former Bacolod Convention Plaza and Hotel), Teleperformance,  Bacolod City Police Station, Goldenfield Commercial Complex, Magsungay, Jose R. Torres Elementary School, Henrietta Village, Airport Subd., Calong-Calong, Villa Esperanza, Palmas Del Mar, Orient Marine, Villa  Servando, Golden River Village.",
-        "TRANSCOM, Bel-Air Subd., San Lorenzo Homes, Back of Alijis Substation, ECC Villas, Alijis Road (from Alijis Substation to Airport Terminal), Bacolod Memorial Park, Asian Alcohol, Sason Furniture, Jade Court II, VL Yap, Good Year and Teletech (Robinsons Metro), Lopue’s South Square, Ramylu Village, Woodstock Subd., John B. Lacson College, Pauline Village, Citymall Goldenfields to Sugarland Hotel (Hyundai, Nissan, Honda, Benby Enterprises, Prk. Kalubihan,  Prk. Kabulakan).",
-        "Lacson St. (San Sebastian St. to Abad  Bridge), Mabini St.(Gonzaga Substation to San Sebastian St.), San Sebastian St. (Locsin St. to Sta. Ana St.), UNOR-IS,Planta  Hotel,Civil  Service Commission Negros Occidental Field Office, Portion of Brgy.  39, Regency Plaza Tourist Inn, Southville Subd, Montalbo Gym., Abad  Santos St., Moran St."
-      ]
-    },
-    {
-      "date": "Sunday, October 11, 2026",
+      "date": "Thursday, October 15, 2026",
       "window": "7:00AM to 5:00PM",
       "feeders": [
-        "Talisay Feeder 3",
-        "Lopez Feeder 1",
-        "Murcia Feeder 3"
+        "Alijis Feeder 2"
       ],
-      "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
+      "cause": "Conversion from single phase to three phase wire.",
       "areas": [
-        "Hda. Esmeralda to Magcurao.",
-        "From Prk Tagaytay to Patag",
-        "Ferlin, Senyang, Dizon, Tres, Duong."
-      ]
-    },
-    {
-      "date": "Sunday, October 11, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Asdes-Gonzaga Feeder 1"
-      ],
-      "cause": "Reconductoring of 0.63km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of LF1); Replacement of 9-Rotten 3-Ph Primary Wood Poles & Erection of 1-40ft Concrete Midpole And MOP Activity (Portion of MUF3); Reconductoring of 0.47km 1-phase primary line to 4/0 Tree Wire due to heavy vegetated area (Portion of TF3); Reconductoring of 0.15 km 3-phase primary line from 4/0 ACSR to 336 Tree Wire due to Hotspot (Whole AF2, AF4, AGF2); Sumag Substation Degassing (Whole of Sum-ag SS.); 69kV Pole Erection at Cor. Mabini-Ciocon Sts and Stringing 2-spans 69kV New Capitol Line (Whole of AGF2, Portion of AGF3, Portion of AGF1)",
-      "areas": [
-        "Gonzaga St. (Lacson - Mabini), Mabini St. (Gonzaga-Malalosan St.)"
+        "Portion of Salazar Street, Brgy. Alijis, Bacolod City."
       ]
     }
   ],
