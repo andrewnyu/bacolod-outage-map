@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-14T14:25:53.220Z",
-  sourceDate: "16 October 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-10-15T09:29:56.113Z",
+  sourceDate: "15 October 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -22,17 +22,6 @@ const SCHEDULE = {
   },
   scheduled: [
     {
-      "date": "Thursday, October 15, 2026",
-      "window": "7:00AM to 5:00PM",
-      "feeders": [
-        "Alijis Feeder 2"
-      ],
-      "cause": "Conversion from single phase to three phase wire.",
-      "areas": [
-        "Portion of Salazar Street, Brgy. Alijis, Bacolod City."
-      ]
-    },
-    {
       "date": "Friday, October 16, 2026",
       "window": "10:00AM to 2:00PM",
       "feeders": [
@@ -41,6 +30,17 @@ const SCHEDULE = {
       "cause": "Relocation of one 30ft. Obstructing secondary concrete pole into lot boundary.",
       "areas": [
         "Portion along St. Peter Subd., Brgy. Tangub, Bacolod City."
+      ]
+    },
+    {
+      "date": "Thursday, October 15, 2026",
+      "window": "7:00AM to 5:00PM",
+      "feeders": [
+        "Alijis Feeder 2"
+      ],
+      "cause": "Conversion from single phase to three phase wire.",
+      "areas": [
+        "Portion of Salazar Street, Brgy. Alijis, Bacolod City."
       ]
     }
   ],
