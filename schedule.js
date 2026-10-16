@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-16T09:22:59.718Z",
+  fetchedAt: "2026-10-16T13:51:34.159Z",
   sourceDate: "15 October 2026",
   source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
