@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-17T08:53:49.855Z",
-  sourceDate: "15 October 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-10-17T12:49:40.598Z",
+  sourceDate: "20 October 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -20,7 +20,19 @@ const SCHEDULE = {
   // canonical feeder name -> rotational brownout slot
   slots: {
   },
-  scheduled: [],
+  scheduled: [
+    {
+      "date": "Tuesday, October 20, 2026",
+      "window": "9:00AM to 1:00PM",
+      "feeders": [
+        "Mountain View Feeder 6"
+      ],
+      "cause": "Uprating of one 50kVa overloaded common distribution transformer into one 75kVa distribution transformer",
+      "areas": [
+        "Portion of Country Homes Subd., Brgy. Estefania,  Bacolod City."
+      ]
+    }
+  ],
   completed: {
     "date": "Sunday, 6 September 2026",
     "restoredAt": "6:37 PM",
