@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-16T13:51:34.159Z",
+  fetchedAt: "2026-10-17T08:53:49.855Z",
   sourceDate: "15 October 2026",
   source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
@@ -20,19 +20,7 @@ const SCHEDULE = {
   // canonical feeder name -> rotational brownout slot
   slots: {
   },
-  scheduled: [
-    {
-      "date": "Friday, October 16, 2026",
-      "window": "10:00AM to 2:00PM",
-      "feeders": [
-        "Alijis Feeder 1"
-      ],
-      "cause": "Relocation of one 30ft. Obstructing secondary concrete pole into lot boundary.",
-      "areas": [
-        "Portion along St. Peter Subd., Brgy. Tangub, Bacolod City."
-      ]
-    }
-  ],
+  scheduled: [],
   completed: {
     "date": "Sunday, 6 September 2026",
     "restoredAt": "6:37 PM",
