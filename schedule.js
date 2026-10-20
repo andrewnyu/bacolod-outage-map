@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-19T16:20:37.230Z",
-  sourceDate: "20 October 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-10-20T09:42:53.776Z",
+  sourceDate: "23 October 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Thursday, September 24, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,6 +30,17 @@ const SCHEDULE = {
       "cause": "Uprating of one 50kVa overloaded common distribution transformer into one 75kVa distribution transformer",
       "areas": [
         "Portion of Country Homes Subd., Brgy. Estefania,  Bacolod City."
+      ]
+    },
+    {
+      "date": "Friday, October 23, 2026",
+      "window": "10:00AM to 2:00PM",
+      "feeders": [
+        "Panaogao Feeder 2"
+      ],
+      "cause": "Removal of unutilized primary concrete pole.",
+      "areas": [
+        "Portion of Maya-Punay St. Brgy. 3, Silay City."
       ]
     }
   ],
