@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-23T14:08:58.128Z",
+  fetchedAt: "2026-10-24T09:11:33.567Z",
   sourceDate: "24 October 2026",
   source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
@@ -21,17 +21,6 @@ const SCHEDULE = {
   slots: {
   },
   scheduled: [
-    {
-      "date": "Friday, October 23, 2026",
-      "window": "10:00AM to 2:00PM",
-      "feeders": [
-        "Panaogao Feeder 2"
-      ],
-      "cause": "Removal of unutilized primary concrete pole.",
-      "areas": [
-        "Portion of Maya-Punay St. Brgy. 3, Silay City."
-      ]
-    },
     {
       "date": "Saturday, October 24, 2026",
       "window": "6:00AM to 7:00AM & 5:00PM to 6:00PM",
