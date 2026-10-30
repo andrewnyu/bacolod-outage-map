@@ -4,11 +4,11 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-10-29T15:57:41.485Z",
-  sourceDate: "29 October 2026",
-  source: { url: "https://www.facebook.com/photo.php?fbid=122237585174048473", label: "View the source post on Facebook" },
+  fetchedAt: "2026-10-30T11:04:49.701Z",
+  sourceDate: "30 October 2026",
+  source: { url: "https://www.facebook.com/photo.php?fbid=122237767784048473", label: "View the source post on Facebook" },
   rotation: {
-    date: "Thursday, October 29, 2026",
+    date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
     yellowAlert: "8:00PM – 10:00PM",
     available: "2,255 MW",
@@ -22,11 +22,13 @@ const SCHEDULE = {
     "Sum-ag Feeder 2": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
     "Talisay Feeder 3": { s: 16, e: 18, label: "4:00PM – 6:00PM" },
     "Alijis Feeder 4": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
+    "Alijis Feeder 6": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
     "Reclamation Feeder 1": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
     "Reclamation Feeder 3": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
     "Talisay Feeder 2": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
     "Alijis Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
     "Asdes-Gonzaga Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
+    "Mountain View Feeder 3": { s: 18, e: 20, label: "6:00PM – 8:00PM" },
     "Alijis Feeder 8": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
     "Asdes-Gonzaga Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
     "Asdes-Gonzaga Feeder 6": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
