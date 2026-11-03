@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-03T12:27:57.589Z",
+  fetchedAt: "2026-11-03T16:55:03.091Z",
   sourceDate: "30 October 2026",
   source: {"url":"https://www.facebook.com/photo.php?fbid=122237767784048473","label":"View the source post on Facebook"},
   rotation: {
