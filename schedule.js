@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-03T16:55:03.091Z",
-  sourceDate: "30 October 2026",
-  source: {"url":"https://www.facebook.com/photo.php?fbid=122237767784048473","label":"View the source post on Facebook"},
+  fetchedAt: "2026-11-04T12:38:36.548Z",
+  sourceDate: "7 November 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -20,7 +20,19 @@ const SCHEDULE = {
   // canonical feeder name -> rotational brownout slot
   slots: {
   },
-  scheduled: [],
+  scheduled: [
+    {
+      "date": "Saturday, November 7, 2026",
+      "window": "8:00AM to 5:00PM",
+      "feeders": [
+        "Talisay Feeder 3"
+      ],
+      "cause": "Rehabilitaion of 12-spans secondary line and upgrading of 1-25KVa to 1-37.5kva common Distribution Transformer.",
+      "areas": [
+        "Portion of Zone 5, Hda. Bocboc, Hda.  Angeles, Brgy. Concepcion, Talisay City."
+      ]
+    }
+  ],
   completed: {
     "date": "Sunday, 6 September 2026",
     "restoredAt": "6:37 PM",
