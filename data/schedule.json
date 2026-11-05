@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-05T12:49:55.722Z",
+  "fetchedAt": "2026-11-05T17:26:02.534Z",
   "sourceDate": "5 November 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
@@ -29,17 +29,6 @@
       "areas": [
         "Portion of Zone 5, Hda. Bocboc, Hda.  Angeles, Brgy. Concepcion, Talisay City."
       ]
-    },
-    {
-      "date": "Thursday, November 5, 2026",
-      "window": "8:00AM to 5:00PM",
-      "feeders": [
-        "Mountain View Feeder 6"
-      ],
-      "cause": "Replacement of one 30ft. dilapidated wood pole into one 40ft. steel pole and removal of one 30ft. Dilapidated wooden pole and transfer its attachments to adjacent secondary steel pole.",
-      "areas": [
-        "Portion along Prk. Bayabasan, Brgy. Bata, Bacolod City."
-      ]
     }
   ],
   "completed": {
@@ -61,7 +50,7 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-11-05T12:49:55.722Z",
+  "checkedAt": "2026-11-05T17:26:02.534Z",
   "capture": {
     "posts": 2,
     "photos": 9

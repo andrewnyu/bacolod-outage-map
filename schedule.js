@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-05T12:49:55.722Z",
+  fetchedAt: "2026-11-05T17:26:02.534Z",
   sourceDate: "5 November 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
@@ -30,17 +30,6 @@ const SCHEDULE = {
       "cause": "Rehabilitaion of 12-spans secondary line and upgrading of 1-25KVa to 1-37.5kva common Distribution Transformer.",
       "areas": [
         "Portion of Zone 5, Hda. Bocboc, Hda.  Angeles, Brgy. Concepcion, Talisay City."
-      ]
-    },
-    {
-      "date": "Thursday, November 5, 2026",
-      "window": "8:00AM to 5:00PM",
-      "feeders": [
-        "Mountain View Feeder 6"
-      ],
-      "cause": "Replacement of one 30ft. dilapidated wood pole into one 40ft. steel pole and removal of one 30ft. Dilapidated wooden pole and transfer its attachments to adjacent secondary steel pole.",
-      "areas": [
-        "Portion along Prk. Bayabasan, Brgy. Bata, Bacolod City."
       ]
     }
   ],
