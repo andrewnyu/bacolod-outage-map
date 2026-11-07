@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-06T16:39:41.251Z",
-  sourceDate: "5 November 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-11-07T11:23:26.054Z",
+  sourceDate: "12 November 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,6 +30,17 @@ const SCHEDULE = {
       "cause": "Rehabilitaion of 12-spans secondary line and upgrading of 1-25KVa to 1-37.5kva common Distribution Transformer.",
       "areas": [
         "Portion of Zone 5, Hda. Bocboc, Hda.  Angeles, Brgy. Concepcion, Talisay City."
+      ]
+    },
+    {
+      "date": "Thursday, November 12, 2026",
+      "window": "8:00AM to 5:00PM",
+      "feeders": [
+        "Alijis Feeder 8"
+      ],
+      "cause": "Reconductoring of 5 span dilapidated secondary lines into 4/0 All aluminum conductors.",
+      "areas": [
+        "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
       ]
     }
   ],
