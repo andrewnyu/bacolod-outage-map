@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-08T15:52:55.892Z",
+  fetchedAt: "2026-11-09T13:27:22.402Z",
   sourceDate: "8 November 2026",
   source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
@@ -30,17 +30,6 @@ const SCHEDULE = {
       "cause": "Reconductoring of 5 span dilapidated secondary lines into 4/0 All aluminum conductors.",
       "areas": [
         "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
-      ]
-    },
-    {
-      "date": "Sunday, November 8, 2026",
-      "window": "6:00AM to 6:00PM",
-      "feeders": [
-        "Alijis Feeder 3"
-      ],
-      "cause": "Reconductoring of 3 phase primary line (1.0km) from bare wire to 4/0 tree wire along Panaad Mansilingan Rd. ; Massive replacement of insulators",
-      "areas": [
-        "Grandville 1, 2, 3, Forest Hills Subd.Woodside, La Salle Ville, St. Benilde Homes, Panaad Park & Stadium, Hillside Subd."
       ]
     }
   ],
