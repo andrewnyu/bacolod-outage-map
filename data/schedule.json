@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-11T12:15:38.662Z",
+  "fetchedAt": "2026-11-11T17:00:18.723Z",
   "sourceDate": "11 November 2026",
   "source": {
     "url": "https://www.facebook.com/negrospowerph",
@@ -29,17 +29,6 @@
       "areas": [
         "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
       ]
-    },
-    {
-      "date": "Wednesday, November 11, 2026",
-      "window": "9:00AM to 3:00PM",
-      "feeders": [
-        "Talisay Feeder 1"
-      ],
-      "cause": "Replacement of six 30ft. Secondary leaning/rotten wooden poles into six 40ft. Secondary concrete poles ; Rehabilitation of 7 span melted secondary line to 4/0 All-Aluminum Conductor insulated wire",
-      "areas": [
-        "Burgos St., Rizal St., Zone 6, Talisay City."
-      ]
     }
   ],
   "completed": {
@@ -61,9 +50,9 @@
       "Massive tree clearing along Aguinaldo St."
     ]
   },
-  "checkedAt": "2026-11-11T12:15:38.662Z",
+  "checkedAt": "2026-11-11T17:00:18.723Z",
   "capture": {
-    "posts": 2,
+    "posts": 1,
     "photos": 9
   }
 }
