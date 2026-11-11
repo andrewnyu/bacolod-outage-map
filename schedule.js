@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-10T16:54:05.036Z",
-  sourceDate: "8 November 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-11-11T12:15:38.662Z",
+  sourceDate: "11 November 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,6 +30,17 @@ const SCHEDULE = {
       "cause": "Reconductoring of 5 span dilapidated secondary lines into 4/0 All aluminum conductors.",
       "areas": [
         "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
+      ]
+    },
+    {
+      "date": "Wednesday, November 11, 2026",
+      "window": "9:00AM to 3:00PM",
+      "feeders": [
+        "Talisay Feeder 1"
+      ],
+      "cause": "Replacement of six 30ft. Secondary leaning/rotten wooden poles into six 40ft. Secondary concrete poles ; Rehabilitation of 7 span melted secondary line to 4/0 All-Aluminum Conductor insulated wire",
+      "areas": [
+        "Burgos St., Rizal St., Zone 6, Talisay City."
       ]
     }
   ],
