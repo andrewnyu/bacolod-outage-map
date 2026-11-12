@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-12T13:23:26.551Z",
+  fetchedAt: "2026-11-12T17:28:27.204Z",
   sourceDate: "15 November 2026",
-  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
+  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -21,17 +21,6 @@ const SCHEDULE = {
   slots: {
   },
   scheduled: [
-    {
-      "date": "Thursday, November 12, 2026",
-      "window": "8:00AM to 5:00PM",
-      "feeders": [
-        "Alijis Feeder 8"
-      ],
-      "cause": "Reconductoring of 5 span dilapidated secondary lines into 4/0 All aluminum conductors.",
-      "areas": [
-        "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
-      ]
-    },
     {
       "date": "Sunday, November 15, 2026",
       "window": "8:00AM to 5:00PM",
