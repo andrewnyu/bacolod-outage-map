@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-11T17:00:18.723Z",
-  sourceDate: "11 November 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-11-12T13:23:26.551Z",
+  sourceDate: "15 November 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -30,6 +30,17 @@ const SCHEDULE = {
       "cause": "Reconductoring of 5 span dilapidated secondary lines into 4/0 All aluminum conductors.",
       "areas": [
         "Portion along B11, L14, Torrecampo Village, Brgy. Cabug, Bacolod City."
+      ]
+    },
+    {
+      "date": "Sunday, November 15, 2026",
+      "window": "8:00AM to 5:00PM",
+      "feeders": [
+        "Murcia Feeder 4"
+      ],
+      "cause": "Replacement of 4 rotten primary wood pole with its accessories",
+      "areas": [
+        "Prk. Maasin, Brgy. Dulao, Bago City."
       ]
     }
   ],
