@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-14T11:50:35.430Z",
-  sourceDate: "14 November 2026",
-  source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
+  fetchedAt: "2026-11-14T15:40:29.285Z",
+  sourceDate: "18 November 2026",
+  source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
     date: "Friday, October 30, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -75,6 +75,17 @@ const SCHEDULE = {
         "Portion Lag-Asan Relocation Site, Portion Baligasag, Portion Napoles.",
         "Benito Village, Fiesta Homes, FE Village, Puroks (Bayahinan, Orchids, Manga, Makiangayon, KBS, Magayon) DBI to Bago-Bacolod Boundary, Puroks (Paghidaet, 13, Dangal, Baybay, Newton, Proper), Casa Rufina South, Sunshine Rd. Bangga Ma. Morena to Trese y Media, Puroks (Papaya, Eucalyptus, Sunflower, C3, Para 1, Mansanero), Marietta Village, DBI.",
         "Portion of Brgy. Dulao."
+      ]
+    },
+    {
+      "date": "Wednesday, November 18, 2026",
+      "window": "9:00AM to 1:00PM",
+      "feeders": [
+        "Panaogao Feeder 2"
+      ],
+      "cause": "Relocation of one 35ft. Concrete primary pole.",
+      "areas": [
+        "Ofelia Ville, Brgy. Rizal, Silay City."
       ]
     }
   ],
