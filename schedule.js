@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-15T12:21:17.822Z",
+  fetchedAt: "2026-11-15T16:10:48.089Z",
   sourceDate: "15 November 2026",
   source: { url: "https://www.facebook.com/negrospowerph", label: "View the Negros Power Facebook page" },
   rotation: {
@@ -30,17 +30,6 @@ const SCHEDULE = {
       "cause": "Relocation of one 35ft. Concrete primary pole.",
       "areas": [
         "Ofelia Ville, Brgy. Rizal, Silay City."
-      ]
-    },
-    {
-      "date": "Sunday, November 15, 2026",
-      "window": "8:00AM to 5:00PM",
-      "feeders": [
-        "Lopez Feeder 1"
-      ],
-      "cause": "Massive replacement of pin insulators ; Installation of bail clamp, fuse cut out cover, distribution transformer bushing covers ; Vegetation clearing",
-      "areas": [
-        "From Hacienda Caridad to San German, Brgy. Guimbalaon, Silay City."
       ]
     }
   ],
