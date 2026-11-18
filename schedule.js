@@ -4,7 +4,7 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-18T13:32:26.505Z",
+  fetchedAt: "2026-11-18T17:54:10.494Z",
   sourceDate: "15 November 2026",
   source: {"url":"https://www.facebook.com/negrospowerph","label":"View the Negros Power Facebook page"},
   rotation: {
@@ -20,19 +20,7 @@ const SCHEDULE = {
   // canonical feeder name -> rotational brownout slot
   slots: {
   },
-  scheduled: [
-    {
-      "date": "Wednesday, November 18, 2026",
-      "window": "9:00AM to 1:00PM",
-      "feeders": [
-        "Panaogao Feeder 2"
-      ],
-      "cause": "Relocation of one 35ft. Concrete primary pole.",
-      "areas": [
-        "Ofelia Ville, Brgy. Rizal, Silay City."
-      ]
-    }
-  ],
+  scheduled: [],
   completed: {
     "date": "Sunday, 6 September 2026",
     "restoredAt": "6:37 PM",
