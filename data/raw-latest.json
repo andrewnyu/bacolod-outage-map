@@ -1,63 +1,61 @@
 {
- "fetchedAt": "2026-11-19T18:06:24.898Z",
+ "fetchedAt": "2026-11-20T13:41:13.173Z",
  "url": "https://www.facebook.com/negrospowerph",
- "posts": [
-  "Negros Power extends its warmest birthday wishes to Hon. Greg Gasataya, Mayor of Bacolod City!\nMay your special day bring you good health, happiness, and continued blessings. We wish you wisdom, strength, and success as you lead and serve the people of Bacolod City.\nMay you continue to make a positive difference in the community through your leadership and dedication to public service.\nHappy Birthday, Mayor Greg!"
- ],
+ "posts": [],
  "photos": [
   {
    "fbid": "122223181208048473",
    "alt": "",
-   "src": "https://scontent-iad3-2.xx.fbcdn.net/v/t39.99422-6/716871547_1006606618581810_1264544403280221455_n.png?stp=dst-jpg_tt6&cstp=mx1640x924&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=o1BUbQxI0roQ7kNvwEIWdbl&_nc_oc=AdrZswRN7JSxKuTGA1NiYROgFaofgP0HDIZfOhh9iJLARtPtBqcFNc12vuG9OjwYBNk&_nc_zt=14&_nc_ht=scontent-iad3-2.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQTL3a3m3Aq8HeLok3txunF7gm-Q9dWbx1Pmzif51yJ95g&oe=6B04F2A3",
+   "src": "https://scontent-sjc3-1.xx.fbcdn.net/v/t39.99422-6/716871547_1006606618581810_1264544403280221455_n.png?stp=dst-jpg_tt6&cstp=mx1640x924&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=o1BUbQxI0roQ7kNvwFFPD1V&_nc_oc=AdoAoSf1tbahbcPz63xcku8EO8jvY2Uz3B8eJat9xstrVhbduhm3IL0TdjUTZAxMb9Q&_nc_zt=14&_nc_ht=scontent-sjc3-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQT8-kIvLKCdUrBmaTDH_OjAqfk8CWdj_TX4ML_tHdqwZA&oe=6B060BE3",
    "file": "data/img/122223181208048473.jpg"
+  },
+  {
+   "fbid": "122240499806048473",
+   "alt": "May be an image of text",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/916686349_1473662508029721_8467920520506065979_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=111&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=7RL5NLD_cYsQ7kNvwGYJM4a&_nc_oc=AdpNKPORsqvO5fW2FaHPJSER_j24lcPz6xO6J0IpUvEvXeBNP5wocFrPj8xtiq0wI88&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQSwtmC27zRNjhvKK3utMz2s_t8Zu6lHmmtlzDOYGQEDwQ&oe=6B063691",
+   "file": "data/img/122240499806048473.jpg"
+  },
+  {
+   "fbid": "122240499788048473",
+   "alt": "May be an image of money and text",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/915017891_29518234354475290_8631816870987796448_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=100&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=tUUvVS9OPKoQ7kNvwGbFxg3&_nc_oc=AdoIF-jDYGtHnH0PxgjoQgWOrAj_QBp-fx6iVoeehU5gPI8amJ8ICHwRGuZslzqWL28&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQTyFvLp_V9cct4UPUVUiBIg8THV_XCfELcsfBEl8besrQ&oe=6B0615DE",
+   "file": "data/img/122240499788048473.jpg"
+  },
+  {
+   "fbid": "122240499776048473",
+   "alt": "May be an image of text",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/914647135_3329997327195339_4211400207597482526_n.png?stp=c0.89.1080.1080a_dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=5QRo-UjqbTsQ7kNvwHDAfGr&_nc_oc=AdqMxvZ9ilMz4mGATEuOD1jN7pyGUG7f7uumHeKBaei8LMjkQxbBxzEW-637fYNZ0Vw&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQRq6fQURHjnAd4tDPrhv-96mIFfakRXi13WXXMj484niA&oe=6B063232",
+   "file": "data/img/122240499776048473.jpg"
+  },
+  {
+   "fbid": "122240492348048473",
+   "alt": "May be a graphic of text",
+   "src": "https://scontent-sjc3-1.xx.fbcdn.net/v/t39.99422-6/914890778_1672266654289585_4589815805334785046_n.png?stp=c0.89.1080.1080a_dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=105&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=7Y7nx8Au7mAQ7kNvwHywOHV&_nc_oc=AdqGUMUmiLQ0AHUghUTPzifxTM_-33zwfjoUSqK3XPjbAE49pXbaj57Yi7kkiYhpIUY&_nc_zt=14&_nc_ht=scontent-sjc3-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQT5vlHxlQhA3VST3cWam1wKHeWPr5xZ1aM30LCKA2ylHw&oe=6B061112",
+   "file": "data/img/122240492348048473.jpg"
+  },
+  {
+   "fbid": "122240488490048473",
+   "alt": "May be a graphic of map and text",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/916822277_1872379344210033_426790263362464853_n.png?stp=c285.0.630.630a_dst-jpg_tt6&cstp=mx630x630&_nc_cat=102&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=0e4zs_pkbkYQ7kNvwF5gUi-&_nc_oc=AdqABwq4GXXk1y5SMZLlh55l4Gl1yR5enK-lNn20_JC_j02lkLXfQuPa7SHf1Zd_6xY&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQTHO3vz97e_RDCvFJDhfFoDunMlVHG5-W6pS_wVpLb1NA&oe=6B06087E",
+   "file": "data/img/122240488490048473.jpg"
   },
   {
    "fbid": "122240403638048473",
    "alt": "May be an image of text",
-   "src": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.99422-6/913157979_1435591188778456_2483579936060228938_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=103&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=6N8b3uudhgQQ7kNvwHGWad8&_nc_oc=AdpNtW9rAGUgtvu1PyfoOuenR4NCDKrrzTwFZtl1igqys7fbrAb78sf5GIcoDPWs_CY&_nc_zt=14&_nc_ht=scontent-iad3-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQQcw43-4l9k_ejJSThYfwYf9A4sW4NdDHyqE5GiDHluJw&oe=6B05287A",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/913157979_1435591188778456_2483579936060228938_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=103&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=-OkiDR_0IAQQ7kNvwE4gSSz&_nc_oc=Adq5quIMcwbZEQqsUTxHaj-NFG3NwihFybJGb_PQwkK1PdCyPKKUCVJ6KzBnLFgcaS8&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQQPkAZ_O4ojV3kZQZQqocyz8Ky0D2D_CxzMLlMwIobbuw&oe=6B06097A",
    "file": "data/img/122240403638048473.jpg"
   },
   {
    "fbid": "122240391662048473",
    "alt": "May be an image of text",
-   "src": "https://scontent-iad3-2.xx.fbcdn.net/v/t39.99422-6/915023108_2316602839124324_1133655712465929459_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=PtFvv0aORCAQ7kNvwGqkQ_p&_nc_oc=Adr-1ubkx8Qwo4lI7v0Ps9-gvUTK5l9Bbjky7yYtfZZ02-P23Jlw478OykWZ_-bcMPA&_nc_zt=14&_nc_ht=scontent-iad3-2.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQRxTSXTZumqIt3GYP6q0iInYxCL_R-oce7p0DmJCwBJYQ&oe=6B05256E",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/915023108_2316602839124324_1133655712465929459_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=PtFvv0aORCAQ7kNvwHzpHOu&_nc_oc=Adr-AyuabIxViFx7DBkHlDT06JmgUsgQTWiNUMfo_qFfYmnQWTRd5r_ef8bVQdAo-O0&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQQTtCcgOko4JuaWfB4H0TTPEcjgn2QWobdnAvbey71Lpg&oe=6B06066E",
    "file": "data/img/122240391662048473.jpg"
   },
   {
    "fbid": "122240391644048473",
    "alt": "May be an image of money and text",
-   "src": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.99422-6/912821393_1471475045170712_321832669563293685_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=102&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=-XN7Ol1YfpoQ7kNvwEahWfm&_nc_oc=Ado4bciFtpiD62PgwykZ9cX52aHcJdJgw4t6nFpKyyLZwBBChjg1G-yuoUM90zPMngk&_nc_zt=14&_nc_ht=scontent-iad6-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQTO3Ugee3blRUy_6wFLGKpoqJ1AHm14x5hTq7RhLyYGug&oe=6B05069D",
+   "src": "https://scontent-sjc6-1.xx.fbcdn.net/v/t39.99422-6/912821393_1471475045170712_321832669563293685_n.png?stp=dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=102&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=-XN7Ol1YfpoQ7kNvwHgWEtv&_nc_oc=AdpWW-EZ4BoXJIEskVZwVegJPcUMEc-B6AHRLa-Z6RmQGvNct2HlppEgIv93-IeNGcg&_nc_zt=14&_nc_ht=scontent-sjc6-1.xx&_nc_gid=xRs1xReTkyM7TkUcdhLbeA&_nc_ss=7b289&oh=00_AQQEFsbg1TDxL9XEpScCYxL2go93PAr03BagolnAhFB7LA&oe=6B061FDD",
    "file": "data/img/122240391644048473.jpg"
-  },
-  {
-   "fbid": "122240386016048473",
-   "alt": "May be an image of text",
-   "src": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.99422-6/913627951_1821025985811745_307147729392489595_n.png?stp=c0.89.1080.1080a_dst-jpg_tt6&cstp=mx1080x1080&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=pXeB_qzFlTAQ7kNvwFAli4P&_nc_oc=AdqXrmhJ4uBPcdSSfXQ1J4M0q4kGe2zGPyzeQBn0KAw5V03bfe9E0hk8kQqXh6dQi4c&_nc_zt=14&_nc_ht=scontent-iad3-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQTpHllrVepuBcSL3PZA_hUglpKXyDMnLZCLnexbCWMYpQ&oe=6B052006",
-   "file": "data/img/122240386016048473.jpg"
-  },
-  {
-   "fbid": "122240385158048473",
-   "alt": "May be an image of map and text",
-   "src": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.99422-6/915496728_2171263927085888_7808480030174600934_n.png?stp=dst-jpg_tt6&cstp=mx606x606&_nc_cat=105&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=skCr2y7o2loQ7kNvwFBcSmu&_nc_oc=AdoNb72MxTtZ3186wH3H8P_0i-zaXG98y2wW0nYzmcabID9a-RcJTgYw1NE0B42vwQ8&_nc_zt=14&_nc_ht=scontent-iad3-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQQ_agFL7gQuvGm6QHB33FywQRxBd5EZ4VsIvAuWTSP0cg&oe=6B05015B",
-   "file": "data/img/122240385158048473.jpg"
-  },
-  {
-   "fbid": "122240385098048473",
-   "alt": "May be an image of map and text",
-   "src": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.99422-6/913241425_2801236353670385_2673739624598930921_n.png?stp=dst-jpg_tt6&cstp=mx606x606&_nc_cat=103&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=2fVSQVu8EPIQ7kNvwG1POwW&_nc_oc=AdrhgybiyEiXbRt-VFwAAvxypiyn5avzvus_83eMNPLSdZ3R-RAkOehwjtL7h9rgXvs&_nc_zt=14&_nc_ht=scontent-iad6-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQQkpdTSQxYJHn3Iz2HCTSOz7pJpPAKUaRMO0KaXT-c7Gg&oe=6B051227",
-   "file": "data/img/122240385098048473.jpg"
-  },
-  {
-   "fbid": "122240385068048473",
-   "alt": "May be an image of text",
-   "src": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.99422-6/915675417_1695034728876039_2170600493427037239_n.png?stp=dst-jpg_tt6&cstp=mx606x606&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=nnjoEG6S8t8Q7kNvwF_imTU&_nc_oc=Adobosz6cMuHT46sAfyJm05N-tRT5EYid5eQa-k2Rj_I1ykAL0DgeuEQ2xMaMyAgins&_nc_zt=14&_nc_ht=scontent-iad3-1.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQQFC9nUmKMx9CuaVfryG0rUBCQpHH3wE6nVAe7M4jXgew&oe=6B051BD2",
-   "file": "data/img/122240385068048473.jpg"
-  },
-  {
-   "fbid": "122240385044048473",
-   "alt": "May be an image of text",
-   "src": "https://scontent-iad3-2.xx.fbcdn.net/v/t39.99422-6/912909882_1910305553681496_2492900884980681437_n.png?stp=dst-jpg_tt6&cstp=mx606x606&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=714c7a&_nc_ohc=HaWd0xZVdvYQ7kNvwEFOC--&_nc_oc=AdrXSfwBlK4bBU71WgZ8Hj8ebf0KzvNehHXQ7cn7XdFgMAJO4pqpDMw5as8eC-ztCfM&_nc_zt=14&_nc_ht=scontent-iad3-2.xx&_nc_gid=M1hf9h1P-gdQ86ae1ijcSQ&_nc_ss=7b289&oh=00_AQR4-qsn6ql7HiLlN4vXZvd-h5tJjU5qBRXTDvQgg1MC6A&oe=6B0502A5",
-   "file": "data/img/122240385044048473.jpg"
   }
  ],
  "notes": []
