@@ -4,9 +4,9 @@
  */
 
 const SCHEDULE = {
-  fetchedAt: "2026-11-27T14:28:57.596Z",
+  fetchedAt: "2026-11-27T18:46:35.583Z",
   sourceDate: "27 November 2026",
-  source: { url: "https://www.facebook.com/photo.php?fbid=122241271352048473", label: "View the source post on Facebook" },
+  source: {"url":"https://www.facebook.com/photo.php?fbid=122241271352048473","label":"View the source post on Facebook"},
   rotation: {
     date: "Friday, November 27, 2026",
     redAlert: "5:00PM – 8:00PM",
@@ -19,17 +19,6 @@ const SCHEDULE = {
   window: { start: 14, end: 23 },
   // canonical feeder name -> rotational brownout slot
   slots: {
-    "Alijis Feeder 4": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Alijis Feeder 8": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Asdes-Gonzaga Feeder 6": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Lopez Feeder 1": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Reclamation Feeder 1": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Reclamation Feeder 3": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Sum-ag Feeder 2": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Talisay Feeder 3": { s: 17, e: 19, label: "5:00PM – 7:00PM" },
-    "Hilangban Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Mountain View Feeder 3": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
-    "Talisay Feeder 2": { s: 19, e: 21, label: "7:00PM – 9:00PM" },
   },
   scheduled: [],
   completed: {
